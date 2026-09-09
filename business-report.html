@@ -1,0 +1,889 @@
+<!doctype html>
+<html lang="zh-Hant">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>業務回報</title>
+<style>
+:root{
+  --bg:#f4f6fb;--bg2:#fbfcff;--card:rgba(255,255,255,.9);--text:#1e293b;--muted:#7d889a;
+  --line:#e6eaf2;--accent:#50679d;--accent2:#7b89b5;--accentSoft:#eef2fb;
+  --ok:#4f7b68;--okSoft:#edf6f1;--warn:#9a7540;--warnSoft:#fbf5e9;
+  --danger:#a65e68;--dangerSoft:#fbf0f2;--shadow:0 18px 50px rgba(46,59,88,.08);
+  --shadowSoft:0 8px 26px rgba(46,59,88,.055)
+}
+*{box-sizing:border-box}
+body{
+  margin:0;color:var(--text);
+  font-family:"Noto Sans TC","PingFang TC","Microsoft JhengHei",system-ui,-apple-system,sans-serif;
+  background:
+    radial-gradient(circle at 12% 0%,rgba(123,137,181,.14),transparent 26%),
+    radial-gradient(circle at 92% 8%,rgba(80,103,157,.10),transparent 22%),
+    linear-gradient(180deg,var(--bg2),var(--bg));
+  min-height:100vh
+}
+button,input,select,textarea{font:inherit}button{cursor:pointer}button:disabled{cursor:not-allowed;opacity:.5}
+.wrap{max-width:1120px;margin:auto;padding:42px 24px 78px}
+.header{
+  position:relative;overflow:hidden;display:flex;justify-content:space-between;align-items:flex-start;gap:22px;
+  margin-bottom:28px;padding:30px 32px;border:1px solid var(--line);border-radius:28px;
+  background:linear-gradient(135deg,rgba(255,255,255,.97),rgba(249,251,255,.9));box-shadow:var(--shadow)
+}
+.header:after{
+  content:"";position:absolute;right:-70px;top:-95px;width:250px;height:250px;border-radius:50%;
+  background:linear-gradient(135deg,rgba(80,103,157,.17),rgba(123,137,181,.03))
+}
+.brand,.header-actions{position:relative;z-index:1}
+.brand small{
+  display:inline-flex;padding:7px 11px;border-radius:999px;background:var(--accentSoft);color:var(--accent);
+  font-size:10px;letter-spacing:.17em;font-weight:900;margin-bottom:12px
+}
+.brand h1{font-size:32px;margin:0 0 9px;letter-spacing:-.045em}
+.brand p{font-size:12px;color:var(--muted);margin:0;line-height:1.7}
+.header-actions{display:flex;gap:8px;align-items:center}
+.badge{font-size:10px;color:#65728a;border:1px solid var(--line);background:#fff;border-radius:999px;padding:9px 12px}
+.btn{border:0;border-radius:12px;padding:10px 14px;font-size:12px;font-weight:850;transition:.18s ease}
+.btn:hover:not(:disabled){transform:translateY(-1px)}
+.btn.primary{background:linear-gradient(135deg,var(--accent),#657ab0);color:#fff;box-shadow:0 9px 22px rgba(80,103,157,.18)}
+.btn.soft{background:var(--accentSoft);color:var(--accent)}
+.btn.ghost{background:#fff;border:1px solid var(--line);color:var(--text)}
+.btn.danger{background:var(--dangerSoft);color:var(--danger)}
+.btn.sm{padding:8px 10px;font-size:10px}
+.view{display:none}.view.active{display:block}
+.card,.form-card,.metric,.branches,.tablewrap{
+  background:var(--card);border:1px solid var(--line);box-shadow:var(--shadowSoft)
+}
+.card{border-radius:20px;padding:20px}
+.selector{display:flex;justify-content:space-between;align-items:center;gap:18px;margin-bottom:28px;padding:21px 23px}
+.selector strong{font-size:13px}.selector p{font-size:10px;color:var(--muted);margin:5px 0 0}.selector select{min-width:210px}
+input,select,textarea{width:100%;border:1px solid var(--line);border-radius:12px;background:#fff;padding:11px 12px;outline:none;color:var(--text)}
+textarea{min-height:100px;resize:vertical}
+input:focus,select:focus,textarea:focus{border-color:#b9c4df;box-shadow:0 0 0 4px rgba(80,103,157,.10)}
+.section-head{display:flex;justify-content:space-between;align-items:end;gap:14px;margin-bottom:14px}
+.section-head h2{font-size:19px;margin:0;letter-spacing:-.02em}.section-head p{font-size:11px;color:var(--muted);margin:5px 0 0}
+.list{display:flex;flex-direction:column;gap:11px}
+.item{
+  display:grid;grid-template-columns:minmax(0,1fr) auto;gap:18px;align-items:center;background:rgba(255,255,255,.94);
+  border:1px solid var(--line);border-radius:18px;padding:18px 19px;box-shadow:var(--shadowSoft);transition:.18s ease
+}
+.item:hover{transform:translateY(-2px);box-shadow:0 13px 34px rgba(46,59,88,.075)}
+.item h3{font-size:14px;margin:0 0 6px}.item p{font-size:11px;color:var(--muted);margin:0;line-height:1.65}
+.meta{display:flex;gap:6px;flex-wrap:wrap;margin-top:10px}
+.meta span{font-size:9px;border-radius:999px;padding:5px 8px;background:#f4f6fa;color:#6d7686;border:1px solid #edf0f5}
+.meta .ok{background:var(--okSoft);color:var(--ok);border-color:transparent}.meta .closed{background:var(--dangerSoft);color:var(--danger);border-color:transparent}
+.empty{border:1px dashed #d5dce8;border-radius:18px;padding:34px;text-align:center;color:var(--muted);font-size:12px;background:rgba(255,255,255,.58)}
+.form-card{border-radius:24px;padding:24px}.back{background:none;border:0;padding:0;color:var(--accent);font-weight:900;margin-bottom:15px}
+.form-head{padding-bottom:18px;border-bottom:1px solid var(--line);margin-bottom:20px}.form-head h2{font-size:22px;margin:0 0 7px}.form-head p{font-size:11px;color:var(--muted);margin:0;line-height:1.7}
+.field{margin-bottom:16px}.field label{display:block;font-size:11px;font-weight:850;margin-bottom:7px}.required:after{content:" *";color:var(--danger)}
+.choice{display:flex;gap:8px;flex-wrap:wrap}.choice label{display:flex;align-items:center;gap:7px;border:1px solid var(--line);border-radius:11px;padding:9px 11px;font-size:11px;background:#fff}
+.alert{display:none;border-radius:12px;padding:11px 13px;font-size:11px;margin-bottom:14px}.alert.show{display:block}.alert.ok{background:var(--okSoft);color:var(--ok)}.alert.err{background:var(--dangerSoft);color:var(--danger)}
+.admin-tabs{display:inline-flex;gap:5px;margin-bottom:20px;padding:5px;background:#e9edf5;border-radius:999px}
+.admin-tabs button{border:0;background:transparent;color:var(--muted);font-weight:850;border-radius:999px;padding:9px 13px}
+.admin-tabs button.active{background:#fff;color:var(--accent);box-shadow:0 5px 12px rgba(46,59,88,.07)}
+.admin-toolbar{display:flex;justify-content:space-between;align-items:center;gap:15px;margin-bottom:15px}.admin-toolbar h2{font-size:19px;margin:0}.admin-toolbar p{font-size:11px;color:var(--muted);margin:5px 0 0}
+.admin-actions{display:flex;gap:7px;flex-wrap:wrap;justify-content:flex-end}
+.progress{display:flex;gap:8px;align-items:center;margin-top:10px;max-width:440px}.track{height:7px;background:#edf0f5;border-radius:999px;overflow:hidden;flex:1}.fill{height:100%;background:linear-gradient(90deg,var(--accent),var(--accent2))}.progress span{font-size:9px;color:var(--muted)}
+.builder{display:grid;grid-template-columns:.92fr 1.08fr;gap:17px}.qbox{border:1px solid var(--line);border-radius:15px;padding:14px;background:linear-gradient(180deg,#fcfdff,#f8f9fc);margin-bottom:10px}
+.qtop{display:flex;justify-content:space-between;gap:8px;align-items:center;margin-bottom:9px}.qtop strong{font-size:10px;color:#68758a}.two{display:grid;grid-template-columns:1fr 1fr;gap:10px}.check{display:flex;gap:7px;align-items:center;font-size:10px;color:var(--muted);padding-top:10px}.check input{width:auto}
+.status{display:inline-flex;border-radius:999px;padding:5px 8px;font-size:9px;font-weight:900}.status.open{background:var(--okSoft);color:var(--ok)}.status.draft{background:var(--warnSoft);color:var(--warn)}.status.closed{background:#f0f2f5;color:#707988}
+.summary{display:grid;grid-template-columns:190px 1fr;gap:13px;margin-bottom:13px}.metric,.branches{border-radius:17px;padding:15px}.metric strong{font-size:29px;color:var(--accent)}.metric span{font-size:10px;color:var(--muted)}
+.branchgrid{display:grid;grid-template-columns:repeat(6,1fr);gap:6px}.branchchip{text-align:center;font-size:9px;padding:8px 5px;border-radius:9px;background:var(--warnSoft);color:var(--warn)}.branchchip.done{background:var(--okSoft);color:var(--ok);font-weight:850}
+.tablewrap{overflow:auto;border-radius:17px}table{border-collapse:collapse;width:100%;min-width:760px}th,td{font-size:10px;padding:11px 12px;border-bottom:1px solid var(--line);text-align:left;vertical-align:top}th{background:#f8f9fc;color:#5f6878}.missing{background:#fffdfa}
+.modalback{position:fixed;inset:0;background:rgba(23,28,42,.40);display:none;align-items:center;justify-content:center;padding:18px;z-index:20;backdrop-filter:blur(4px)}.modalback.show{display:flex}
+.modal{width:min(390px,100%);background:#fff;border:1px solid var(--line);border-radius:22px;padding:22px;box-shadow:0 28px 70px rgba(28,35,52,.22)}.modal h3{margin:0 0 6px;font-size:18px}.modal p{font-size:11px;color:var(--muted);margin:0 0 15px;line-height:1.65}
+.modal-actions{display:flex;justify-content:flex-end;gap:8px;margin-top:14px}.loginerr{font-size:10px;color:var(--danger);min-height:16px;margin-top:7px}.smallnote{font-size:9px;color:var(--muted);margin-top:9px;line-height:1.6}
+@media(max-width:760px){
+  .wrap{padding:24px 15px 52px}.header{padding:22px 20px}.badge{display:none}.selector{flex-direction:column;align-items:stretch}.selector select{min-width:0}
+  .item{grid-template-columns:1fr}.item .btn{width:100%}.builder{grid-template-columns:1fr}.summary{grid-template-columns:1fr}.branchgrid{grid-template-columns:repeat(3,1fr)}.two{grid-template-columns:1fr}
+}
+</style>
+
+<style>
+}
+</style>
+
+
+<style>
+.portal-back-btn{
+  position:fixed !important;
+  right:24px !important;
+  bottom:24px !important;
+  left:auto !important;
+  top:auto !important;
+  z-index:999999 !important;
+  display:inline-flex !important;
+  align-items:center !important;
+  justify-content:center !important;
+  gap:10px !important;
+  min-width:190px !important;
+  padding:14px 20px !important;
+  border:3px solid rgba(255,255,255,.92) !important;
+  border-radius:18px !important;
+  background:linear-gradient(135deg,#174f9d,#246fc9) !important;
+  color:#fff !important;
+  text-decoration:none !important;
+  font:900 15px "Microsoft JhengHei","Noto Sans TC",sans-serif !important;
+  box-shadow:0 14px 34px rgba(15,58,121,.35),0 0 0 4px rgba(45,117,207,.12) !important;
+  backdrop-filter:blur(8px) !important;
+  transition:transform .18s ease,box-shadow .18s ease !important;
+}
+.portal-back-btn::before{
+  content:"⌂" !important;
+  width:30px !important;
+  height:30px !important;
+  display:grid !important;
+  place-items:center !important;
+  border-radius:50% !important;
+  background:rgba(255,255,255,.18) !important;
+  font-size:19px !important;
+  line-height:1 !important;
+}
+.portal-back-btn:hover{
+  transform:translateY(-3px) !important;
+  box-shadow:0 18px 40px rgba(15,58,121,.42),0 0 0 5px rgba(45,117,207,.15) !important;
+}
+@media(max-width:700px){
+  .portal-back-btn{
+    right:12px !important;
+    bottom:12px !important;
+    min-width:auto !important;
+    padding:12px 16px !important;
+    font-size:13px !important;
+  }
+}
+</style>
+
+<style>
+.portal-back-btn{
+  position:fixed !important;
+  right:24px !important;
+  bottom:24px !important;
+  left:auto !important;
+  top:auto !important;
+  z-index:999999 !important;
+  display:inline-flex !important;
+  align-items:center !important;
+  justify-content:center !important;
+  gap:10px !important;
+  min-width:190px !important;
+  padding:14px 20px !important;
+  border-radius:18px !important;
+  border:3px solid rgba(255,255,255,.92) !important;
+  background:linear-gradient(135deg,#174f9d,#246fc9) !important;
+  color:#fff !important;
+  text-decoration:none !important;
+  font:900 15px "Microsoft JhengHei","Noto Sans TC",sans-serif !important;
+  box-shadow:0 14px 34px rgba(15,58,121,.35),0 0 0 4px rgba(45,117,207,.12) !important;
+}
+.portal-back-btn::before{
+  content:"⌂" !important;
+  width:30px !important;
+  height:30px !important;
+  display:grid !important;
+  place-items:center !important;
+  border-radius:50% !important;
+  background:rgba(255,255,255,.18) !important;
+  font-size:19px !important;
+}
+.portal-back-btn:hover{
+  transform:translateY(-3px) !important;
+}
+@media(max-width:700px){
+  .portal-back-btn{
+    right:12px !important;
+    bottom:12px !important;
+    min-width:auto !important;
+    padding:12px 16px !important;
+    font-size:13px !important;
+  }
+}
+</style>
+
+<style>
+.portal-back-btn{
+position:fixed!important;right:24px!important;bottom:24px!important;z-index:999999!important;
+padding:14px 20px!important;border-radius:18px!important;background:#1958a0!important;
+color:#fff!important;text-decoration:none!important;font:900 15px "Microsoft JhengHei",sans-serif!important;
+box-shadow:0 12px 30px rgba(20,70,130,.32)!important;border:2px solid #fff!important}
+</style>
+<style>
+.portal-back-btn{position:fixed!important;z-index:999999!important;display:inline-flex!important;align-items:center!important;justify-content:center!important;text-decoration:none!important;background:linear-gradient(135deg,#174f9d,#246fc9)!important;color:#fff!important;border:3px solid rgba(255,255,255,.92)!important;box-shadow:0 14px 34px rgba(15,58,121,.35)!important;font-family:"Microsoft JhengHei",sans-serif!important;font-weight:900!important}
+</style>
+</head>
+<body><a class="portal-back-btn" href="index.html">⌂ 返回智慧工作入口</a>
+
+
+<div class="wrap">
+  <header class="header">
+    <div class="brand">
+      <small id="eyebrow">BUSINESS REPORT</small>
+      <h1 id="title">業務回報</h1>
+      <p id="subtitle">選擇目前回報事項，填寫後即可完成。</p>
+    </div>
+    <div class="header-actions">
+      <span class="badge" id="modeBadge">分處填報</span>
+      <button class="btn ghost sm" id="adminBtn" type="button">管理端</button>
+    </div>
+  </header>
+
+  <!-- 分處首頁 -->
+  <section id="branchHome" class="view active">
+    <div class="card selector">
+      <div>
+        <strong>選擇您的分處</strong>
+        <p>系統會顯示該分處目前各項回報狀態。</p>
+      </div>
+      <select id="branchSelect"><option value="">請選擇分處</option></select>
+    </div>
+    <div class="section-head">
+      <div><h2>目前回報事項</h2><p>顯示總處已發布的回報主題。</p></div>
+    </div>
+    <div id="branchList" class="list"></div>
+  </section>
+
+  <!-- 分處填表 -->
+  <section id="branchForm" class="view">
+    <button class="back" type="button" data-action="branch-back">← 返回回報事項</button>
+    <div class="form-card">
+      <div id="branchAlert" class="alert"></div>
+      <div id="branchFormMount"></div>
+    </div>
+  </section>
+
+  <!-- 管理端 -->
+  <section id="adminHome" class="view">
+    <div class="admin-tabs">
+      <button type="button" class="active" data-action="tab-manage">回報管理</button>
+      <button type="button" data-action="tab-history">歷史紀錄</button>
+    </div>
+
+    <div id="managePane">
+      <div class="admin-toolbar">
+        <div><h2>回報管理</h2><p>建立題目、發布回報並查看彙整結果。</p></div>
+        <button class="btn primary" type="button" data-action="new-task">＋ 新增回報</button>
+      </div>
+      <div id="adminList" class="list"></div>
+    </div>
+
+    <div id="historyPane" style="display:none">
+      <div class="admin-toolbar">
+        <div><h2>歷史紀錄</h2><p>已結束的回報仍可查看及匯出。</p></div>
+      </div>
+      <div id="historyList" class="list"></div>
+    </div>
+  </section>
+
+  <!-- 建立/編輯 -->
+  <section id="builderView" class="view">
+    <button class="back" type="button" data-action="admin-back">← 返回回報管理</button>
+    <div class="builder">
+      <div class="card">
+        <div class="section-head"><div><h2 id="builderHeading">新增回報</h2><p>設定這次要請分處回覆的內容。</p></div></div>
+        <div id="builderAlert" class="alert"></div>
+        <div class="field"><label class="required">回報主題</label><input id="taskTitle" type="text" placeholder="例如：○○業務執行情形回報"></div>
+        <div class="field"><label>簡短說明</label><textarea id="taskDesc" placeholder="提供分處需要知道的說明"></textarea></div>
+        <div class="field"><label>截止時間</label><input id="taskDeadline" type="datetime-local"></div>
+        <div class="admin-actions" style="justify-content:flex-start">
+          <button class="btn primary" type="button" data-action="publish-task">發布回報</button>
+          <button class="btn soft" type="button" data-action="save-draft">存草稿</button>
+          <button class="btn ghost" type="button" data-action="admin-back">取消</button>
+        </div>
+        <div class="smallnote">「發布回報」後分處端立即看得到；「存草稿」只留在管理端。</div>
+      </div>
+      <div class="card">
+        <div class="section-head">
+          <div><h2>回報題目</h2><p>題目與回答方式都可以自由設定。</p></div>
+          <button class="btn soft sm" type="button" data-action="add-question">＋ 新增題目</button>
+        </div>
+        <div id="questionList"></div>
+      </div>
+    </div>
+  </section>
+
+  <!-- 結果 -->
+  <section id="resultView" class="view">
+    <button class="back" type="button" data-action="admin-back">← 返回回報管理</button>
+    <div class="admin-toolbar">
+      <div><h2 id="resultTitle"></h2><p id="resultMeta"></p></div>
+      <button class="btn soft" type="button" data-action="export-csv">匯出 CSV</button>
+    </div>
+    <div id="resultSummary"></div>
+    <div id="resultTable"></div>
+  </section>
+</div>
+
+
+<div class="modalback" id="confirmModal">
+  <div class="modal" role="dialog" aria-modal="true" aria-labelledby="confirmTitle">
+    <h3 id="confirmTitle">請確認</h3>
+    <p id="confirmMessage" style="white-space:pre-line"></p>
+    <div class="modal-actions">
+      <button class="btn ghost" type="button" data-action="confirm-cancel">取消</button>
+      <button class="btn primary" type="button" id="confirmOkBtn" data-action="confirm-ok">確定</button>
+    </div>
+  </div>
+</div>
+
+<div class="modalback" id="loginModal">
+  <div class="modal" role="dialog" aria-modal="true" aria-labelledby="loginTitle">
+    <h3 id="loginTitle">進入管理端</h3>
+    <p>僅供總處管理人員使用。</p>
+    <div class="field" style="margin-bottom:0"><label>管理密碼</label><input id="adminPassword" type="password" inputmode="numeric" autocomplete="off" placeholder="請輸入密碼"></div>
+    <div class="loginerr" id="loginError"></div>
+    <div class="modal-actions">
+      <button class="btn ghost" type="button" data-action="close-login">取消</button>
+      <button class="btn primary" type="button" data-action="login">進入管理端</button>
+    </div>
+  </div>
+</div>
+
+<script>
+(function(){
+'use strict';
+
+const BRANCHES=['中正分處','大同分處','中山分處','萬華分處','信義分處','松山分處','南港分處','文山分處','大安分處','士林分處','北投分處','內湖分處'];
+const API_BASE='https://tax-status-api.ddy88000000.workers.dev';
+const REPORT_DATA_API=`${API_BASE}/api/report-data`;
+const REPORT_TASKS_API=`${API_BASE}/api/report-tasks`;
+const REPORT_RESPONSES_API=`${API_BASE}/api/report-responses`;
+const KEYS={tasks:'report_tasks_d1_backup_v1',responses:'report_responses_d1_backup_v1',branch:'report_branch_v2'};
+let isSyncing=false;
+const $=s=>document.querySelector(s);
+
+let state={mode:'branch',tasks:[],responses:[],branch:'',editingId:null,activeTaskId:null,resultTaskId:null,questions:[]};
+let pendingConfirm=null;
+
+function load(){
+  try{state.tasks=JSON.parse(localStorage.getItem(KEYS.tasks)||'[]')||[]}catch{state.tasks=[]}
+  try{state.responses=JSON.parse(localStorage.getItem(KEYS.responses)||'[]')||[]}catch{state.responses=[]}
+  state.branch=localStorage.getItem(KEYS.branch)||'';
+  normalize();
+}
+async function loadRemote({silent=false}={}){
+  if(isSyncing)return;
+  try{
+    isSyncing=true;
+    const res=await fetch(REPORT_DATA_API,{cache:'no-store'});
+    const data=await res.json();
+    if(!res.ok||!data.success)throw new Error(data.error||`HTTP ${res.status}`);
+    state.tasks=Array.isArray(data.tasks)?data.tasks:[];
+    state.responses=Array.isArray(data.responses)?data.responses:[];
+    normalize();
+    persist();
+    if(state.mode==='admin')renderAdmin(); else renderBranch();
+    return true;
+  }catch(err){
+    console.error('讀取共用回報資料失敗',err);
+    if(!silent)showAlert('#branchAlert','共用資料暫時無法讀取，目前顯示本機備份。','err');
+    return false;
+  }finally{isSyncing=false}
+}
+async function saveTaskRemote(task,{create=false}={}){
+  const url=create?REPORT_TASKS_API:`${REPORT_TASKS_API}/${encodeURIComponent(task.id)}`;
+  const res=await fetch(url,{method:create?'POST':'PUT',headers:{'Content-Type':'application/json'},body:JSON.stringify({task})});
+  const data=await res.json().catch(()=>({}));
+  if(!res.ok||!data.success)throw new Error(data.error||`HTTP ${res.status}`);
+  return data;
+}
+async function deleteTaskRemote(id){
+  const res=await fetch(`${REPORT_TASKS_API}/${encodeURIComponent(id)}`,{method:'DELETE'});
+  const data=await res.json().catch(()=>({}));
+  if(!res.ok||!data.success)throw new Error(data.error||`HTTP ${res.status}`);
+  return data;
+}
+async function saveResponseRemote(rec){
+  const url=`${REPORT_RESPONSES_API}/${encodeURIComponent(rec.taskId)}/${encodeURIComponent(rec.branch)}`;
+  const res=await fetch(url,{method:'PUT',headers:{'Content-Type':'application/json'},body:JSON.stringify({response:rec})});
+  const data=await res.json().catch(()=>({}));
+  if(!res.ok||!data.success)throw new Error(data.error||`HTTP ${res.status}`);
+  return data;
+}
+function normalize(){
+  state.tasks=state.tasks.map(t=>({
+    id:t.id||uid(),title:t.title||'未命名回報',desc:t.desc||'',deadline:t.deadline||'',
+    status:['open','draft','closed'].includes(t.status)?t.status:'draft',
+    createdAt:t.createdAt||new Date().toISOString(),closedAt:t.closedAt||'',
+    questions:Array.isArray(t.questions)?t.questions.map(q=>({
+      id:q.id||uid(),label:q.label||'',type:q.type||'text',required:!!q.required,
+      options:Array.isArray(q.options)?q.options:[]
+    })):[]
+  }));
+}
+function persist(){
+  localStorage.setItem(KEYS.tasks,JSON.stringify(state.tasks));
+  localStorage.setItem(KEYS.responses,JSON.stringify(state.responses));
+}
+function uid(){return Math.random().toString(36).slice(2)+Date.now().toString(36)}
+function esc(v){return String(v??'').replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]))}
+function fmt(v){if(!v)return '';const d=new Date(v);return isNaN(d)?v:d.toLocaleString('zh-TW')}
+function expired(t){return !!t.deadline && new Date(t.deadline).getTime()<Date.now()}
+function getTask(id){return state.tasks.find(t=>t.id===id)}
+function respFor(taskId,branch){return state.responses.find(r=>r.taskId===taskId&&r.branch===branch)}
+function taskResponses(id){return state.responses.filter(r=>r.taskId===id)}
+function countFor(id){return new Set(taskResponses(id).map(r=>r.branch)).size}
+function qTypeName(t){return ({text:'短文字',textarea:'長文字',number:'數字',date:'日期',yesno:'是／否',radio:'單選',checkbox:'多選',select:'下拉選單'})[t]||t}
+function needsOptions(t){return ['radio','checkbox','select'].includes(t)}
+function showAlert(id,msg,type){
+  const el=$(id);if(!el)return;
+  el.textContent=msg;el.className='alert show '+(type||'ok');
+  clearTimeout(el._timer);el._timer=setTimeout(()=>el.className='alert',2500);
+}
+function showView(id){
+  document.querySelectorAll('.view').forEach(v=>v.classList.remove('active'));
+  $(id).classList.add('active');
+  window.scrollTo({top:0,behavior:'smooth'});
+}
+function setMode(mode){
+  state.mode=mode;
+  $('#modeBadge').textContent=mode==='admin'?'總處管理端':'分處填報';
+  $('#adminBtn').textContent=mode==='admin'?'返回分處端':'管理端';
+  $('#title').textContent=mode==='admin'?'回報管理':'業務回報';
+  $('#subtitle').textContent=mode==='admin'?'建立回報主題，並查看 12 分處彙整結果。':'選擇目前回報事項，填寫後即可完成。';
+  if(mode==='admin'){renderAdmin();showView('#adminHome')}
+  else{renderBranch();showView('#branchHome')}
+}
+async function cleanupDemoTask(){
+  const demo=state.tasks.find(t=>
+    t.title==='服務情形臨時回報' &&
+    t.desc==='請各分處依實際辦理情形完成本次回報。' &&
+    Array.isArray(t.questions) &&
+    t.questions.length===3 &&
+    t.questions[0]?.label==='目前辦理情形' &&
+    t.questions[1]?.label==='是否有需總處協助事項' &&
+    t.questions[2]?.label==='補充說明'
+  );
+  if(!demo)return false;
+  try{
+    await deleteTaskRemote(demo.id);
+    state.tasks=state.tasks.filter(x=>x.id!==demo.id);
+    state.responses=state.responses.filter(r=>r.taskId!==demo.id);
+    persist();
+    return true;
+  }catch(err){
+    console.error('移除示範回報失敗',err);
+    return false;
+  }
+}
+
+
+function askConfirm(title,message,okText,onOk,danger){
+  pendingConfirm=onOk;
+  $('#confirmTitle').textContent=title||'請確認';
+  $('#confirmMessage').textContent=message||'';
+  $('#confirmOkBtn').textContent=okText||'確定';
+  $('#confirmOkBtn').className='btn '+(danger?'danger':'primary');
+  $('#confirmModal').classList.add('show');
+}
+function closeConfirm(){
+  $('#confirmModal').classList.remove('show');
+  pendingConfirm=null;
+}
+
+/* 分處端 */
+function initBranches(){
+  BRANCHES.forEach(b=>$('#branchSelect').insertAdjacentHTML('beforeend',`<option value="${esc(b)}">${esc(b)}</option>`));
+  $('#branchSelect').value=state.branch;
+}
+function renderBranch(){
+  load();
+  $('#branchSelect').value=state.branch;
+  const items=state.tasks.filter(t=>t.status==='open').sort((a,b)=>(a.deadline||'9999').localeCompare(b.deadline||'9999'));
+  const mount=$('#branchList');
+  if(!items.length){mount.innerHTML='<div class="empty">目前沒有需要回報的事項。</div>';return}
+  mount.innerHTML=items.map(t=>{
+    const r=state.branch?respFor(t.id,state.branch):null;
+    const isClosed=expired(t);
+    return `<article class="item">
+      <div>
+        <h3>${esc(t.title)}</h3>
+        <p>${esc(t.desc||'請依題目完成填報。')}</p>
+        <div class="meta">
+          ${t.deadline?`<span>截止 ${esc(fmt(t.deadline))}</span>`:''}
+          <span>${t.questions.length} 題</span>
+          ${r?'<span class="ok">✓ 已回報，可修改</span>':''}
+          ${isClosed?'<span class="closed">已截止</span>':''}
+        </div>
+      </div>
+      <button class="btn ${isClosed?'ghost':(r?'soft':'primary')}" type="button" data-action="open-form" data-id="${t.id}" ${isClosed?'disabled':''}>${isClosed?'已截止':(r?'查看／修改':'開始填寫')}</button>
+    </article>`;
+  }).join('');
+}
+function openForm(id){
+  if(!state.branch){alert('請先選擇您的分處。');$('#branchSelect').focus();return}
+  load(); const t=getTask(id); if(!t)return;
+  state.activeTaskId=id;
+  const old=respFor(id,state.branch);
+  $('#branchFormMount').innerHTML=`
+    <div class="form-head"><h2>${esc(t.title)}</h2><p>${esc(t.desc||'請依題目完成填報。')}${t.deadline?'<br>截止時間：'+esc(fmt(t.deadline)):''}</p></div>
+    <form id="responseForm">
+      <div class="field"><label>回報分處</label><input type="text" disabled value="${esc(state.branch)}"></div>
+      ${t.questions.map((q,i)=>renderField(q,i,old)).join('')}
+      <div style="display:flex;gap:7px;flex-wrap:wrap;margin-top:18px">
+        <button class="btn primary" type="submit">${old?'更新回報':'送出回報'}</button>
+        <button class="btn ghost" type="button" data-action="branch-back">取消</button>
+      </div>
+    </form>`;
+  $('#responseForm').addEventListener('submit',submitResponse);
+  showView('#branchForm');
+}
+function renderField(q,i,old){
+  const name='q_'+q.id, val=old?.answers?.[q.id] ?? (q.type==='checkbox'?[]:'');
+  const req=q.required?'required':'', cls=q.required?'required':'';
+  let c='';
+  if(q.type==='text')c=`<input name="${name}" type="text" ${req} value="${esc(val)}">`;
+  else if(q.type==='textarea')c=`<textarea name="${name}" ${req}>${esc(val)}</textarea>`;
+  else if(q.type==='number')c=`<input name="${name}" type="number" ${req} value="${esc(val)}">`;
+  else if(q.type==='date')c=`<input name="${name}" type="date" ${req} value="${esc(val)}">`;
+  else if(q.type==='yesno'||q.type==='radio'){
+    const ops=q.type==='yesno'?['是','否']:q.options;
+    c=`<div class="choice">${ops.map((op,j)=>`<label><input style="width:auto" name="${name}" type="radio" value="${esc(op)}" ${val===op?'checked':''} ${q.required&&j===0?'required':''}>${esc(op)}</label>`).join('')}</div>`;
+  }else if(q.type==='checkbox'){
+    const arr=Array.isArray(val)?val:[];
+    c=`<div class="choice">${q.options.map(op=>`<label><input style="width:auto" name="${name}" type="checkbox" value="${esc(op)}" ${arr.includes(op)?'checked':''}>${esc(op)}</label>`).join('')}</div>`;
+  }else if(q.type==='select'){
+    c=`<select name="${name}" ${req}><option value="">請選擇</option>${q.options.map(op=>`<option value="${esc(op)}" ${val===op?'selected':''}>${esc(op)}</option>`).join('')}</select>`;
+  }
+  return `<div class="field"><label class="${cls}">${i+1}. ${esc(q.label)}</label>${c}</div>`;
+}
+async function submitResponse(e){
+  e.preventDefault(); load();
+  const t=getTask(state.activeTaskId); if(!t)return;
+  const fd=new FormData(e.currentTarget), old=respFor(t.id,state.branch), answers={};
+  for(const q of t.questions){
+    const n='q_'+q.id;
+    if(q.type==='checkbox'){
+      const a=fd.getAll(n); if(q.required&&!a.length){showAlert('#branchAlert','請完成必填題目：「'+q.label+'」','err');return} answers[q.id]=a;
+    }else answers[q.id]=fd.get(n)||'';
+  }
+  const rec={id:old?.id||uid(),taskId:t.id,branch:state.branch,answers,submittedAt:new Date().toISOString()};
+  const ix=state.responses.findIndex(r=>r.taskId===t.id&&r.branch===state.branch);
+  if(ix>=0)state.responses[ix]=rec; else state.responses.push(rec);
+  persist();
+  const submitBtn=e.currentTarget.querySelector('button[type="submit"]');if(submitBtn)submitBtn.disabled=true;
+  try{
+    await saveResponseRemote(rec);
+    showAlert('#branchAlert',old?'已更新回報內容，並同步共用資料。':'回報完成，已同步共用資料。','ok');
+    setTimeout(()=>{renderBranch();showView('#branchHome')},650);
+  }catch(err){
+    console.error('共用回報同步失敗',err);
+    showAlert('#branchAlert','送出失敗：共用資料庫暫時無法寫入，請稍後再試。','err');
+  }finally{if(submitBtn)submitBtn.disabled=false}
+}
+
+/* 管理端 */
+function renderAdmin(){
+  load();
+  const list=state.tasks.filter(t=>t.status!=='closed').sort((a,b)=>new Date(b.createdAt)-new Date(a.createdAt));
+  $('#adminList').innerHTML=list.length?list.map(adminItem).join(''):'<div class="empty">目前沒有回報主題。</div>';
+  const hist=state.tasks.filter(t=>t.status==='closed').sort((a,b)=>new Date(b.closedAt||b.createdAt)-new Date(a.closedAt||a.createdAt));
+  $('#historyList').innerHTML=hist.length?hist.map(t=>`<article class="item">
+    <div><h3>${esc(t.title)}</h3><p><span class="status closed">已結束</span>　${countFor(t.id)} / 12 分處有回報</p></div>
+    <div class="admin-actions">
+      <button class="btn soft sm" type="button" data-action="view-result" data-id="${t.id}">查看結果</button>
+      <button class="btn ghost sm" type="button" data-action="reopen-task" data-id="${t.id}">重新開放</button>
+      <button class="btn danger sm" type="button" data-action="delete-task" data-id="${t.id}">刪除</button>
+    </div>
+  </article>`).join(''):'<div class="empty">目前沒有歷史回報。</div>';
+}
+function adminItem(t){
+  const n=countFor(t.id),rate=Math.round(n/12*100),st=t.status==='open'?'open':'draft';
+  return `<article class="item">
+    <div>
+      <h3>${esc(t.title)}</h3>
+      <p><span class="status ${st}">${t.status==='open'?'已發布':'草稿'}</span>${t.deadline?'　截止 '+esc(fmt(t.deadline)):''}</p>
+      <div class="progress"><div class="track"><div class="fill" style="width:${rate}%"></div></div><span>${n} / 12 已回報</span></div>
+    </div>
+    <div class="admin-actions">
+      ${t.status==='open'?`<button class="btn soft sm" type="button" data-action="view-result" data-id="${t.id}">查看結果</button>`:''}
+      <button class="btn ghost sm" type="button" data-action="edit-task" data-id="${t.id}">編輯</button>
+      ${t.status==='draft'
+        ?`<button class="btn primary sm" type="button" data-action="quick-publish" data-id="${t.id}">發布</button>`
+        :`<button class="btn danger sm" type="button" data-action="close-task" data-id="${t.id}">結束</button>`}
+      <button class="btn danger sm" type="button" data-action="delete-task" data-id="${t.id}">刪除</button>
+    </div>
+  </article>`;
+}
+function newQuestion(){return{id:uid(),label:'',type:'text',required:false,options:[]}}
+function openBuilder(id){
+  load(); state.editingId=id||null;
+  const t=id?getTask(id):null;
+  state.questions=t?JSON.parse(JSON.stringify(t.questions)):[newQuestion()];
+  $('#builderHeading').textContent=t?'編輯回報':'新增回報';
+  $('#taskTitle').value=t?.title||'';
+  $('#taskDesc').value=t?.desc||'';
+  $('#taskDeadline').value=t?.deadline||'';
+  $('#builderAlert').className='alert';
+  renderQuestions(); showView('#builderView');
+}
+function renderQuestions(){
+  $('#questionList').innerHTML=state.questions.length?state.questions.map((q,i)=>`<div class="qbox">
+    <div class="qtop"><strong>題目 ${i+1}</strong><div class="admin-actions">
+      <button class="btn ghost sm" type="button" data-action="q-up" data-id="${q.id}" ${i===0?'disabled':''}>↑</button>
+      <button class="btn ghost sm" type="button" data-action="q-down" data-id="${q.id}" ${i===state.questions.length-1?'disabled':''}>↓</button>
+      <button class="btn danger sm" type="button" data-action="q-delete" data-id="${q.id}">刪除</button>
+    </div></div>
+    <div class="field"><input type="text" data-role="q-label" data-id="${q.id}" value="${esc(q.label)}" placeholder="輸入題目內容"></div>
+    <div class="two">
+      <select data-role="q-type" data-id="${q.id}">
+        ${['text','textarea','number','date','yesno','radio','checkbox','select'].map(v=>`<option value="${v}" ${q.type===v?'selected':''}>${qTypeName(v)}</option>`).join('')}
+      </select>
+      <label class="check"><input type="checkbox" data-role="q-required" data-id="${q.id}" ${q.required?'checked':''}> 必填</label>
+    </div>
+    <div class="field" style="margin-top:9px;${needsOptions(q.type)?'':'display:none'}">
+      <input type="text" data-role="q-options" data-id="${q.id}" value="${esc((q.options||[]).join('、'))}" placeholder="選項用頓號分隔，例如：有、無、其他">
+    </div>
+  </div>`).join(''):'<div class="empty">尚未設定題目。</div>';
+}
+function syncQuestionInputs(){
+  document.querySelectorAll('[data-role="q-label"]').forEach(el=>{const q=state.questions.find(x=>x.id===el.dataset.id);if(q)q.label=el.value});
+  document.querySelectorAll('[data-role="q-required"]').forEach(el=>{const q=state.questions.find(x=>x.id===el.dataset.id);if(q)q.required=el.checked});
+  document.querySelectorAll('[data-role="q-options"]').forEach(el=>{const q=state.questions.find(x=>x.id===el.dataset.id);if(q)q.options=el.value.split(/[、,，]/).map(x=>x.trim()).filter(Boolean)});
+}
+async function saveTask(status){
+  syncQuestionInputs();
+  const title=$('#taskTitle').value.trim(),desc=$('#taskDesc').value.trim(),deadline=$('#taskDeadline').value;
+  if(!title){showAlert('#builderAlert','請輸入回報主題。','err');return}
+  if(!state.questions.length){showAlert('#builderAlert','請至少設定一題。','err');return}
+  if(state.questions.some(q=>!q.label.trim())){showAlert('#builderAlert','尚有題目未輸入內容。','err');return}
+  if(state.questions.some(q=>needsOptions(q.type)&&!q.options.length)){showAlert('#builderAlert','單選、多選或下拉選單必須設定選項。','err');return}
+  load();
+  let task,create=false;
+  if(state.editingId){
+    task=getTask(state.editingId); if(!task)return;
+    Object.assign(task,{title,desc,deadline,status,questions:JSON.parse(JSON.stringify(state.questions))});
+  }else{
+    create=true;
+    task={id:uid(),title,desc,deadline,status,createdAt:new Date().toISOString(),closedAt:'',questions:JSON.parse(JSON.stringify(state.questions))};
+    state.tasks.push(task);
+  }
+  persist();
+  try{
+    await saveTaskRemote(task,{create});
+    state.editingId=null; renderAdmin(); showView('#adminHome');
+    showAlert('#adminAlert',status==='open'?'已發布並同步至共用資料庫。':'草稿已儲存至共用資料庫。','ok');
+  }catch(err){
+    console.error('回報主題同步失敗',err);
+    if(create)state.tasks=state.tasks.filter(x=>x.id!==task.id);
+    persist();
+    showAlert('#builderAlert','儲存失敗：共用資料庫暫時無法寫入。','err');
+  }
+}
+function openResult(id){
+  load(); const t=getTask(id); if(!t)return;
+  state.resultTaskId=id;
+  $('#resultTitle').textContent=t.title;
+  $('#resultMeta').textContent=(t.deadline?'截止 '+fmt(t.deadline)+' ・ ':'')+t.questions.length+' 題';
+  const map=new Map(taskResponses(id).map(r=>[r.branch,r])),done=BRANCHES.filter(b=>map.has(b)),rate=Math.round(done.length/12*100);
+  $('#resultSummary').innerHTML=`<div class="summary">
+    <div class="metric"><strong>${done.length}</strong><span> / 12 已回報</span><div class="progress"><div class="track"><div class="fill" style="width:${rate}%"></div></div><span>${rate}%</span></div></div>
+    <div class="branches"><div class="branchgrid">${BRANCHES.map(b=>`<div class="branchchip ${map.has(b)?'done':''}">${map.has(b)?'✓ ':''}${esc(b.replace('分處',''))}</div>`).join('')}</div></div>
+  </div>`;
+  const head=`<tr><th>分處</th><th>狀態</th>${t.questions.map(q=>`<th>${esc(q.label)}</th>`).join('')}<th>回報時間</th></tr>`;
+  const body=BRANCHES.map(b=>{
+    const r=map.get(b);
+    if(!r)return `<tr class="missing"><td><strong>${esc(b)}</strong></td><td>尚未回報</td>${t.questions.map(()=>'<td>—</td>').join('')}<td>—</td></tr>`;
+    return `<tr><td><strong>${esc(b)}</strong></td><td style="color:var(--ok)">已回報</td>${t.questions.map(q=>`<td>${formatAnswer(r.answers?.[q.id])}</td>`).join('')}<td>${esc(new Date(r.submittedAt).toLocaleString('zh-TW'))}</td></tr>`;
+  }).join('');
+  $('#resultTable').innerHTML=`<div class="tablewrap"><table><thead>${head}</thead><tbody>${body}</tbody></table></div>`;
+  showView('#resultView');
+}
+function formatAnswer(v){if(Array.isArray(v))return v.length?v.map(x=>esc(x)).join('、'):'—';return v?esc(v):'—'}
+function exportCsv(){
+  load();const t=getTask(state.resultTaskId);if(!t)return;
+  const map=new Map(taskResponses(t.id).map(r=>[r.branch,r]));
+  const rows=[['分處','狀態',...t.questions.map(q=>q.label),'回報時間']];
+  BRANCHES.forEach(b=>{
+    const r=map.get(b);
+    rows.push([b,r?'已回報':'尚未回報',...t.questions.map(q=>{const v=r?.answers?.[q.id]??'';return Array.isArray(v)?v.join('、'):v}),r?new Date(r.submittedAt).toLocaleString('zh-TW'):'']);
+  });
+  const csv=rows.map(row=>row.map(v=>`"${String(v).replace(/"/g,'""')}"`).join(',')).join('\n');
+  const blob=new Blob(['\ufeff'+csv],{type:'text/csv;charset=utf-8'});
+  const a=document.createElement('a');a.href=URL.createObjectURL(blob);a.download=t.title+'_彙整.csv';document.body.appendChild(a);a.click();a.remove();setTimeout(()=>URL.revokeObjectURL(a.href),100);
+}
+
+/* 事件：全部集中，避免動態按鈕失效 */
+document.addEventListener('click',async function(e){
+  const btn=e.target.closest('button'); if(!btn)return;
+  const act=btn.dataset.action;
+
+  if(act==='confirm-cancel'){closeConfirm();return}
+  if(act==='confirm-ok'){
+    const fn=pendingConfirm;
+    $('#confirmModal').classList.remove('show');
+    pendingConfirm=null;
+    if(typeof fn==='function')await fn();
+    return;
+  }
+
+  if(btn.id==='adminBtn'){
+    if(state.mode==='admin')setMode('branch');
+    else{ $('#adminPassword').value='';$('#loginError').textContent='';$('#loginModal').classList.add('show');setTimeout(()=>$('#adminPassword').focus(),30) }
+    return;
+  }
+  if(act==='close-login'){ $('#loginModal').classList.remove('show'); return }
+  if(act==='login'){
+    if($('#adminPassword').value==='11'){ $('#loginModal').classList.remove('show');setMode('admin') }
+    else{ $('#loginError').textContent='密碼錯誤，請重新輸入。';$('#adminPassword').select() }
+    return;
+  }
+  if(act==='open-form'){openForm(btn.dataset.id);return}
+  if(act==='branch-back'){renderBranch();showView('#branchHome');return}
+  if(act==='tab-manage'){
+    document.querySelectorAll('.admin-tabs button').forEach(x=>x.classList.remove('active'));btn.classList.add('active');
+    $('#managePane').style.display='block';$('#historyPane').style.display='none';return;
+  }
+  if(act==='tab-history'){
+    document.querySelectorAll('.admin-tabs button').forEach(x=>x.classList.remove('active'));btn.classList.add('active');
+    $('#managePane').style.display='none';$('#historyPane').style.display='block';return;
+  }
+  if(act==='new-task'){openBuilder();return}
+  if(act==='edit-task'){openBuilder(btn.dataset.id);return}
+  if(act==='view-result'){openResult(btn.dataset.id);return}
+  if(act==='quick-publish'){
+    load();const t=getTask(btn.dataset.id);if(t){const old=t.status;t.status='open';persist();try{await saveTaskRemote(t);renderAdmin()}catch(err){t.status=old;persist();showAlert('#adminAlert','發布失敗，請稍後再試。','err')}} return;
+  }
+  if(act==='close-task'){
+    load();
+    const taskId=btn.dataset.id;
+    const t=getTask(taskId);
+    if(!t)return;
+    askConfirm(
+      '結束回報？',
+      '「'+t.title+'」結束後，分處將無法再填寫。\n\n資料不會刪除，之後可在「歷史紀錄」重新開放。',
+      '結束回報',
+      async function(){
+        load();
+        const target=getTask(taskId);
+        if(!target)return;
+        const oldStatus=target.status,oldClosedAt=target.closedAt;
+        target.status='closed';target.closedAt=new Date().toISOString();persist();
+        try{await saveTaskRemote(target);renderAdmin()}catch(err){target.status=oldStatus;target.closedAt=oldClosedAt;persist();showAlert('#adminAlert','結束回報失敗，請稍後再試。','err')}
+      },
+      true
+    );
+    return;
+  }
+  if(act==='reopen-task'){
+    load();
+    const taskId=btn.dataset.id;
+    const t=getTask(taskId);
+    if(!t)return;
+    askConfirm(
+      '重新開放回報？',
+      '重新開放「'+t.title+'」後，分處端會再次看到這個回報項目。',
+      '重新開放',
+      async function(){
+        load();
+        const target=getTask(taskId);
+        if(!target)return;
+        const oldStatus=target.status,oldClosedAt=target.closedAt;
+        target.status='open';target.closedAt='';persist();
+        try{await saveTaskRemote(target);renderAdmin()}catch(err){target.status=oldStatus;target.closedAt=oldClosedAt;persist();showAlert('#adminAlert','重新開放失敗，請稍後再試。','err')}
+      },
+      false
+    );
+    return;
+  }
+  if(act==='delete-task'){
+    load();
+    const taskId=btn.dataset.id;
+    const t=getTask(taskId);
+    if(!t)return;
+    const hasResponses=taskResponses(taskId).length>0;
+    askConfirm(
+      '永久刪除議題？',
+      '確定要刪除「'+t.title+'」嗎？'
+        +(hasResponses?'\n\n⚠ 此議題已有分處回報，刪除後回報內容也會一起刪除。':'')
+        +'\n\n刪除後無法復原。',
+      '永久刪除',
+      async function(){
+        try{await deleteTaskRemote(taskId);state.tasks=state.tasks.filter(x=>x.id!==taskId);state.responses=state.responses.filter(r=>r.taskId!==taskId);persist();renderAdmin()}catch(err){showAlert('#adminAlert','刪除失敗，請稍後再試。','err')}
+      },
+      true
+    );
+    return;
+  }
+  if(act==='admin-back'){renderAdmin();showView('#adminHome');return}
+  if(act==='add-question'){syncQuestionInputs();state.questions.push(newQuestion());renderQuestions();return}
+  if(act==='publish-task'){saveTask('open');return}
+  if(act==='save-draft'){saveTask('draft');return}
+  if(act==='q-delete'){syncQuestionInputs();state.questions=state.questions.filter(q=>q.id!==btn.dataset.id);renderQuestions();return}
+  if(act==='q-up'||act==='q-down'){
+    syncQuestionInputs();const i=state.questions.findIndex(q=>q.id===btn.dataset.id),j=i+(act==='q-up'?-1:1);
+    if(i>=0&&j>=0&&j<state.questions.length){[state.questions[i],state.questions[j]]=[state.questions[j],state.questions[i]];renderQuestions()} return;
+  }
+  if(act==='export-csv'){exportCsv();return}
+});
+
+document.addEventListener('change',function(e){
+  if(e.target.id==='branchSelect'){
+    state.branch=e.target.value;localStorage.setItem(KEYS.branch,state.branch);renderBranch();return;
+  }
+  if(e.target.dataset.role==='q-type'){
+    syncQuestionInputs();
+    const q=state.questions.find(x=>x.id===e.target.dataset.id);if(q){q.type=e.target.value;if(!needsOptions(q.type))q.options=[];renderQuestions()}
+  }
+});
+$('#adminPassword').addEventListener('keydown',e=>{if(e.key==='Enter')document.querySelector('[data-action="login"]').click()});
+$('#loginModal').addEventListener('click',e=>{if(e.target===$('#loginModal'))$('#loginModal').classList.remove('show')});
+$('#confirmModal').addEventListener('click',e=>{if(e.target===$('#confirmModal'))closeConfirm()});
+
+load();initBranches();renderBranch();
+(async()=>{const ok=await loadRemote();if(ok){const removed=await cleanupDemoTask();if(removed)await loadRemote({silent:true})}})();
+setInterval(()=>loadRemote({silent:true}),5000);
+document.addEventListener('visibilitychange',()=>{if(!document.hidden)loadRemote({silent:true})});
+window.addEventListener('focus',()=>loadRemote({silent:true}));
+})();
+</script>
+
+
+
+
+
+<script>
+(async function(){
+ const KEY='trsSmartPortalSettings_v12';
+ const API='https://tax-status-api.ddy88000000.workers.dev/api/portal-settings';
+ const def={enabled:true,text:'返回智慧工作入口',position:'bottom-right',scale:100,x:0,y:0};
+ let b=def;
+ try{
+   const r=await fetch(API,{cache:'no-store'});
+   const d=await r.json();
+   if(d?.success&&d.settings){
+     localStorage.setItem(KEY,JSON.stringify(d.settings));
+     b={...def,...(d.settings.backButton||{})};
+   }
+ }catch(e){
+   try{
+     const s=JSON.parse(localStorage.getItem(KEY)||'null');
+     if(s?.backButton)b={...def,...s.backButton};
+   }catch{}
+ }
+ const el=document.querySelector('.portal-back-btn');
+ if(!el)return;
+ el.style.display=b.enabled?'inline-flex':'none';
+ el.textContent='⌂ '+b.text;
+ const sc=Math.max(.7,Math.min(1.6,(Number(b.scale)||100)/100));
+ el.style.setProperty('font-size',(15*sc)+'px','important');
+ el.style.setProperty('padding',(14*sc)+'px '+(20*sc)+'px','important');
+ el.style.setProperty('border-radius',(18*sc)+'px','important');
+ ['left','right','top','bottom'].forEach(k=>el.style.setProperty(k,'auto','important'));
+ const x=Number(b.x)||0,y=Number(b.y)||0,p=b.position||'bottom-right';
+ if(p==='top-left'){
+   el.style.setProperty('left',(24+x)+'px','important');
+   el.style.setProperty('top',(24+y)+'px','important');
+ }else if(p==='top-right'){
+   el.style.setProperty('right',(24-x)+'px','important');
+   el.style.setProperty('top',(24+y)+'px','important');
+ }else if(p==='bottom-left'){
+   el.style.setProperty('left',(24+x)+'px','important');
+   el.style.setProperty('bottom',(24-y)+'px','important');
+ }else{
+   el.style.setProperty('right',(24-x)+'px','important');
+   el.style.setProperty('bottom',(24-y)+'px','important');
+ }
+})();
+</script>
+
+</body>
+</html>

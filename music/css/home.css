@@ -1,0 +1,541 @@
+/* Tax Melody 首頁：完整顯示整張 3:2 主視覺，依視窗縮放，不裁切 */
+:root{
+  --ink:#15225c;--muted:#6672a3;--blue:#5368e8;--purple:#9b68e8;
+  --pink:#f196cd;--cyan:#74d7ec;--gold:#ffc95b;
+  --glass:rgba(255,255,255,.78);--line:rgba(91,104,184,.20);
+  --shadow:0 20px 60px rgba(58,73,145,.18)
+}
+*{box-sizing:border-box}
+html,body{margin:0;width:100%;height:100%;font-family:"Noto Sans TC","Microsoft JhengHei",system-ui,sans-serif;color:var(--ink);background:linear-gradient(145deg,#eaf7ff,#f6edff 54%,#fff1f7);overflow:hidden}
+button,select,input{font:inherit}button{cursor:pointer}.app-shell{width:100%;height:100%;position:relative}.screen{display:none;min-height:100vh;padding:10px}.screen.active{display:block;animation:fade .35s ease}@keyframes fade{from{opacity:0;transform:translateY(8px)}}
+.glass{background:var(--glass);border:1px solid rgba(255,255,255,.88);box-shadow:var(--shadow);backdrop-filter:blur(18px);-webkit-backdrop-filter:blur(18px)}
+
+/* 首頁：依實際圖片 1784×881 比例滿版顯示 */
+#homeScreen.home-screen{
+  padding:0;
+  width:100vw;
+  min-height:100vh;
+  display:none;
+  overflow-x:hidden;
+  overflow-y:auto;
+  background:#dff4ff;
+}
+#homeScreen.home-screen.active{
+  display:block;
+}
+
+/* 實際圖片比例約 2.025:1，不再誤用 3:2 */
+.home-stage{
+  position:relative;
+  width:100vw;
+  aspect-ratio:1784 / 881;
+  margin:0;
+  overflow:hidden;
+  background:#dff4ff;
+}
+.home-bg{
+  position:absolute;
+  inset:0;
+  width:100%;
+  height:100%;
+  object-fit:cover;
+  object-position:center center;
+  display:block;
+  user-select:none;
+  pointer-events:none;
+}
+
+/* 左上機關名稱 */
+.home-agency{position:absolute;z-index:4;left:2.4%;top:2.2%;display:flex;flex-direction:column;line-height:1.15;text-shadow:0 1px 0 #fff}
+.home-agency b{font-size:clamp(11px,1.1vw,19px)}
+.home-agency span{font-size:clamp(7px,.56vw,10px);color:#6071a8;margin-top:3px}
+
+/* 右上功能列 */
+.home-top-nav{position:absolute;z-index:5;right:2.2%;top:1.7%;display:flex;gap:clamp(5px,.7vw,12px)}
+.home-top-nav button{width:clamp(46px,4.8vw,72px);height:clamp(46px,4.8vw,72px);border:0;border-radius:50%;background:rgba(255,255,255,.84);color:var(--ink);display:flex;flex-direction:column;align-items:center;justify-content:center;box-shadow:0 5px 18px rgba(58,73,145,.15);transition:.2s}
+.home-top-nav button:hover{transform:translateY(-4px) scale(1.04);background:#fff}
+.home-top-nav span{font-size:clamp(20px,1.7vw,30px);line-height:1}
+.home-top-nav small{font-size:clamp(10px,.78vw,13px);margin-top:4px;white-space:nowrap}
+
+/* 對話框：依 1784×881 圖片比例定位在石虎右上方 */
+.mascot-bubble{
+  position:absolute;
+  z-index:8;
+  left:61%;
+  top:38%;
+  transform:translateX(-50%);
+  min-width:250px;
+  padding:16px 26px;
+  background:rgba(255,255,255,.98);
+  border:2px solid #40509a;
+  border-radius:30px;
+  color:#1a275f;
+  font-size:clamp(15px,1vw,18px);
+  font-weight:900;
+  line-height:1.5;
+  text-align:center;
+  white-space:nowrap;
+  box-shadow:0 8px 24px rgba(49,64,133,.18);
+  animation:bubbleFloat 2.8s ease-in-out infinite;
+}
+.mascot-bubble::after{
+  content:"";
+  position:absolute;
+  left:50%;
+  bottom:-13px;
+  width:24px;
+  height:24px;
+  transform:translateX(-50%) rotate(45deg);
+  background:#fff;
+  border-right:2px solid #40509a;
+  border-bottom:2px solid #40509a;
+}@keyframes bubbleFloat{0%,100%{translate:0 0}50%{translate:0 -7px}}
+
+/* 開始按鈕 */
+.start-song-btn{
+  position:absolute;
+  z-index:6;
+  left:50%;
+  bottom:12.8%;
+  transform:translateX(-50%);
+  width:15%;
+  min-width:250px;
+  padding:.9% 1.8%;
+  border:3px solid rgba(255,255,255,.9);
+  border-radius:999px;
+  color:#fff;
+  font-size:clamp(17px,1.45vw,25px);
+  font-weight:900;
+  background:linear-gradient(90deg,#ffc15d,#ff9f8e 42%,#ee7cc7 72%,#886fe9);
+  box-shadow:0 12px 28px rgba(66,48,137,.32),inset 0 2px 0 rgba(255,255,255,.45);
+  transition:.2s;
+  animation:startGlow 2.2s ease-in-out infinite;
+}
+.start-song-btn:hover{transform:translateX(-50%) translateY(-4px) scale(1.025)}
+@keyframes startGlow{50%{box-shadow:0 14px 38px rgba(237,112,193,.48),0 0 24px rgba(255,218,113,.48)}}
+
+/* 底部四顆：縮小、拉開、保留設計感 */
+.home-shortcuts{
+  position:absolute;
+  z-index:6;
+  left:10%;
+  right:10%;
+  bottom:4.2%;
+
+  display:grid;
+  grid-template-columns:repeat(4,1fr);
+  gap:60px;
+}
+.home-shortcuts button,
+.home-shortcuts .home-link-button{
+  height:58px;
+  padding:0 18px;
+
+  border:1px solid rgba(255,255,255,.95);
+  border-radius:999px;
+
+  background:rgba(255,255,255,.88);
+  backdrop-filter:blur(14px);
+
+  color:#17245f;
+
+  display:flex;
+  align-items:center;
+  justify-content:center;
+  gap:12px;
+
+  font-size:23px;
+  font-weight:800;
+  white-space:nowrap;
+
+  box-shadow:0 8px 20px rgba(47,66,137,.18);
+
+  transition:.2s;
+}
+.home-shortcuts button:hover,
+.home-shortcuts .home-link-button:hover{
+  transform:translateY(-4px);
+  background:rgba(255,255,255,.96);
+  box-shadow:0 12px 28px rgba(47,66,137,.26);
+}
+.home-shortcuts .icon{
+  font-size:23px;
+  line-height:1;
+}
+.home-shortcuts .qa{
+  min-width:46px;
+  padding:5px 9px;
+
+  border:2px solid #6570ab;
+  border-radius:999px;
+
+  font-size:14px;
+  font-weight:900;
+  line-height:1;
+}
+
+/* 其他頁面共用 */
+.section-header{max-width:1500px;margin:0 auto 10px;border-radius:22px;padding:11px 18px;display:flex;align-items:center;justify-content:space-between}.section-header>div{display:flex;align-items:center;gap:10px}.section-header>div>span{font-weight:900;font-size:1.35rem;border:2px solid var(--ink);border-radius:50%;width:44px;height:44px;display:grid;place-items:center}.section-header h2{margin:0}.section-header h2 small{font-size:.7rem;color:var(--muted);letter-spacing:.12em}.round{width:44px;height:44px;border:0;border-radius:50%;background:#fff;color:var(--ink);font-size:1.25rem}.btn{border:0;border-radius:999px;padding:14px 24px;font-weight:900;transition:.2s transform,.2s box-shadow}.btn:hover{transform:translateY(-2px)}.primary{color:#fff;background:linear-gradient(135deg,#ffb447,#f08ac6 45%,#6d73eb);box-shadow:0 12px 28px rgba(113,99,219,.28)}.secondary{color:var(--ink);background:rgba(255,255,255,.72);border:1px solid var(--line)}.danger{color:white;background:#e66179}.modal{position:fixed;z-index:100;inset:0;background:rgba(26,29,77,.38);display:grid;place-items:center;padding:20px}.hidden{display:none!important}.modal-card{width:min(420px,92vw);border-radius:26px;padding:26px;display:flex;flex-direction:column;gap:12px;text-align:center}.modal-card h2{margin:0 0 8px}.modal-close{position:absolute;right:18px;top:14px;border:0;background:transparent;font-size:1.8rem}.settings-card{position:relative;text-align:left}.settings-card label{display:grid;grid-template-columns:120px 1fr;align-items:center;gap:10px}.settings-card .check{display:block}.toast{position:fixed;left:50%;bottom:28px;z-index:120;transform:translate(-50%,20px);background:#202862;color:#fff;padding:11px 18px;border-radius:999px;opacity:0;pointer-events:none;transition:.25s}.toast.show{opacity:1;transform:translate(-50%,0)}.fps{position:fixed;right:10px;bottom:10px;z-index:90;background:#111a;color:#fff;padding:5px 8px;border-radius:8px;font:12px monospace}.favorites-list{max-width:900px;margin:30px auto;border-radius:24px;padding:24px}.favorite-item{display:flex;justify-content:space-between;align-items:center;padding:14px;border-bottom:1px solid var(--line)}
+
+@media(max-width:700px){
+  html,body{overflow-x:hidden;overflow-y:auto}
+  #homeScreen.home-screen{overflow-x:hidden;overflow-y:auto}
+  .home-stage{width:100%;min-width:0}
+  .home-screen{overflow-x:hidden!important}
+}
+.enter-overlay {
+  position: fixed;
+  inset: 0;
+  z-index: 99999;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: rgba(24, 27, 70, 0.72);
+  backdrop-filter: blur(10px);
+  transition: opacity 0.4s ease;
+}
+
+.enter-overlay.hide {
+  opacity: 0;
+  pointer-events: none;
+}
+
+.enter-card {
+  width: min(360px, 86vw);
+  padding: 34px 28px;
+  border-radius: 28px;
+  text-align: center;
+  background: rgba(255, 255, 255, 0.94);
+  box-shadow: 0 24px 60px rgba(0, 0, 0, 0.28);
+}
+
+.enter-logo {
+  width: 72px;
+  height: 72px;
+  margin: 0 auto 14px;
+  border-radius: 50%;
+  display: grid;
+  place-items: center;
+  font-size: 34px;
+  background: #656ee8;
+  color: white;
+}
+
+.enter-card h1 {
+  margin: 0;
+  font-size: 32px;
+  color: #424aa8;
+}
+
+.enter-card p {
+  margin: 10px 0 22px;
+  color: #666;
+}
+
+.enter-card button {
+  border: 0;
+  border-radius: 999px;
+  padding: 14px 30px;
+  font-size: 17px;
+  font-weight: 800;
+  cursor: pointer;
+  background: #656ee8;
+  color: white;
+  box-shadow: 0 10px 24px rgba(101, 110, 232, 0.3);
+}
+
+.enter-card button:active {
+  transform: scale(0.97);
+}
+.home-link-button {
+  height:58px;
+  padding:0 18px;
+
+  border:1px solid rgba(255,255,255,.95);
+  border-radius:999px;
+
+  background:rgba(255,255,255,.88);
+  backdrop-filter:blur(14px);
+  -webkit-backdrop-filter:blur(14px);
+
+  color:#17245f;
+  text-decoration:none;
+
+  display:flex;
+  flex-direction:row;
+  align-items:center;
+  justify-content:center;
+  gap:12px;
+
+  font-family:inherit;
+  font-size:23px;
+  font-weight:800;
+  white-space:nowrap;
+
+  box-shadow:0 8px 20px rgba(47,66,137,.18);
+  transition:.2s;
+  cursor:pointer;
+}
+
+.home-link-button:hover {
+  transform:translateY(-4px);
+  background:rgba(255,255,255,.96);
+  box-shadow:0 12px 28px rgba(47,66,137,.26);
+}
+
+.home-link-button .qa {
+  min-width:46px;
+  padding:5px 9px;
+
+  display:inline-flex;
+  align-items:center;
+  justify-content:center;
+
+  border:2px solid #6570ab;
+  border-radius:999px;
+
+  font-size:14px;
+  font-weight:900;
+  line-height:1;
+}
+
+.home-link-button b {
+  display:block;
+}
+
+
+/* 手機旋轉提示：預設完全隱藏，只有橫向手機顯示 */
+.portrait-only-overlay {
+  display: none;
+  position: fixed;
+  inset: 0;
+  z-index: 999999;
+  align-items: center;
+  justify-content: center;
+  padding: 24px;
+  background: linear-gradient(145deg, #6f7be8, #9b68e8 55%, #ef8fc6);
+}
+
+.portrait-only-card {
+  width: min(360px, 88vw);
+  padding: 30px 22px;
+  border-radius: 28px;
+  text-align: center;
+  background: rgba(255,255,255,.95);
+  box-shadow: 0 24px 70px rgba(28,31,93,.32);
+}
+
+.portrait-phone-icon {
+  font-size: 50px;
+}
+
+.portrait-only-card h2 {
+  margin: 12px 0 8px;
+  color: #35405f;
+}
+
+.portrait-only-card p,
+.portrait-only-card span {
+  color: #6f7894;
+}
+
+@media (orientation: landscape) and (max-height: 760px) and (hover: none) {
+  .portrait-only-overlay {
+    display: flex;
+  }
+}
+
+@media (orientation: landscape) and (max-height: 760px) and (pointer: coarse) {
+  .portrait-only-overlay {
+    display: flex;
+  }
+}
+
+
+/* =========================================================
+   手機首頁 V4：上方功能鍵不再遮住 Tax Melody 標題
+   ========================================================= */
+@media (max-width: 768px) and (orientation: portrait) {
+  #homeScreen.home-screen,
+  .home-stage {
+    min-height: 100dvh;
+    height: 100dvh;
+    overflow: hidden !important;
+  }
+
+  /* 圖片往下讓出獨立功能列空間 */
+  .home-picture {
+    top: 66px !important;
+    height: calc(100% - 66px) !important;
+  }
+
+  .home-picture .home-bg {
+    width: 100%;
+    height: 100%;
+    object-fit: cover !important;
+    object-position: center top !important;
+  }
+
+  .home-agency {
+    display: none !important;
+  }
+
+  .home-top-nav {
+    top: max(6px, env(safe-area-inset-top)) !important;
+    left: 10px !important;
+    right: 10px !important;
+    height: 54px;
+    padding: 5px 8px;
+    display: flex;
+    align-items: center;
+    justify-content: center !important;
+    gap: 8px !important;
+    border: 1px solid rgba(255,255,255,.92);
+    border-radius: 20px;
+    background: rgba(255,255,255,.86);
+    backdrop-filter: blur(16px);
+    -webkit-backdrop-filter: blur(16px);
+    box-shadow: 0 8px 24px rgba(51,67,132,.14);
+  }
+
+  .home-top-nav button {
+    width: 44px !important;
+    height: 44px !important;
+    flex: 0 0 44px !important;
+    background: transparent !important;
+    box-shadow: none !important;
+  }
+
+  .home-top-nav span {
+    font-size: 17px !important;
+  }
+
+  .home-top-nav small {
+    margin-top: 1px !important;
+    font-size: 7px !important;
+  }
+
+  .start-song-btn {
+    bottom: 25.5% !important;
+  }
+
+  .home-shortcuts {
+    bottom: 5.5% !important;
+  }
+}
+
+@media (max-width: 430px) and (orientation: portrait) {
+  .home-picture {
+    top: 62px !important;
+    height: calc(100% - 62px) !important;
+  }
+
+  .home-top-nav {
+    height: 50px;
+  }
+
+  .home-top-nav button {
+    width: 40px !important;
+    height: 40px !important;
+    flex-basis: 40px !important;
+  }
+
+  .start-song-btn {
+    bottom: 24.5% !important;
+  }
+
+  .home-shortcuts {
+    bottom: 4.5% !important;
+  }
+}
+
+
+/* =========================================================
+   手機首頁 V5：小型 2×2 圓形功能鍵，不遮住主標題
+   ========================================================= */
+@media (max-width: 768px) and (orientation: portrait) {
+  #homeScreen.home-screen,
+  .home-stage {
+    height: 100dvh !important;
+    min-height: 100dvh !important;
+    overflow: hidden !important;
+  }
+
+  .home-picture {
+    top: 0 !important;
+    height: 100% !important;
+  }
+
+  .home-picture .home-bg {
+    object-fit: cover !important;
+    object-position: center top !important;
+  }
+
+  .home-agency {
+    display: none !important;
+  }
+
+  .home-top-nav {
+    top: max(10px, env(safe-area-inset-top)) !important;
+    right: 10px !important;
+    left: auto !important;
+    width: 108px !important;
+    height: auto !important;
+    padding: 0 !important;
+    display: grid !important;
+    grid-template-columns: repeat(2, 48px) !important;
+    gap: 7px !important;
+    align-items: center !important;
+    justify-content: end !important;
+    border: 0 !important;
+    border-radius: 0 !important;
+    background: transparent !important;
+    box-shadow: none !important;
+    backdrop-filter: none !important;
+    -webkit-backdrop-filter: none !important;
+  }
+
+  .home-top-nav button {
+    width: 48px !important;
+    height: 48px !important;
+    min-width: 48px !important;
+    padding: 0 !important;
+    border: 1px solid rgba(255,255,255,.94) !important;
+    border-radius: 50% !important;
+    background: rgba(255,255,255,.82) !important;
+    box-shadow: 0 7px 18px rgba(42,56,121,.16) !important;
+    backdrop-filter: blur(12px) !important;
+    -webkit-backdrop-filter: blur(12px) !important;
+  }
+
+  .home-top-nav span {
+    font-size: 17px !important;
+  }
+
+  .home-top-nav small {
+    margin-top: 1px !important;
+    font-size: 7px !important;
+  }
+
+  .start-song-btn {
+    bottom: 25.5% !important;
+  }
+
+  .home-shortcuts {
+    bottom: 5.5% !important;
+  }
+}
+
+@media (max-width: 430px) and (orientation: portrait) {
+  .home-top-nav {
+    width: 100px !important;
+    grid-template-columns: repeat(2, 45px) !important;
+    gap: 6px !important;
+  }
+
+  .home-top-nav button {
+    width: 45px !important;
+    height: 45px !important;
+    min-width: 45px !important;
+  }
+}

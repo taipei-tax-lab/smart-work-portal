@@ -1,0 +1,590 @@
+<!doctype html>
+<html lang="zh-Hant">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover,user-scalable=no">
+  <meta name="theme-color" content="#5b67e8">
+  <title>Tax Melody v2｜地方稅音樂節奏學習遊戲</title>
+  <link rel="stylesheet" href="css/home.css?v=20260803-home-result-v3">
+  <link rel="stylesheet" href="css/song-select.css?v=20260803-mobile-album-only-v1">
+  <link rel="stylesheet" href="css/game.css?v=20260803-mobile-portrait">
+  <link rel="stylesheet" href="css/result.css?v=20260803-home-result-v3">
+  <link rel="stylesheet" href="css/learning.css?v=20260803-mobile-portrait">
+  <link rel="stylesheet" href="css/responsive.css?v=20260803-mobile-album-only-v1">
+<style>
+.portal-back-btn{
+position:fixed!important;right:24px!important;bottom:24px!important;z-index:999999!important;
+padding:14px 20px!important;border-radius:18px!important;background:#1958a0!important;
+color:#fff!important;text-decoration:none!important;font:900 15px "Microsoft JhengHei",sans-serif!important;
+box-shadow:0 12px 30px rgba(20,70,130,.32)!important;border:2px solid #fff!important}
+</style>
+<style>
+.portal-back-btn{position:fixed!important;z-index:999999!important;display:inline-flex!important;align-items:center!important;justify-content:center!important;text-decoration:none!important;background:linear-gradient(135deg,#174f9d,#246fc9)!important;color:#fff!important;border:3px solid rgba(255,255,255,.92)!important;box-shadow:0 14px 34px rgba(15,58,121,.35)!important;font-family:"Microsoft JhengHei",sans-serif!important;font-weight:900!important}
+</style>
+</head>
+<body><a class="portal-back-btn" href="../index.html">⌂ 返回智慧工作入口</a>
+<div id="enterOverlay" class="enter-overlay">
+  <div class="enter-card">
+    <div class="enter-logo">♪</div>
+    <h1>Tax Melody</h1>
+    <p>跟著節奏，一起學地方稅</p>
+    <button id="enterGameButton">點擊進入遊戲</button>
+  </div>
+</div>
+  <div id="app" class="app-shell">
+    <div class="ambient" aria-hidden="true"><i></i><i></i><i></i><i></i><i></i></div>
+
+    <section id="homeScreen" class="screen active home-screen">
+      <main class="home-stage" aria-label="Tax Melody 首頁">
+        <picture class="home-picture">
+          <source media="(max-width: 768px) and (orientation: portrait)" srcset="assets/images/home-mobile.png">
+          <img class="home-bg" src="assets/images/tax-melody-home-clean.png" alt="Tax Melody 地方稅音樂學習遊戲首頁">
+        </picture>
+
+        <div class="home-agency">
+          <b>臺北市稅捐稽徵處</b>
+          <span>TAIPEI CITY REVENUE SERVICE</span>
+        </div>
+
+        <nav class="home-top-nav" aria-label="首頁選單">
+          <button data-go="songs"><span>♫</span><small>音樂</small></button>
+<button
+  onclick="window.open('https://tpctax.gov.taipei/News.aspx?n=BB8B93F0A49EAB80&sms=87415A8B9CE81B16','_blank')"
+>
+  <span>Q&amp;A</span>
+  <small>常見問答</small>
+</button>          <button data-go="knowledge"><span>📖</span><small>學習中心</small></button>
+          <button data-open-settings><span>⚙</span><small>設定</small></button>
+        </nav>
+
+        <div class="mascot-bubble">跟著節奏，<br>一起學地方稅新訊！</div>
+
+        <button id="quickStart" class="start-song-btn">▶ <strong>開始新歌</strong> ♪</button>
+
+        <nav class="home-shortcuts" aria-label="首頁功能">
+          <button data-go="knowledge">
+            <span class="icon">🏅</span>
+            <b>學習中心</b>
+          </button>
+
+          <a
+            href="https://tpctax.gov.taipei/News.aspx?n=BB8B93F0A49EAB80&sms=87415A8B9CE81B16"
+            target="_blank"
+            rel="noopener"
+            class="home-link-button"
+          >
+            <span class="qa">Q&amp;A</span>
+            <b>常見問答</b>
+          </a>
+
+          <a
+            href="https://netcsweb.tax.nat.gov.tw/Webhook/"
+            target="_blank"
+            rel="noopener"
+            class="home-link-button"
+          >
+            <span class="icon">🎧</span>
+            <b>智慧客服</b>
+          </a>
+
+          <button data-go="records">
+            <span class="icon">📊</span>
+            <b>學習紀錄</b>
+          </button>
+        </nav>
+      </main>
+    </section>
+    <section id="songsScreen" class="screen song-select-screen">
+      <header class="section-header glass song-select-header">
+        <button class="round" data-go="home" aria-label="回首頁">←</button>
+
+        <div class="song-select-heading">
+          <span>02</span>
+          <div>
+            <h2>歌曲選擇 <small>SONG SELECT</small></h2>
+            <p>挑選歌曲與難度，開始節奏挑戰</p>
+          </div>
+        </div>
+
+        <button class="round" data-open-settings aria-label="設定">⚙</button>
+      </header>
+
+      <main class="mobile-album-select" aria-label="手機版歌曲選擇">
+        <section class="mobile-album-panel glass">
+          <p class="mobile-album-kicker">SWIPE TO SELECT</p>
+          <h2>左右滑動選擇專輯</h2>
+
+          <div id="mobileAlbumCarousel"
+               class="mobile-album-carousel"
+               aria-label="專輯滑動選單"></div>
+
+          <div class="mobile-selected-copy">
+            <small>NOW SELECTING</small>
+            <h3 id="mobileSelectedSongTitle">守護第一時間</h3>
+            <p id="mobileSelectedSongSubtitle">稅籍異動即時通</p>
+          </div>
+
+          <section class="mobile-difficulty-panel">
+            <div class="mobile-difficulty-heading">
+              <span>選擇難度</span>
+              <b id="mobileDifficultyLabel">EASY</b>
+            </div>
+
+            <div class="mobile-difficulty-tabs">
+              <button type="button" data-mobile-difficulty="easy" class="easy active">
+                <span>★</span><b>EASY</b>
+              </button>
+              <button type="button" data-mobile-difficulty="normal" class="normal">
+                <span>★★</span><b>NORMAL</b>
+              </button>
+              <button type="button" data-mobile-difficulty="hard" class="hard">
+                <span>★★★</span><b>HARD</b>
+              </button>
+              <button type="button" data-mobile-difficulty="expert" class="expert">
+                <span>★★★★</span><b>EXPERT</b>
+              </button>
+            </div>
+          </section>
+
+          <button id="mobileStartChallenge"
+                  type="button"
+                  class="mobile-start-challenge">
+            ▶ 開始挑戰
+          </button>
+        </section>
+      </main>
+
+      <main class="song-select-stage">
+        <section class="song-feature glass" aria-label="目前選擇歌曲">
+          <div class="feature-light feature-light-a"></div>
+          <div class="feature-light feature-light-b"></div>
+
+          <div class="feature-cover-wrap">
+            <div class="record-ring" aria-hidden="true"></div>
+            <img id="selectedSongCover"
+                 class="feature-cover"
+                 src="assets/images/tax-melody-concept.jpg"
+                 alt="目前選擇歌曲封面">
+            <span id="selectedAvailability" class="availability-badge">READY</span>
+          </div>
+
+          <div class="feature-copy">
+            <p class="feature-eyebrow">NOW SELECTING</p>
+            <h3 id="selectedSongTitle">守護第一時間</h3>
+            <p id="selectedSongSubtitle" class="feature-subtitle">稅籍異動即時通</p>
+
+            <div class="feature-tags">
+              <span>地方稅新訊</span>
+              <span id="selectedSongDuration">04:08</span>
+              <span id="selectedSongStars">★★★★</span>
+            </div>
+
+            <div class="feature-score">
+              <small>BEST SCORE</small>
+              <strong id="selectedBestScore">0</strong>
+            </div>
+
+            <div class="feature-actions">
+              <button id="selectedFavoriteButton"
+                      type="button"
+                      class="feature-favorite"
+                      aria-label="收藏目前歌曲">☆</button>
+
+              <button id="selectedPlayButton"
+                      type="button"
+                      class="feature-play">
+                <span>▶</span>
+                <b>開始挑戰</b>
+              </button>
+            </div>
+          </div>
+        </section>
+
+        <aside class="song-browser glass">
+          <div class="difficulty-area">
+            <div class="browser-title">
+              <div>
+                <small>SELECT LEVEL</small>
+                <h3>選擇難度</h3>
+              </div>
+              <span id="difficultyLabel">EASY</span>
+            </div>
+
+            <div class="difficulty-tabs">
+              <button data-difficulty="easy" class="easy active">
+                <span>★</span><b>EASY</b>
+              </button>
+              <button data-difficulty="normal" class="normal">
+                <span>★★</span><b>NORMAL</b>
+              </button>
+              <button data-difficulty="hard" class="hard">
+                <span>★★★</span><b>HARD</b>
+              </button>
+              <button data-difficulty="expert" class="expert">
+                <span>★★★★</span><b>EXPERT</b>
+              </button>
+            </div>
+          </div>
+
+          <div class="browser-list-heading">
+            <div>
+              <small>MUSIC LIST</small>
+              <h3>歌曲清單</h3>
+            </div>
+            <span id="songCountBadge">0 首</span>
+          </div>
+
+          <div id="songList" class="song-list compact-song-list"></div>
+
+          <div class="mission-card">
+            <div class="mission-icon">🏆</div>
+            <div class="mission-copy">
+              <small>MISSION PROGRESS</small>
+              <b>完成歌曲</b>
+              <span><strong id="completedCount">0</strong> / <em id="totalSongCount">0</em> 首</span>
+            </div>
+            <div class="mission-progress"><i id="missionProgressBar"></i></div>
+          </div>
+        </aside>
+      </main>
+    </section>
+
+<section id="gameScreen" class="screen game-screen">
+      <header class="game-hud glass">
+        <div class="hud-block"><small>SCORE</small><strong id="scoreValue">0000000</strong></div>
+        <div class="hud-block"><small>COMBO</small><strong id="comboValue">0</strong></div>
+        <div class="song-progress"><span id="gameSongTitle">守護第一時間</span><div><i id="progressBar"></i></div><small><span id="currentTime">0:00</span> / <span id="durationTime">0:00</span></small></div>
+        <div class="life"><small>LIFE ♥</small><strong id="lifeValue">1000</strong></div>
+        <button id="gameHelpButton" class="game-help-btn" type="button" aria-label="開啟遊戲說明">🎮 遊戲說明</button>
+        <button id="pauseButton" class="pause-btn" aria-label="暫停">Ⅱ</button>
+      </header>
+
+      <main class="game-stage">
+        <div id="lyricsPanel" class="lyrics-panel glass">
+          <p id="prevLyric"></p><strong id="currentLyric">準備開始</strong><p id="nextLyric"></p>
+        </div>
+        <div id="countdown" class="countdown hidden">3</div>
+        <div id="judgeText" class="judge"></div>
+        <div id="laneArea" class="lane-area">
+          <div class="lane" data-lane="0"></div><div class="lane" data-lane="1"></div><div class="lane" data-lane="2"></div><div class="lane" data-lane="3"></div>
+          <div class="hit-line"></div>
+        </div>
+        <div class="key-row">
+          <button class="key-btn" data-lane="0" aria-label="D 鍵"><b>D</b></button>
+          <button class="key-btn" data-lane="1" aria-label="F 鍵"><b>F</b></button>
+          <button class="key-btn" data-lane="2" aria-label="J 鍵"><b>J</b></button>
+          <button class="key-btn" data-lane="3" aria-label="K 鍵"><b>K</b></button>
+        </div>
+      </main>
+    </section>
+
+    <section id="resultScreen" class="screen result-screen">
+      <main class="result-panel glass">
+        <p class="eyebrow">04 結算畫面 RESULT</p>
+        <h2>MISSION COMPLETE!</h2>
+        <div class="stars">★ ★ ★</div>
+        <div class="result-body">
+
+  <div class="result-left">
+    <div class="result-summary">
+      <div id="rankBadge" class="rank-badge">S</div>
+
+      <p>
+        <span>SCORE</span>
+        <strong id="finalScore">0</strong>
+      </p>
+
+      <p>
+        <span>MAX COMBO</span>
+        <strong id="rCombo">0</strong>
+      </p>
+
+      <p>
+        <span>ACCURACY</span>
+        <strong id="rAccuracy">0%</strong>
+      </p>
+    </div>
+
+    <div class="result-grid">
+      <div>
+        <span>PERFECT</span>
+        <strong id="rPerfect">0</strong>
+      </div>
+
+      <div>
+        <span>GREAT</span>
+        <strong id="rGreat">0</strong>
+      </div>
+
+      <div>
+        <span>GOOD</span>
+        <strong id="rGood">0</strong>
+      </div>
+
+      <div>
+        <span>MISS</span>
+        <strong id="rMiss">0</strong>
+      </div>
+    </div>
+  </div>
+
+  <div class="result-hero">
+    <img
+      id="resultTiger"
+      class="result-tiger"
+      src="assets/tiger/result-a.png"
+      alt="結算成績石虎"
+    >
+
+    <div class="result-rank-circle">
+      <small>RANK</small>
+      <strong id="resultRankText">A</strong>
+    </div>
+  </div>
+
+</div>
+        <div class="result-actions"><button id="retryButton" class="btn secondary">↻ 重新挑戰</button><button id="toLearningButton" class="btn primary">今日學習重點</button><button data-go="songs" class="btn secondary">⌂ 回到選歌</button></div>
+      </main>
+    </section>
+
+
+    <section id="knowledgeScreen" class="screen knowledge-screen">
+      <header class="section-header glass knowledge-header">
+        <button class="round" data-go="home" aria-label="回首頁">←</button>
+        <div>
+          <span>05</span>
+          <h2>學習中心<small>KNOWLEDGE STATION</small></h2>
+        </div>
+        <button class="round" data-open-settings aria-label="設定">⚙</button>
+      </header>
+
+      <main class="knowledge-shell">
+        <section class="knowledge-intro glass">
+          <div>
+            <p class="knowledge-eyebrow">TAX MELODY LEARNING</p>
+            <h1>選主題，快速了解地方稅新訊</h1>
+            <p>每首歌曲都整理成重點卡片，不必先玩遊戲，也能直接閱讀學習內容。</p>
+          </div>
+          <div class="knowledge-note">
+            <span>♪</span>
+            <b>用音樂記住稅務重點</b>
+          </div>
+        </section>
+
+        <section id="knowledgeTopicList"
+                 class="knowledge-topic-grid"
+                 aria-label="學習主題列表"></section>
+      </main>
+    </section>
+
+    <section id="learningScreen" class="screen learning-screen">
+      <header class="section-header glass"><button class="round" data-go="home">←</button><div><span>05</span><h2>學習重點 <small>LEARNING</small></h2></div><button id="favoriteLearning" class="round">☆</button></header>
+      <main class="learning-card glass">
+        <div class="learn-copy"><span class="today">今日學到</span><h2 id="learningTitle">稅籍異動即時通</h2><p id="learningSummary"></p><div id="learningPoints" class="learning-points"></div></div>
+      <div class="tiger-teacher">
+<img src="assets/tiger/tiger-teacher.png" alt="石虎老師">   </div>
+      
+<div class="learning-actions">
+    <button type="button" class="back-songs-btn" data-go="knowledge">
+        ← 回到知識補給站
+    </button>
+
+   <a id="taxAiLink"
+   class="tax-ai-btn"
+   href="https://tpctax.gov.taipei/News.aspx?n=BB8B93F0A49EAB80&sms=87415A8B9CE81B16"
+   target="_blank"
+   rel="noopener">
+    前往常見問答了解更多 →
+</a>
+</div>
+      </main>
+    </section>
+
+    <section id="recordsScreen" class="screen records-screen">
+      <header class="section-header glass records-header">
+        <button class="round" data-go="home" aria-label="回首頁">←</button>
+        <div>
+          <span>📊</span>
+          <h2>我的學習紀錄 <small>LEARNING RECORDS</small></h2>
+        </div>
+        <button class="round" data-go="songs" aria-label="前往歌曲">♫</button>
+      </header>
+
+      <main class="records-shell">
+        <section class="records-summary glass">
+          <div class="records-summary-copy">
+            <p class="records-eyebrow">YOUR TAX MELODY JOURNEY</p>
+            <h1>每一次挑戰，都是一筆學習成果</h1>
+            <p>查看完成歌曲、最高分數與挑戰紀錄，也能直接再次挑戰或複習學習重點。</p>
+          </div>
+
+          <div class="records-stats">
+            <article>
+              <small>完成歌曲</small>
+              <strong id="recordCompletedSongs">0</strong>
+              <span>首</span>
+            </article>
+            <article>
+              <small>累積挑戰</small>
+              <strong id="recordAttempts">0</strong>
+              <span>次</span>
+            </article>
+            <article>
+              <small>最高分</small>
+              <strong id="recordTopScore">0</strong>
+              <span>分</span>
+            </article>
+            <article>
+              <small>已學主題</small>
+              <strong id="recordLearnedTopics">0</strong>
+              <span>個</span>
+            </article>
+          </div>
+        </section>
+
+        <section id="recordsList" class="records-list" aria-label="歌曲學習紀錄"></section>
+      </main>
+    </section>
+
+
+    <div id="gameGuideModal" class="modal hidden game-guide-modal" role="dialog" aria-modal="true" aria-labelledby="gameGuideTitle">
+      <div class="modal-card glass game-guide-card">
+        <button id="closeGameGuideButton" class="modal-close game-guide-close" type="button" aria-label="關閉遊戲說明">×</button>
+
+        <div class="game-guide-heading">
+          <span class="game-guide-music">♫</span>
+          <div>
+            <small>HOW TO PLAY</small>
+            <h2 id="gameGuideTitle">節奏挑戰玩法</h2>
+            <p>看準音符，跟著節奏按下對應按鍵！</p>
+          </div>
+        </div>
+
+        <div class="game-guide-steps">
+          <article>
+            <span class="guide-number">1</span>
+            <div class="guide-demo guide-note-demo"><i></i><b></b></div>
+            <div><strong>注意落下的音符</strong><p>音符會沿著四條軌道往判定線移動。</p></div>
+          </article>
+
+          <article>
+            <span class="guide-number">2</span>
+            <div class="guide-demo guide-key-demo"><kbd>D</kbd><kbd>F</kbd><kbd>J</kbd><kbd>K</kbd></div>
+            <div><strong>到達判定線就按</strong><p>電腦按 D、F、J、K；手機直接點擊對應軌道。</p></div>
+          </article>
+
+          <article>
+            <span class="guide-number">3</span>
+            <div class="guide-demo guide-combo-demo">COMBO<br><b>12</b></div>
+            <div><strong>連續命中累積高分</strong><p>抓準節奏可獲得 PERFECT，並提高 Combo。</p></div>
+          </article>
+        </div>
+
+        <div class="game-guide-tip">
+          <span>💡</span> 音符碰到下方彩色判定線時再按，會更容易命中！
+        </div>
+
+        <button id="startGameFromGuideButton" class="btn primary game-guide-start" type="button">
+          我知道了，開始挑戰！
+        </button>
+      </div>
+    </div>
+
+    <div id="pauseModal" class="modal hidden" role="dialog" aria-modal="true"><div class="modal-card glass"><h2>PAUSE</h2><button id="resumeButton" class="btn primary">繼續</button><button id="restartButton" class="btn secondary">重新開始</button><button id="pauseSettingsButton" class="btn secondary">設定</button><button id="leaveSongButton" class="btn danger">離開歌曲</button></div></div>
+
+    <div id="settingsModal" class="modal hidden" role="dialog" aria-modal="true"><div class="modal-card settings-card glass"><button class="modal-close" data-close-settings>×</button><h2>遊戲設定</h2>
+      <label>BGM 音量 <input id="bgmVolume" type="range" min="0" max="1" step="0.05"></label>
+      <label>SE 音量 <input id="seVolume" type="range" min="0" max="1" step="0.05"></label>
+      <label>音符速度 <input id="noteSpeed" type="range" min="0.7" max="1.5" step="0.05"><output id="noteSpeedOut"></output></label>
+      <label>判定嚴格度 <select id="judgeStrictness"><option value="relaxed">寬鬆</option><option value="normal">標準</option><option value="strict">嚴格</option></select></label>
+      <label>背景亮度 <input id="bgBrightness" type="range" min="0.45" max="1" step="0.05"></label>
+      <label class="check"><input id="fpsToggle" type="checkbox"> 顯示 FPS</label>
+      <button id="fullscreenButton" class="btn secondary">切換全螢幕</button>
+    </div></div>
+
+    <div id="toast" class="toast"></div><div id="fpsCounter" class="fps hidden">60 FPS</div>
+  </div>
+
+<audio id="song" preload="metadata"></audio>
+<audio id="songPreview" preload="metadata"></audio>
+
+<audio
+  id="loginBgm"
+  src="Tax_Melody_Login_BGM.mp3"
+  preload="auto"
+  autoplay
+  loop>
+</audio>
+
+<script src="data/offline-data.js?v=20260803"></script>
+<script src="js/storage.js"></script>
+<script src="js/settings.js?v=20260803-real-settings-v1"></script>
+<script src="js/audio.js"></script>
+<script src="js/lyrics.js"></script>
+<script src="js/result.js"></script>
+<script src="js/game.js"></script>
+<script src="js/ui.js?v=20260803-mobile-album-only-v1"></script>
+<script src="js/app.js"></script>
+
+
+<div id="portraitOnlyOverlay" class="portrait-only-overlay" aria-hidden="true">
+  <div class="portrait-only-card">
+    <div class="portrait-phone-icon">📱</div>
+    <h2>請將手機轉為直向</h2>
+    <p>Tax Melody 手機版建議使用直式遊玩</p>
+    <span>旋轉手機後即可繼續</span>
+  </div>
+</div>
+
+
+
+
+
+
+<script>
+(async function(){
+ const KEY='trsSmartPortalSettings_v12';
+ const API='https://tax-status-api.ddy88000000.workers.dev/api/portal-settings';
+ const def={enabled:true,text:'返回智慧工作入口',position:'bottom-right',scale:100,x:0,y:0};
+ let b=def;
+ try{
+   const r=await fetch(API,{cache:'no-store'});
+   const d=await r.json();
+   if(d?.success&&d.settings){
+     localStorage.setItem(KEY,JSON.stringify(d.settings));
+     b={...def,...(d.settings.backButton||{})};
+   }
+ }catch(e){
+   try{
+     const s=JSON.parse(localStorage.getItem(KEY)||'null');
+     if(s?.backButton)b={...def,...s.backButton};
+   }catch{}
+ }
+ const el=document.querySelector('.portal-back-btn');
+ if(!el)return;
+ el.style.display=b.enabled?'inline-flex':'none';
+ el.textContent='⌂ '+b.text;
+ const sc=Math.max(.7,Math.min(1.6,(Number(b.scale)||100)/100));
+ el.style.setProperty('font-size',(15*sc)+'px','important');
+ el.style.setProperty('padding',(14*sc)+'px '+(20*sc)+'px','important');
+ el.style.setProperty('border-radius',(18*sc)+'px','important');
+ ['left','right','top','bottom'].forEach(k=>el.style.setProperty(k,'auto','important'));
+ const x=Number(b.x)||0,y=Number(b.y)||0,p=b.position||'bottom-right';
+ if(p==='top-left'){
+   el.style.setProperty('left',(24+x)+'px','important');
+   el.style.setProperty('top',(24+y)+'px','important');
+ }else if(p==='top-right'){
+   el.style.setProperty('right',(24-x)+'px','important');
+   el.style.setProperty('top',(24+y)+'px','important');
+ }else if(p==='bottom-left'){
+   el.style.setProperty('left',(24+x)+'px','important');
+   el.style.setProperty('bottom',(24-y)+'px','important');
+ }else{
+   el.style.setProperty('right',(24-x)+'px','important');
+   el.style.setProperty('bottom',(24-y)+'px','important');
+ }
+})();
+</script>
+
+</body>
+</html>

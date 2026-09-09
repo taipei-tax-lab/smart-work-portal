@@ -1,0 +1,85 @@
+[
+  {
+    "id": "first-alert",
+    "title": "守護第一時間",
+    "subtitle": "稅籍異動即時通",
+    "category": "最新上架",
+    "duration": "04:08",
+    "audio": "assets/music/守護第一時間.mp3",
+    "cover": "assets/images/tax-melody-concept.jpg",
+    "available": true,
+    "bpm": 129,
+    "stars": {
+      "easy": 2,
+      "normal": 4,
+      "hard": 6,
+      "expert": 8
+    },
+    "learningId": "first-alert"
+  },
+  {
+    "id": "energy-go",
+    "title": "建築能效 GO！",
+    "subtitle": "建築能效減稅新制",
+    "category": "熱門推薦",
+    "duration": "02:45",
+    "cover": "assets/images/tax-melody-concept.jpg",
+    "audio": "assets/music/building-energy-go.mp3",
+    "available": true,
+    "stars": {
+      "easy": 2,
+      "normal": 4,
+      "hard": 6,
+      "expert": 8
+    },
+    "learningId": "energy-go"
+  },
+  {
+    "id": "house20",
+    "title": "房屋稅 2.0 上路",
+    "subtitle": "自住與出租新制",
+    "category": "人氣精選",
+    "duration": "02:50",
+    "cover": "assets/images/tax-melody-concept.jpg",
+    "available": false,
+    "stars": {
+      "easy": 2,
+      "normal": 4,
+      "hard": 6,
+      "expert": 8
+    },
+    "learningId": "house20"
+  },
+  {
+    "id": "amusement",
+    "title": "娛樂稅新時代",
+    "subtitle": "娛樂稅修法重點",
+    "category": "熱門推薦",
+    "duration": "02:41",
+    "cover": "assets/images/tax-melody-concept.jpg",
+    "available": false,
+    "stars": {
+      "easy": 2,
+      "normal": 4,
+      "hard": 6,
+      "expert": 8
+    },
+    "learningId": "amusement"
+  },
+  {
+    "id": "disaster",
+    "title": "災損別擔心",
+    "subtitle": "災損減免三步驟",
+    "category": "全部歌曲",
+    "duration": "02:37",
+    "cover": "assets/images/tax-melody-concept.jpg",
+    "available": false,
+    "stars": {
+      "easy": 2,
+      "normal": 4,
+      "hard": 6,
+      "expert": 8
+    },
+    "learningId": "disaster"
+  }
+]

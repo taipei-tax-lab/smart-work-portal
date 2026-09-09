@@ -1,0 +1,375 @@
+<!DOCTYPE html>
+<html lang="zh-Hant">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>系統異常通報中心</title>
+  <link rel="stylesheet" href="style.css">
+<style>
+.portal-back-btn{
+position:fixed!important;right:24px!important;bottom:24px!important;z-index:999999!important;
+padding:14px 20px!important;border-radius:18px!important;background:#1958a0!important;
+color:#fff!important;text-decoration:none!important;font:900 15px "Microsoft JhengHei",sans-serif!important;
+box-shadow:0 12px 30px rgba(20,70,130,.32)!important;border:2px solid #fff!important}
+</style>
+<style>
+.portal-back-btn{position:fixed!important;z-index:999999!important;display:inline-flex!important;align-items:center!important;justify-content:center!important;text-decoration:none!important;background:linear-gradient(135deg,#174f9d,#246fc9)!important;color:#fff!important;border:3px solid rgba(255,255,255,.92)!important;box-shadow:0 14px 34px rgba(15,58,121,.35)!important;font-family:"Microsoft JhengHei",sans-serif!important;font-weight:900!important}
+</style>
+</head>
+<body><a class="portal-back-btn" href="../index.html">⌂ 返回智慧工作入口</a>
+<header class="topbar">
+  <div class="brand">
+    <div class="brand-mark">!</div>
+    <div>
+      <div class="brand-title">系統異常通報中心</div>
+      <div class="brand-sub">異常即時回報・狀態同步共享</div>
+    </div>
+  </div>
+  <button class="admin-entry" id="adminToggle">管理端</button>
+</header>
+
+<main class="page">
+  <section id="userView">
+
+    <section class="brand-home">
+      <div class="brand-home-copy">
+        <div class="brand-home-kicker">SYSTEM SERVICE CENTER</div>
+        <h1>系統異常通報中心</h1>
+        <p>一處發現、即時回報；全處掌握、持續追蹤。</p>
+
+        <div class="brand-status" id="summaryBar">
+          <div class="brand-status-dot" id="summarySymbol">✓</div>
+          <div>
+            <div class="summary-label" id="summaryLabel">目前正常</div>
+            <div class="summary-title" id="summaryTitle">目前沒有進行中的異常事件</div>
+            <div class="summary-desc" id="summaryDesc">如實際受理案件時發現異常，可直接建立回報。</div>
+          </div>
+        </div>
+
+        <div class="brand-actions">
+          <button class="brand-report-btn" id="openReportBtn">
+            <span class="brand-report-icon">＋</span>
+            <span>
+              <strong>立即回報異常</strong>
+              <small>選擇分處、系統與問題即可</small>
+            </span>
+          </button>
+
+          <div class="brand-help">
+            <span></span>
+            同一系統異常將自動整併，避免重複回報。
+          </div>
+        </div>
+      </div>
+
+      <div class="brand-home-visual" aria-hidden="true">
+        <div class="visual-shape visual-shape-a"></div>
+        <div class="visual-shape visual-shape-b"></div>
+
+        <div class="visual-card main-screen">
+          <div class="screen-top">
+            <span></span><span></span><span></span>
+          </div>
+          <div class="screen-body">
+            <div class="screen-title"></div>
+            <div class="screen-row row-alert">
+              <span class="row-icon">!</span>
+              <div>
+                <b></b>
+                <i></i>
+              </div>
+            </div>
+            <div class="screen-row row-ok">
+              <span class="row-icon">✓</span>
+              <div>
+                <b></b>
+                <i></i>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <div class="visual-card mini-card card-one">
+          <span class="mini-dot dot-pink"></span>
+          <div class="mini-lines"><b></b><i></i></div>
+        </div>
+        <div class="visual-card mini-card card-two">
+          <span class="mini-dot dot-blue"></span>
+          <div class="mini-lines"><b></b><i></i></div>
+        </div>
+        <div class="visual-card mini-card card-three">
+          <span class="mini-dot dot-green"></span>
+          <div class="mini-lines"><b></b><i></i></div>
+        </div>
+
+        <div class="visual-caption">REPORT · SYNC · TRACK</div>
+      </div>
+    </section>
+
+    <section class="event-strip-section">
+      <div class="event-strip-head">
+        <div>
+          <div class="eyebrow">LIVE STATUS</div>
+          <h2>目前進行中</h2>
+        </div>
+        <span class="count-badge" id="activeCount">0 件</span>
+      </div>
+      <div id="incidentList" class="incident-list event-strip-list"></div>
+    </section>
+
+    <section class="section-block recent-section">
+      <div class="section-head">
+        <div>
+          <div class="eyebrow">RECENT</div>
+          <h2><span class="title-icon">◌</span>近期已結案</h2>
+        </div>
+      </div>
+      <div id="recentList" class="recent-list"></div>
+    </section>
+
+    
+  </section>
+
+  <section id="adminView" class="hidden">
+    <button class="back-btn" id="backToUser">← 返回分處畫面</button>
+
+    <section class="admin-hero">
+      <div>
+        <div class="eyebrow">MANAGEMENT</div>
+        <h1><span class="admin-title-icon">⌁</span>異常事件管理</h1>
+        <p>即時掌握案件狀態，完整保留處理歷程。</p>
+      </div>
+      <div class="admin-hero-note"><div class="hero-note-ring"></div><div class="hero-note-dots"></div>
+        <span>事件留痕</span>
+        <strong>每筆回報與狀態更新皆留存。</strong>
+      </div>
+    </section>
+
+    <div class="admin-stats">
+      <div class="stat"><span>進行中</span><strong id="statActive">0</strong></div>
+      <div class="stat"><span>已結案</span><strong id="statClosed">0</strong></div>
+      <div class="stat"><span>歷次通報</span><strong id="statTotal">0</strong></div>
+    </div>
+
+    <div class="admin-toolbar">
+      <div class="admin-tabs">
+        <button class="admin-tab active" data-filter="active">進行中</button>
+        <button class="admin-tab" data-filter="closed">已結案</button>
+        <button class="admin-tab" data-filter="all">全部</button>
+      </div>
+      <div class="admin-toolbar-right">
+        <div class="admin-hint">先看摘要，再視需要展開完整歷程</div>
+        <button class="notification-settings-btn" id="openNotificationSettings">✉ 通知設定</button>
+      </div>
+    </div>
+
+    <div id="adminList" class="admin-list"></div>
+    </section>
+</main>
+
+<div class="modal" id="reportModal">
+  <div class="modal-card">
+    <div class="modal-head">
+      <div>
+        <div class="eyebrow">NEW REPORT</div>
+        <h3>回報系統異常</h3>
+        <p>同一系統會自動併入同一事件。一般情況只要選系統與問題即可完成。</p>
+      </div>
+      <button class="close-btn" data-close="reportModal">×</button>
+    </div>
+
+    <div class="form-grid fast-form">
+      <label class="field full branch-first">
+        <span class="branch-first-label">① 回報分處</span>
+        <select id="reportBranch"></select>
+      </label>
+      <label class="field full">
+        <span>哪個系統？</span>
+        <select id="reportSystem"></select>
+<div id="otherSystemWrap" class="hidden">
+  <label for="otherSystemName">請輸入系統名稱</label>
+  <input
+    type="text"
+    id="otherSystemName"
+    placeholder="請輸入系統名稱"
+  >
+</div>
+      </label>
+
+      <div class="field full">
+        <span>遇到什麼問題？</span>
+        <div id="issueOptions" class="issue-options"></div>
+<div id="otherIssueWrap" class="hidden">
+  <label for="otherIssueText">請簡要說明問題情形</label>
+  <input
+    type="text"
+    id="otherIssueText"
+    placeholder="例如：查詢結果顯示異常"
+  >
+</div>
+      </div>
+
+      <details class="optional-note field full">
+        <summary>＋ 補充說明（非必要）</summary>
+        <textarea id="reportNote" placeholder="例如：查詢後持續顯示連線逾時。"></textarea>
+      </details>
+    </div>
+
+    <div class="modal-actions">
+      <button class="btn secondary" data-close="reportModal">取消</button>
+      <button class="btn primary" id="submitReport">送出回報</button>
+    </div>
+  </div>
+</div>
+
+<div class="modal" id="quickModal">
+  <div class="modal-card compact">
+    <div class="modal-head">
+      <div>
+        <div class="eyebrow">QUICK ACTION</div>
+        <h3 id="quickTitle">選擇分處</h3>
+        <p id="quickDesc">只需要選擇分處即可。</p>
+      </div>
+      <button class="close-btn" data-close="quickModal">×</button>
+    </div>
+
+    <label class="field">
+      <span id="quickFieldLabel" class="branch-first-label">① 分處別</span>
+      <select id="quickBranch"></select>
+    </label>
+
+    <div id="quickEmpty" class="quick-empty hidden"></div>
+
+    <div class="modal-actions">
+      <button class="btn secondary" data-close="quickModal">取消</button>
+      <button class="btn primary" id="quickConfirm">確認</button>
+    </div>
+  </div>
+</div>
+
+<div class="modal" id="closeConfirmModal">
+  <div class="modal-card compact">
+    <div class="modal-head">
+      <div>
+        <div class="eyebrow">CLOSE INCIDENT</div>
+        <h3>確認結案？</h3>
+        <p id="closeConfirmText">結案後將移至近期事件紀錄。</p>
+      </div>
+      <button class="close-btn" data-close="closeConfirmModal">×</button>
+    </div>
+    <div class="close-warning hidden" id="closeWarning"></div>
+    <div class="modal-actions">
+      <button class="btn secondary" data-close="closeConfirmModal">取消</button>
+      <button class="btn danger" id="confirmCloseBtn">確認結案</button>
+    </div>
+  </div>
+</div>
+
+
+<div class="modal" id="notificationSettingsModal">
+  <div class="modal-card notification-settings-card">
+    <div class="modal-head">
+      <div>
+        <div class="eyebrow">NOTIFICATION SETTINGS</div>
+        <h3>通知收件人設定</h3>
+        <p>人員異動時只要更新 Email 並儲存，後續通知會自動使用最新設定。</p>
+      </div>
+      <button class="close-btn" data-close="notificationSettingsModal">×</button>
+    </div>
+    <div class="notification-settings-note">
+      <span>目前為測試模式</span>
+      <p>正式收件人會儲存在共用資料庫；測試模式開啟時，實際寄信仍會導向測試信箱。</p>
+    </div>
+    <div class="recipient-settings-list" id="recipientSettingsList"></div>
+    <div class="modal-actions notification-settings-actions">
+      <span class="recipient-save-status" id="recipientSaveStatus"></span>
+      <button class="btn secondary" data-close="notificationSettingsModal">取消</button>
+      <button class="btn primary" id="saveNotificationSettings">儲存設定</button>
+    </div>
+  </div>
+</div>
+
+<div id="toastArea" class="toast-area"></div>
+
+
+<div class="modal" id="adminPasswordModal">
+  <div class="modal-card compact admin-password-card">
+    <div class="modal-head">
+      <div>
+        <div class="eyebrow">MANAGEMENT ACCESS</div>
+        <h3>進入管理端</h3>
+        <p>請輸入管理密碼。</p>
+      </div>
+      <button class="close-btn" data-close="adminPasswordModal">×</button>
+    </div>
+
+    <label class="field full password-field">
+      <span>管理密碼</span>
+      <input id="adminPasswordInput" type="password" placeholder="請輸入密碼" autocomplete="off">
+    </label>
+
+    <div class="password-error hidden" id="adminPasswordError">
+      密碼錯誤，請重新輸入。
+    </div>
+
+    <div class="modal-actions">
+      <button class="btn secondary" data-close="adminPasswordModal">取消</button>
+      <button class="btn primary" id="adminPasswordSubmit">進入管理端</button>
+    </div>
+  </div>
+</div>
+
+<script src="data.js"></script>
+<script src="app.js"></script>
+
+
+
+
+
+<script>
+(async function(){
+ const KEY='trsSmartPortalSettings_v12';
+ const API='https://tax-status-api.ddy88000000.workers.dev/api/portal-settings';
+ const def={enabled:true,text:'返回智慧工作入口',position:'bottom-right',scale:100,x:0,y:0};
+ let b=def;
+ try{
+   const r=await fetch(API,{cache:'no-store'});
+   const d=await r.json();
+   if(d?.success&&d.settings){
+     localStorage.setItem(KEY,JSON.stringify(d.settings));
+     b={...def,...(d.settings.backButton||{})};
+   }
+ }catch(e){
+   try{
+     const s=JSON.parse(localStorage.getItem(KEY)||'null');
+     if(s?.backButton)b={...def,...s.backButton};
+   }catch{}
+ }
+ const el=document.querySelector('.portal-back-btn');
+ if(!el)return;
+ el.style.display=b.enabled?'inline-flex':'none';
+ el.textContent='⌂ '+b.text;
+ const sc=Math.max(.7,Math.min(1.6,(Number(b.scale)||100)/100));
+ el.style.setProperty('font-size',(15*sc)+'px','important');
+ el.style.setProperty('padding',(14*sc)+'px '+(20*sc)+'px','important');
+ el.style.setProperty('border-radius',(18*sc)+'px','important');
+ ['left','right','top','bottom'].forEach(k=>el.style.setProperty(k,'auto','important'));
+ const x=Number(b.x)||0,y=Number(b.y)||0,p=b.position||'bottom-right';
+ if(p==='top-left'){
+   el.style.setProperty('left',(24+x)+'px','important');
+   el.style.setProperty('top',(24+y)+'px','important');
+ }else if(p==='top-right'){
+   el.style.setProperty('right',(24-x)+'px','important');
+   el.style.setProperty('top',(24+y)+'px','important');
+ }else if(p==='bottom-left'){
+   el.style.setProperty('left',(24+x)+'px','important');
+   el.style.setProperty('bottom',(24-y)+'px','important');
+ }else{
+   el.style.setProperty('right',(24-x)+'px','important');
+   el.style.setProperty('bottom',(24-y)+'px','important');
+ }
+})();
+</script>
+
+</body>
+</html>

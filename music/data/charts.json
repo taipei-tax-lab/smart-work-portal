@@ -1,0 +1,12 @@
+{
+  "first-alert": {
+    "generator": "procedural",
+    "bpm": 129,
+    "lanes": 4,
+    "noteTypes": [
+      "tap",
+      "hold",
+      "flick"
+    ]
+  }
+}

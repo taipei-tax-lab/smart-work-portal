@@ -1,0 +1,567 @@
+<!DOCTYPE html>
+<html lang="zh-Hant">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>工作捷徑｜同仁常用網站入口</title>
+<style>
+:root{
+  --bg:#f6f7fb;
+  --card:#ffffff;
+  --text:#243045;
+  --muted:#70809a;
+  --line:#e7ebf4;
+  --navy:#5b6fb1;
+  --purple:#8b73c9;
+  --teal:#58a4a3;
+  --gold:#d59a47;
+  --pink:#d47b9a;
+  --sky:#69a7d7;
+  --shadow:0 18px 44px rgba(44,58,89,.09);
+  --radius:26px;
+}
+*{box-sizing:border-box}
+body{
+  margin:0;
+  font-family:"Noto Sans TC","Microsoft JhengHei",sans-serif;
+  color:var(--text);
+  background:
+    radial-gradient(circle at 15% 15%, rgba(139,115,201,.12), transparent 28%),
+    radial-gradient(circle at 85% 8%, rgba(91,111,177,.12), transparent 25%),
+    radial-gradient(circle at 85% 85%, rgba(88,164,163,.11), transparent 22%),
+    linear-gradient(180deg,#fcfdff 0%, #f4f6fb 100%);
+}
+.wrap{max-width:1180px;margin:0 auto;padding:54px 24px 72px}
+.hero{
+  display:grid;
+  grid-template-columns:minmax(0,1.2fr) minmax(320px,.8fr);
+  gap:18px;
+  margin-bottom:28px;
+}
+.hero-main,.hero-side{
+  background:rgba(255,255,255,.8);
+  border:1px solid rgba(255,255,255,.72);
+  backdrop-filter: blur(10px);
+  box-shadow:var(--shadow);
+  border-radius:32px;
+}
+.hero-main{
+  position:relative;
+  overflow:hidden;
+  padding:30px 32px;
+}
+.hero-main::before{
+  content:"";
+  position:absolute;
+  width:240px;height:240px;
+  right:-80px;top:-80px;
+  background:linear-gradient(135deg, rgba(91,111,177,.18), rgba(139,115,201,.05));
+  border-radius:50%;
+}
+.hero-main::after{
+  content:"";
+  position:absolute;
+  width:140px;height:140px;
+  left:-30px;bottom:-40px;
+  background:linear-gradient(135deg, rgba(88,164,163,.13), rgba(105,167,215,.04));
+  border-radius:50%;
+}
+.eyebrow{
+  position:relative;
+  z-index:1;
+  display:inline-flex;align-items:center;gap:8px;
+  padding:8px 13px;border-radius:999px;
+  background:linear-gradient(135deg,#eef2ff,#f2f0ff);
+  color:#6878b6;font-size:.78rem;font-weight:800;
+}
+.hero h1{
+  position:relative;z-index:1;
+  margin:18px 0 10px;
+  font-size:2.7rem;line-height:1.08;letter-spacing:-.05em;
+}
+.hero p{
+  position:relative;z-index:1;
+  margin:0;max-width:700px;color:var(--muted);
+  line-height:1.9;font-size:1rem;
+}
+.hero-pills{
+  position:relative;z-index:1;
+  display:flex;flex-wrap:wrap;gap:10px;margin-top:22px;
+}
+.hero-pills span{
+  padding:8px 12px;border-radius:999px;background:#fff;
+  border:1px solid var(--line);font-size:.83rem;color:#66758d;font-weight:700;
+}
+.hero-side{
+  padding:24px;
+  display:flex;flex-direction:column;gap:18px;justify-content:space-between;
+}
+.panel-title{
+  font-size:.96rem;font-weight:900;margin:0 0 10px;
+}
+.search-box{position:relative}
+.search-box input{
+  width:100%;padding:15px 16px 15px 48px;
+  border-radius:16px;border:1px solid var(--line);outline:none;
+  background:#fff;color:var(--text);font-size:.95rem;
+  box-shadow: inset 0 1px 0 rgba(255,255,255,.8);
+}
+.search-box input:focus{
+  border-color:#c5cbed;box-shadow:0 0 0 4px rgba(91,111,177,.11);
+}
+.search-icon{
+  position:absolute;left:16px;top:50%;transform:translateY(-50%);
+  color:#97a2b4;font-size:1.05rem;
+}
+.tags{display:flex;flex-wrap:wrap;gap:8px}
+.tag-btn{
+  border:none;border-radius:999px;padding:8px 12px;
+  background:#f4f6fb;color:#66758d;font-size:.8rem;font-weight:800;
+  cursor:pointer;transition:.15s ease;
+}
+.tag-btn:hover,.tag-btn.active{
+  background:linear-gradient(135deg,#eef2ff,#f2f0ff);
+  color:#6878b6;
+}
+.side-note{
+  border-radius:20px;padding:16px;
+  background:linear-gradient(135deg,#f9fbff 0%,#f6f4ff 100%);
+  border:1px solid var(--line);color:#75839a;
+  font-size:.88rem;line-height:1.8;
+}
+.section-head{
+  display:flex;justify-content:space-between;align-items:end;gap:16px;
+  margin-bottom:18px;
+}
+.section-head h2{margin:0;font-size:1.28rem}
+.section-head p{margin:5px 0 0;color:var(--muted);font-size:.92rem}
+.grid{
+  display:grid;
+  grid-template-columns:repeat(3,minmax(0,1fr));
+  gap:18px;
+}
+.card{
+  background:rgba(255,255,255,.9);
+  border:1px solid rgba(255,255,255,.8);
+  border-radius:28px;padding:22px;
+  box-shadow:var(--shadow);
+  display:flex;flex-direction:column;min-height:252px;
+  transition:.2s ease;
+}
+.card:hover{
+  transform:translateY(-3px);
+  box-shadow:0 24px 50px rgba(44,58,89,.13);
+}
+.card-top{
+  display:flex;align-items:flex-start;justify-content:space-between;gap:12px;
+}
+.icon-box{
+  width:62px;height:62px;border-radius:22px;
+  display:flex;align-items:center;justify-content:center;
+  font-size:1.7rem;color:#fff;box-shadow:0 12px 24px rgba(0,0,0,.08);
+}
+.c1{background:linear-gradient(135deg,#5b6fb1,#89a0ef)}
+.c2{background:linear-gradient(135deg,#7d6bcc,#ae94ff)}
+.c3{background:linear-gradient(135deg,#58a4a3,#7ecfce)}
+.c4{background:linear-gradient(135deg,#d59a47,#f0c57c)}
+.c5{background:linear-gradient(135deg,#d47b9a,#f1a7bf)}
+.c6{background:linear-gradient(135deg,#69a7d7,#93c8ef)}
+.category{
+  display:inline-flex;align-items:center;gap:6px;
+  background:#fafbfe;border:1px solid #e9edf5;border-radius:999px;
+  padding:6px 10px;color:#66758d;font-size:.74rem;font-weight:900;
+}
+.card h3{
+  margin:16px 0 8px;font-size:1.16rem;line-height:1.35;
+}
+.card p{
+  margin:0;color:var(--muted);line-height:1.78;font-size:.92rem;
+}
+.meta{
+  display:flex;gap:8px;flex-wrap:wrap;margin-top:16px;
+}
+.meta span{
+  font-size:.75rem;color:#74839b;
+  background:#f5f7fb;border-radius:999px;padding:6px 10px;
+}
+.card a{
+  margin-top:auto;padding-top:18px;
+  text-decoration:none;font-weight:900;color:#5f70ad;
+  display:inline-flex;align-items:center;gap:8px;
+}
+.card a:hover{opacity:.85}
+.empty{
+  display:none;
+  margin-top:8px;padding:28px;text-align:center;
+  border:1px dashed #d6dceb;border-radius:24px;
+  background:rgba(255,255,255,.72);color:var(--muted);
+}
+.footer-note{
+  margin-top:30px;text-align:center;color:#97a2b4;font-size:.82rem;
+}
+@media (max-width:980px){
+  .hero{grid-template-columns:1fr}
+  .grid{grid-template-columns:repeat(2,minmax(0,1fr))}
+}
+@media (max-width:620px){
+  .wrap{padding:34px 16px 52px}
+  .hero h1{font-size:2.1rem}
+  .grid{grid-template-columns:1fr}
+}
+
+.icon-box{
+  width:60px;height:60px;border-radius:20px;
+  display:flex;align-items:center;justify-content:center;
+  box-shadow:none;
+  border:1px solid rgba(255,255,255,.85);
+}
+.icon-box svg{
+  width:28px;height:28px;
+  stroke:currentColor;
+  fill:none;
+  stroke-width:1.8;
+  stroke-linecap:round;
+  stroke-linejoin:round;
+}
+.c1{background:#eef2ff;color:#6074b6}
+.c2{background:#f3efff;color:#806bc4}
+.c3{background:#edf8f7;color:#4f9998}
+.c4{background:#fff6e8;color:#c58b38}
+.c5{background:#fff0f4;color:#c66e8c}
+.c6{background:#eef7fd;color:#5d9dcd}
+
+</style>
+
+<style>
+}
+</style>
+
+
+<style>
+.portal-back-btn{
+  position:fixed !important;
+  right:24px !important;
+  bottom:24px !important;
+  left:auto !important;
+  top:auto !important;
+  z-index:999999 !important;
+  display:inline-flex !important;
+  align-items:center !important;
+  justify-content:center !important;
+  gap:10px !important;
+  min-width:190px !important;
+  padding:14px 20px !important;
+  border:3px solid rgba(255,255,255,.92) !important;
+  border-radius:18px !important;
+  background:linear-gradient(135deg,#174f9d,#246fc9) !important;
+  color:#fff !important;
+  text-decoration:none !important;
+  font:900 15px "Microsoft JhengHei","Noto Sans TC",sans-serif !important;
+  box-shadow:0 14px 34px rgba(15,58,121,.35),0 0 0 4px rgba(45,117,207,.12) !important;
+  backdrop-filter:blur(8px) !important;
+  transition:transform .18s ease,box-shadow .18s ease !important;
+}
+.portal-back-btn::before{
+  content:"⌂" !important;
+  width:30px !important;
+  height:30px !important;
+  display:grid !important;
+  place-items:center !important;
+  border-radius:50% !important;
+  background:rgba(255,255,255,.18) !important;
+  font-size:19px !important;
+  line-height:1 !important;
+}
+.portal-back-btn:hover{
+  transform:translateY(-3px) !important;
+  box-shadow:0 18px 40px rgba(15,58,121,.42),0 0 0 5px rgba(45,117,207,.15) !important;
+}
+@media(max-width:700px){
+  .portal-back-btn{
+    right:12px !important;
+    bottom:12px !important;
+    min-width:auto !important;
+    padding:12px 16px !important;
+    font-size:13px !important;
+  }
+}
+</style>
+
+<style>
+.portal-back-btn{
+  position:fixed !important;
+  right:24px !important;
+  bottom:24px !important;
+  left:auto !important;
+  top:auto !important;
+  z-index:999999 !important;
+  display:inline-flex !important;
+  align-items:center !important;
+  justify-content:center !important;
+  gap:10px !important;
+  min-width:190px !important;
+  padding:14px 20px !important;
+  border-radius:18px !important;
+  border:3px solid rgba(255,255,255,.92) !important;
+  background:linear-gradient(135deg,#174f9d,#246fc9) !important;
+  color:#fff !important;
+  text-decoration:none !important;
+  font:900 15px "Microsoft JhengHei","Noto Sans TC",sans-serif !important;
+  box-shadow:0 14px 34px rgba(15,58,121,.35),0 0 0 4px rgba(45,117,207,.12) !important;
+}
+.portal-back-btn::before{
+  content:"⌂" !important;
+  width:30px !important;
+  height:30px !important;
+  display:grid !important;
+  place-items:center !important;
+  border-radius:50% !important;
+  background:rgba(255,255,255,.18) !important;
+  font-size:19px !important;
+}
+.portal-back-btn:hover{
+  transform:translateY(-3px) !important;
+}
+@media(max-width:700px){
+  .portal-back-btn{
+    right:12px !important;
+    bottom:12px !important;
+    min-width:auto !important;
+    padding:12px 16px !important;
+    font-size:13px !important;
+  }
+}
+</style>
+
+<style>
+.portal-back-btn{
+position:fixed!important;right:24px!important;bottom:24px!important;z-index:999999!important;
+padding:14px 20px!important;border-radius:18px!important;background:#1958a0!important;
+color:#fff!important;text-decoration:none!important;font:900 15px "Microsoft JhengHei",sans-serif!important;
+box-shadow:0 12px 30px rgba(20,70,130,.32)!important;border:2px solid #fff!important}
+</style>
+<style>
+.portal-back-btn{position:fixed!important;z-index:999999!important;display:inline-flex!important;align-items:center!important;justify-content:center!important;text-decoration:none!important;background:linear-gradient(135deg,#174f9d,#246fc9)!important;color:#fff!important;border:3px solid rgba(255,255,255,.92)!important;box-shadow:0 14px 34px rgba(15,58,121,.35)!important;font-family:"Microsoft JhengHei",sans-serif!important;font-weight:900!important}
+</style>
+</head>
+<body><a class="portal-back-btn" href="index.html">⌂ 返回智慧工作入口</a>
+
+
+<main class="wrap">
+  <section class="hero">
+    <div class="hero-main">
+      <span class="eyebrow">✦ 同仁工作入口</span>
+      <h1>工作捷徑</h1>
+      <p>將同仁常用網站集中整理，需要時直接點選，不用再翻書籤、找舊訊息或到處查網址。畫面簡潔、分類清楚，查找更快更順手。</p>
+      <div class="hero-pills">
+        <span>法規查詢</span>
+        <span>地政查詢</span>
+        <span>戶政查詢</span>
+        <span>稅務工具</span>
+        <span>商工查詢</span>
+      </div>
+    </div>
+
+    <div class="hero-side">
+      <div>
+        <div class="panel-title">快速搜尋</div>
+        <div class="search-box">
+          <span class="search-icon">⌕</span>
+          <input id="searchInput" type="search" placeholder="輸入關鍵字，例如：法規、地政、戶政">
+        </div>
+        <div class="tags" style="margin-top:14px">
+          <button class="tag-btn" data-keyword="">全部</button>
+          <button class="tag-btn" data-keyword="法規">法規</button>
+          <button class="tag-btn" data-keyword="地政">地政</button>
+          <button class="tag-btn" data-keyword="戶政">戶政</button>
+          <button class="tag-btn" data-keyword="房屋稅">房屋稅</button>
+          <button class="tag-btn" data-keyword="商工">商工</button>
+        </div>
+      </div>
+      <div class="side-note">
+        <strong style="color:#5f70ad">使用提醒</strong><br>
+        點選卡片下方「前往網站」即可另開新分頁。之後若還有新工具，也可以用相同版型繼續往下加。
+      </div>
+    </div>
+  </section>
+
+  <section>
+    <div class="section-head">
+      <div>
+        <h2>常用網站</h2>
+        <p>精選目前最常使用的 6 個工具入口。</p>
+      </div>
+    </div>
+
+    <div class="grid" id="toolGrid">
+      <article class="card" data-keywords="地政 地籍 土地 地政雲 查詢">
+        <div class="card-top">
+          <div class="icon-box c1"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M3.5 6.5 8.5 4l7 2.5 5-2v13l-5 2-7-2.5-5 2z"/><path d="M8.5 4v13M15.5 6.5v13"/></svg></div>
+          <span class="category">地政查詢</span>
+        </div>
+        <h3>地政雲</h3>
+        <p>臺北市地政相關資訊與查詢服務入口，適合查找地政資料與相關應用。</p>
+        <div class="meta">
+          <span>土地</span><span>地籍</span>
+        </div>
+        <a href="https://cloud.land.gov.taipei/cloud/into/index.html" target="_blank" rel="noopener">前往網站 →</a>
+      </article>
+
+      <article class="card" data-keywords="法規 全國法規 法令 中央法規">
+        <div class="card-top">
+          <div class="icon-box c2"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 3v17M7 20h10M5 7h14M7 7l-3 5h6zM17 7l-3 5h6z"/></svg></div>
+          <span class="category">法規查詢</span>
+        </div>
+        <h3>全國法規資料庫</h3>
+        <p>查詢中央法規、命令與相關法令資料，適合快速確認法規內容與修正狀況。</p>
+        <div class="meta">
+          <span>中央法規</span><span>法令</span>
+        </div>
+        <a href="https://law.moj.gov.tw/" target="_blank" rel="noopener">前往網站 →</a>
+      </article>
+
+      <article class="card" data-keywords="臺北市 法規 台北市法規 自治條例 地方法規">
+        <div class="card-top">
+          <div class="icon-box c3"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M3 9h18M5 9v8M9 9v8M15 9v8M19 9v8M3 17h18M2 21h20M12 3 3 7h18z"/></svg></div>
+          <span class="category">法規查詢</span>
+        </div>
+        <h3>臺北市法規查詢系統</h3>
+        <p>查詢臺北市自治法規及相關條文內容，適合處理地方制度與自治規範查詢。</p>
+        <div class="meta">
+          <span>地方自治</span><span>臺北市</span>
+        </div>
+        <a href="https://laws.gov.taipei/Law/LawSearch/LawArticleContent/FL001173" target="_blank" rel="noopener">前往網站 →</a>
+      </article>
+
+      <article class="card" data-keywords="戶政 戶籍 內政部 戶政司 人口 查詢">
+        <div class="card-top">
+          <div class="icon-box c4"><svg viewBox="0 0 24 24" aria-hidden="true"><circle cx="9" cy="8" r="3"/><path d="M3.5 19c.7-4 2.8-6 5.5-6s4.8 2 5.5 6"/><circle cx="17" cy="9" r="2.5"/><path d="M15 14c3.4-.3 5.4 1.5 6 5"/></svg></div>
+          <span class="category">戶政查詢</span>
+        </div>
+        <h3>內政部戶政司全球資訊網</h3>
+        <p>戶籍、人口及相關戶政資訊服務入口，作業時可快速連結至戶政相關資訊頁面。</p>
+        <div class="meta">
+          <span>戶籍</span><span>人口資料</span>
+        </div>
+        <a href="https://www.ris.gov.tw/app/portal" target="_blank" rel="noopener">前往網站 →</a>
+      </article>
+
+      <article class="card" data-keywords="房屋稅 房屋 稅籍 編號 查詢 不動產">
+        <div class="card-top">
+          <div class="icon-box c5"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M3 11 12 4l9 7"/><path d="M5 10v10h14V10M9 20v-6h6v6"/></svg></div>
+          <span class="category">稅務工具</span>
+        </div>
+        <h3>房屋稅籍編號查詢</h3>
+        <p>查詢房屋稅籍編號的線上服務，適合處理房屋資料時快速確認相關編號資訊。</p>
+        <div class="meta">
+          <span>房屋</span><span>稅籍編號</span>
+        </div>
+        <a href="https://services.arpa.tpctax.dof.gov.taipei/online/housetaxno.html" target="_blank" rel="noopener">前往網站 →</a>
+      </article>
+
+      <article class="card" data-keywords="商工 公司 商業 登記 工商 查詢">
+        <div class="card-top">
+          <div class="icon-box c6"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M5 21V5h10v16M15 10h4v11M8 8h2M12 8h1M8 12h2M12 12h1M8 16h2M12 16h1M3 21h18"/></svg></div>
+          <span class="category">商工查詢</span>
+        </div>
+        <h3>全國商工行政服務入口網</h3>
+        <p>提供公司、商業及商工行政相關查詢與服務，適合查詢商工登記與基本資料。</p>
+        <div class="meta">
+          <span>公司登記</span><span>商業資料</span>
+        </div>
+        <a href="https://gcis.nat.gov.tw/mainNew/" target="_blank" rel="noopener">前往網站 →</a>
+      </article>
+    </div>
+
+    <div class="empty" id="emptyState">找不到符合的工具，請換個關鍵字試試看。</div>
+  </section>
+
+  <div class="footer-note">可持續擴充更多常用網站，作為同仁工作入口的一部分。</div>
+</main>
+
+<script>
+const input = document.getElementById('searchInput');
+const cards = [...document.querySelectorAll('.card')];
+const empty = document.getElementById('emptyState');
+const tagBtns = [...document.querySelectorAll('.tag-btn')];
+
+function filterCards(value=''){
+  const q = value.trim().toLowerCase();
+  let visible = 0;
+  cards.forEach(card => {
+    const text = (card.innerText + ' ' + (card.dataset.keywords || '')).toLowerCase();
+    const match = !q || text.includes(q);
+    card.style.display = match ? '' : 'none';
+    if(match) visible++;
+  });
+  empty.style.display = visible ? 'none' : 'block';
+}
+
+input.addEventListener('input', () => {
+  tagBtns.forEach(btn => btn.classList.remove('active'));
+  filterCards(input.value);
+});
+
+tagBtns.forEach(btn => {
+  btn.addEventListener('click', () => {
+    tagBtns.forEach(x => x.classList.remove('active'));
+    btn.classList.add('active');
+    input.value = btn.dataset.keyword;
+    filterCards(input.value);
+  });
+});
+
+tagBtns[0].classList.add('active');
+</script>
+
+
+
+
+
+<script>
+(async function(){
+ const KEY='trsSmartPortalSettings_v12';
+ const API='https://tax-status-api.ddy88000000.workers.dev/api/portal-settings';
+ const def={enabled:true,text:'返回智慧工作入口',position:'bottom-right',scale:100,x:0,y:0};
+ let b=def;
+ try{
+   const r=await fetch(API,{cache:'no-store'});
+   const d=await r.json();
+   if(d?.success&&d.settings){
+     localStorage.setItem(KEY,JSON.stringify(d.settings));
+     b={...def,...(d.settings.backButton||{})};
+   }
+ }catch(e){
+   try{
+     const s=JSON.parse(localStorage.getItem(KEY)||'null');
+     if(s?.backButton)b={...def,...s.backButton};
+   }catch{}
+ }
+ const el=document.querySelector('.portal-back-btn');
+ if(!el)return;
+ el.style.display=b.enabled?'inline-flex':'none';
+ el.textContent='⌂ '+b.text;
+ const sc=Math.max(.7,Math.min(1.6,(Number(b.scale)||100)/100));
+ el.style.setProperty('font-size',(15*sc)+'px','important');
+ el.style.setProperty('padding',(14*sc)+'px '+(20*sc)+'px','important');
+ el.style.setProperty('border-radius',(18*sc)+'px','important');
+ ['left','right','top','bottom'].forEach(k=>el.style.setProperty(k,'auto','important'));
+ const x=Number(b.x)||0,y=Number(b.y)||0,p=b.position||'bottom-right';
+ if(p==='top-left'){
+   el.style.setProperty('left',(24+x)+'px','important');
+   el.style.setProperty('top',(24+y)+'px','important');
+ }else if(p==='top-right'){
+   el.style.setProperty('right',(24-x)+'px','important');
+   el.style.setProperty('top',(24+y)+'px','important');
+ }else if(p==='bottom-left'){
+   el.style.setProperty('left',(24+x)+'px','important');
+   el.style.setProperty('bottom',(24-y)+'px','important');
+ }else{
+   el.style.setProperty('right',(24-x)+'px','important');
+   el.style.setProperty('bottom',(24-y)+'px','important');
+ }
+})();
+</script>
+
+</body>
+</html>

@@ -1,0 +1,791 @@
+<!doctype html>
+<html lang="zh-Hant">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>智慧工作入口</title>
+<style>
+:root{
+  --blue:#104b95;--ink:#2c4d78;--soft:#6f84a5;--line:rgba(82,125,183,.18)
+}
+*{box-sizing:border-box}
+html,body{margin:0;padding:0;font-family:"Microsoft JhengHei","PingFang TC","Noto Sans TC",sans-serif;color:var(--ink)}
+body{
+  min-height:100vh;
+  background:
+    radial-gradient(circle at 84% 20%,rgba(131,198,255,.18),transparent 27%),
+    linear-gradient(rgba(255,255,255,.72),rgba(255,255,255,.84)),
+    linear-gradient(180deg,#ebf7ff 0%,#f9fcff 52%,#eef7ff 100%);
+  overflow-x:hidden
+}
+button,input,textarea,select{font-family:inherit}
+.page{position:relative;min-height:100vh;overflow:hidden}
+.city{position:absolute;right:0;top:110px;width:42%;height:390px;opacity:.16;pointer-events:none}
+.city span{position:absolute;bottom:0;width:48px;border-radius:8px 8px 0 0;background:linear-gradient(180deg,#6bb8f3,#297dcc)}
+.city span:nth-child(1){left:0;height:160px}.city span:nth-child(2){left:70px;height:190px}.city span:nth-child(3){left:140px;height:120px}
+.city span:nth-child(4){left:210px;height:220px}.city span:nth-child(5){left:280px;height:145px}.city span:nth-child(6){left:350px;height:205px}
+.city span:nth-child(7){left:420px;height:170px}.city span:nth-child(8){left:490px;height:230px}.city span:nth-child(9){left:560px;height:145px}
+.shell{width:min(1500px,calc(100vw - 32px));margin:0 auto;padding:18px 0 30px;position:relative;z-index:2}
+.topbar{display:flex;align-items:center;justify-content:space-between;gap:15px;flex-wrap:wrap}
+.brand{display:flex;align-items:center;gap:11px;min-width:250px}
+.brand img{width:54px;height:54px;object-fit:contain}
+.brand strong{display:block;color:#2e5c92;font-size:1rem}.brand span{display:block;color:#8191a9;font-size:.63rem;letter-spacing:.04em;margin-top:3px}
+.utility{display:flex;align-items:center;gap:9px;flex-wrap:wrap;justify-content:flex-end}
+.portal-badge{padding:7px 11px;border-radius:999px;background:#eaf4ff;color:#2b67ad;font-size:.72rem;font-weight:900;border:1px solid #cfe2f8}
+.u-btn,.admin-entry-btn{
+  border:1px solid rgba(108,151,204,.18);background:rgba(255,255,255,.88);color:#28568d;
+  border-radius:15px;padding:9px 12px;font-weight:900;cursor:pointer;box-shadow:0 7px 18px rgba(47,80,128,.06)
+}
+.u-btn:hover,.admin-entry-btn:hover{background:#fff;transform:translateY(-1px)}
+.hero{position:relative;min-height:235px;display:flex;align-items:center;justify-content:center;padding:34px clamp(150px,15vw,245px) 12px}
+.title-wrap{text-align:center;position:relative;z-index:5;max-width:min(900px,72vw);margin:0 auto}
+.hero h1{font-size:clamp(3.3rem,6vw,6rem);line-height:1;margin:0;color:#144d93;letter-spacing:.02em;white-space:nowrap;font-weight:900}
+.yellow-line{height:6px;width:72%;background:#f3c847;border-radius:999px;margin:11px auto 8px;transform:rotate(-1deg)}
+.hero-sub{font-size:clamp(.95rem,1.35vw,1.28rem);line-height:1.72;color:#194f93;font-weight:900;letter-spacing:.08em}
+.hand-note{position:absolute;z-index:3;color:#24619f;font-weight:900;line-height:1.35;transform:rotate(-6deg);white-space:pre-line}
+.hand-note.left{left:2.3%;top:55px}.hand-note.right{right:2.5%;top:61px;text-align:center;transform:rotate(-4deg)}
+.mascot-peek{position:absolute;left:5.3%;top:70px;width:205px;z-index:4;pointer-events:none}
+.mascot-peek img{width:100%;display:block;filter:drop-shadow(0 12px 24px rgba(40,72,119,.18))}
+.cards{position:relative;z-index:4;display:flex;flex-wrap:wrap;justify-content:center;gap:14px;max-width:1280px;margin:14px auto 0}
+.card{
+  position:relative;flex:1 1 210px;max-width:245px;min-width:190px;min-height:345px;padding:27px 18px 21px;border-radius:28px;
+  border:1px solid var(--bd);background:var(--bg);box-shadow:0 18px 40px rgba(46,78,128,.09);overflow:hidden;cursor:pointer;transition:.2s ease
+}
+.card:hover{transform:translateY(-5px);box-shadow:0 25px 50px rgba(46,78,128,.14)}
+.card:before{content:"";position:absolute;width:140px;height:140px;border-radius:50%;right:-40px;top:-35px;background:var(--blob);opacity:.52}
+.blue{--bd:#b7dafd;--bg:linear-gradient(160deg,#fbfdff,#eaf5ff);--blob:#d1e9ff;--accent:#2b78eb;--text:#154b95}
+.orange{--bd:#efd19d;--bg:linear-gradient(160deg,#fffdfa,#fff2da);--blob:#ffe0a7;--accent:#f39a2f;--text:#9b4c13}
+.red{--bd:#efc1c8;--bg:linear-gradient(160deg,#fffafb,#ffeff2);--blob:#ffd2d8;--accent:#ef6071;--text:#9d1e38}
+.green{--bd:#bee2ca;--bg:linear-gradient(160deg,#fbfffc,#ecf9f0);--blob:#d3f1dc;--accent:#45ae74;--text:#17603c}
+.purple{--bd:#d2c7f7;--bg:linear-gradient(160deg,#fdfbff,#f2efff);--blob:#ded5ff;--accent:#7b63df;--text:#4d2da8}
+.teal{--bd:#b9e2df;--bg:linear-gradient(160deg,#fbffff,#e9f8f6);--blob:#cdf0ec;--accent:#3ca99e;--text:#14625c}
+.pink{--bd:#efc9df;--bg:linear-gradient(160deg,#fffafd,#fbeef6);--blob:#f7d9e9;--accent:#d968a3;--text:#8f3566}
+.iconbox{position:relative;z-index:2;width:100px;height:100px;margin:0 auto 20px;border-radius:28px;background:rgba(255,255,255,.92);display:grid;place-items:center;box-shadow:0 10px 25px rgba(48,78,127,.08);font-size:2.4rem}
+.card h3{position:relative;z-index:2;margin:0;text-align:center;color:var(--text);font-size:1.85rem;font-weight:900}
+.card p{position:relative;z-index:2;text-align:center;color:var(--text);opacity:.79;font-size:.82rem;line-height:1.7;font-weight:800}
+.go{position:absolute;left:50%;bottom:18px;transform:translateX(-50%);z-index:2;width:38px;height:38px;border-radius:50%;background:var(--accent);color:#fff;display:grid;place-items:center;font-size:1.5rem;font-weight:900}
+.same-tab-note{text-align:center;color:#8a99ae;font-size:.72rem;margin:10px 0}
+.announcement{max-width:760px;margin:18px auto 0;border:1px solid #dce8f5;border-radius:20px;background:rgba(255,255,255,.9);overflow:hidden;box-shadow:0 12px 30px rgba(53,82,126,.07)}
+.ann-title{padding:11px 16px;color:#285b96;font-weight:900;border-bottom:1px solid #e8f0f7}
+.ann-row{display:grid;grid-template-columns:90px 1fr 24px;gap:12px;align-items:center;padding:10px 16px;border-bottom:1px solid #edf2f7;font-size:.78rem;cursor:default}
+.ann-row:last-child{border-bottom:0}.ann-row.link{cursor:pointer}.ann-row.link:hover{background:#f7fbff}
+.ann-row b{color:#4974ab}.ann-row span:nth-child(2){color:#637995}
+.footer-note{text-align:center;color:#6f86a4;font-weight:850;font-size:.77rem;margin-top:14px}
+
+/* modal */
+.modal{position:fixed;inset:0;z-index:5000;display:none;align-items:center;justify-content:center;padding:22px;background:rgba(24,46,76,.46);backdrop-filter:blur(6px)}
+.modal.open{display:flex}.modal-card{width:min(720px,94vw);max-height:86vh;overflow:auto;background:#fff;border-radius:24px;padding:22px;box-shadow:0 30px 80px rgba(0,0,0,.22)}
+.modal-head{display:flex;justify-content:space-between;gap:15px;align-items:flex-start;margin-bottom:16px}
+.modal-head small{color:#7e96b5;font-weight:900;letter-spacing:.12em}.modal-head h3{margin:4px 0 0;color:#23588f;font-size:1.45rem}
+.close{border:0;background:#edf4fb;color:#5f7b9d;width:38px;height:38px;border-radius:50%;font-size:1.25rem;cursor:pointer}
+.choices{display:grid;grid-template-columns:1fr 1fr;gap:12px}
+.choice{display:flex;align-items:center;gap:12px;border:1px solid #dce8f5;background:#fafdff;border-radius:17px;padding:14px;text-align:left;cursor:pointer;color:#365b85}
+.choice:hover{background:#f1f7fe}.choice .ci{width:46px;height:46px;border-radius:14px;background:#eaf4ff;display:grid;place-items:center;font-size:1.55rem}
+.choice strong{display:block;font-size:.92rem}.choice small{display:block;color:#7b8fa9;margin-top:4px;line-height:1.5}.choice .arr{margin-left:auto}
+
+/* admin */
+.admin-overlay{position:fixed;inset:0;z-index:9999999;display:none;align-items:center;justify-content:center;padding:22px;background:rgba(19,35,58,.55);backdrop-filter:blur(8px)}
+.admin-overlay.open{display:flex}.admin-panel{width:min(1040px,96vw);max-height:92vh;overflow:auto;background:#f8fbff;border-radius:28px;border:1px solid #fff;box-shadow:0 30px 90px rgba(0,0,0,.25);padding:24px}
+.admin-login{width:min(430px,92vw)}.admin-top{display:flex;justify-content:space-between;align-items:flex-start;gap:16px;margin-bottom:18px}.admin-top h2{margin:4px 0 0;color:#1c4b83}.admin-top small{color:#7290b7;font-weight:900;letter-spacing:.08em}
+.admin-grid{display:grid;grid-template-columns:1fr 1fr;gap:14px}.admin-section{background:#fff;border:1px solid #dfe9f5;border-radius:20px;padding:17px}.admin-section.full{grid-column:1/-1}.admin-section h3{margin:0 0 12px;color:#315b91;font-size:1rem}
+.admin-field{display:grid;gap:6px;margin:10px 0}.admin-field label{font-size:.76rem;color:#617797;font-weight:850}
+.admin-field input,.admin-field textarea,.admin-field select,.admin-select{width:100%;border:1px solid #d4e0ef;border-radius:11px;padding:10px 11px;font:inherit;color:#304f79;background:#fbfdff;outline:none}
+.admin-field textarea{min-height:70px;resize:vertical}.admin-check{display:flex;align-items:center;gap:8px;margin-top:10px;color:#4f698e;font-size:.8rem;font-weight:800}
+.admin-note-help{margin-top:7px;color:#8495ab;font-size:.7rem;line-height:1.6}
+.admin-range-row{display:grid;grid-template-columns:1fr auto;align-items:center;gap:12px}.admin-range-value{min-width:64px;text-align:center;padding:7px 9px;border-radius:10px;background:#eef5fd;color:#37618f;font-size:.76rem;font-weight:900}
+.admin-pos-grid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:10px;margin-top:8px}.admin-pos-box{border:1px solid #dce7f3;border-radius:14px;padding:11px;background:#fbfdff}.admin-pos-box strong{display:block;margin-bottom:8px;color:#42648e;font-size:.77rem}.admin-pos-row{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:7px}.admin-pos-row label{display:grid;gap:5px;font-size:.68rem;color:#7890ae;font-weight:850}.admin-pos-row input{width:100%;border:1px solid #d4e0ef;border-radius:9px;padding:8px 9px;color:#36587f;background:#fff}
+.admin-file-row{display:flex;flex-wrap:wrap;align-items:center;gap:9px;margin-top:8px}.admin-file-btn{display:inline-flex;align-items:center;justify-content:center;min-height:38px;padding:9px 12px;border:1px solid #d3e0ef;border-radius:11px;background:#fff;color:#3e638f;font-weight:900;cursor:pointer;font-size:.78rem}.admin-image-preview{width:92px;height:92px;border-radius:18px;border:1px solid #dbe6f2;background:#f7fbff;object-fit:contain;padding:5px}
+.admin-actions{position:sticky;bottom:-24px;background:linear-gradient(180deg,rgba(248,251,255,0),#f8fbff 28%);padding:24px 0 2px;display:flex;justify-content:flex-end;gap:9px}
+.admin-save,.admin-reset{border:0;border-radius:12px;padding:11px 17px;font-weight:900;cursor:pointer}.admin-save{background:#245f9f;color:#fff}.admin-reset{background:#eaf1f8;color:#5d7694}
+.admin-login-row{display:flex;gap:8px;margin-top:15px}.admin-login-row input{flex:1;border:1px solid #d6e2ef;border-radius:11px;padding:11px}.admin-login-row button{border:0;border-radius:11px;background:#2f6db2;color:#fff;padding:10px 15px;font-weight:900}.admin-error{color:#c74b59;font-size:.78rem;margin-top:8px;min-height:18px}.admin-hint{margin-top:14px;padding:10px 12px;border-radius:12px;background:#eef6ff;color:#57769f;font-size:.75rem;line-height:1.6}
+.admin-toast{position:fixed;left:50%;bottom:28px;transform:translateX(-50%) translateY(18px);z-index:10000000;background:#183e71;color:#fff;border-radius:12px;padding:11px 16px;font-weight:850;opacity:0;pointer-events:none;transition:.2s}.admin-toast.show{opacity:1;transform:translateX(-50%) translateY(0)}
+.admin-list{display:grid;gap:11px;margin-top:11px}.admin-item{border:1px solid #dce7f3;border-radius:15px;padding:13px;background:#fbfdff}.admin-item-head{display:flex;align-items:center;justify-content:space-between;gap:10px;margin-bottom:9px}.admin-item-head strong{color:#365d91;font-size:.84rem}.mini-actions{display:flex;flex-wrap:wrap;gap:5px}.mini-btn{border:1px solid #d3e0ef;background:#fff;color:#4e6e97;border-radius:8px;min-height:31px;padding:5px 8px;font-weight:900;cursor:pointer;font-size:.69rem}.mini-btn.danger{color:#b65462}.mini-btn:disabled{opacity:.35;cursor:not-allowed}
+.item-grid{display:grid;grid-template-columns:90px 1fr 1fr 1fr;gap:8px}.item-grid.two{grid-template-columns:1fr 1fr}.item-grid label{display:grid;gap:4px;color:#6a7e9c;font-size:.68rem;font-weight:850}.item-grid input,.item-grid textarea,.item-grid select{width:100%;border:1px solid #d4e0ef;border-radius:9px;padding:8px 9px;color:#304f79;background:#fff}.item-grid textarea{min-height:56px;resize:vertical}.item-grid .wide{grid-column:1/-1}.enabled-line{display:flex!important;align-items:center;gap:7px}
+.add-btn{margin-top:10px;width:100%;min-height:40px;border:1px dashed #a9c6e6;border-radius:11px;background:#f3f8fe;color:#3768a2;font-weight:900;cursor:pointer}
+
+@media(max-width:1180px){.hero{padding-left:20px;padding-right:20px}.mascot-peek,.hand-note{display:none}.title-wrap{max-width:95vw}.hero h1{white-space:normal}.card{max-width:300px}}
+@media(max-width:900px){.utility{width:100%;justify-content:flex-start}.card{flex:1 1 calc(50% - 12px);max-width:none}.hero{min-height:180px}}
+@media(max-width:760px){.choices{grid-template-columns:1fr}.admin-grid{grid-template-columns:1fr}.admin-section.full{grid-column:auto}.admin-pos-grid,.item-grid,.item-grid.two{grid-template-columns:1fr}.item-grid .wide{grid-column:auto}}
+@media(max-width:560px){.shell{width:calc(100vw - 20px)}.hero h1{font-size:2.7rem}.hero-sub{font-size:.9rem}.card{flex:1 1 100%}.brand{min-width:0}}
+
+#syncBadge[data-state="ok"]{background:#edf9f1;color:#2f7c4b;border-color:#cfead8}
+#syncBadge[data-state="local"]{background:#fff7e8;color:#a56a13;border-color:#f0ddb3}
+#syncBadge[data-state="error"]{background:#fff0f2;color:#b84c5c;border-color:#efccd2}
+
+
+.learning-preview-wrap{display:flex;gap:10px;align-items:center;flex-wrap:wrap;margin-top:7px}
+.learning-preview-img{width:120px;height:80px;object-fit:cover;border-radius:12px;border:1px solid #dce7f3;background:#f7fbff}
+.learning-url-note{font-size:.67rem;color:#8495aa;line-height:1.55;margin-top:5px}
+.learning-type-badge{display:inline-flex;align-items:center;padding:5px 8px;border-radius:999px;background:#eef5fd;color:#416d9e;font-size:.65rem;font-weight:900}
+
+</style>
+</head>
+<body>
+<div class="page">
+  <div class="city"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></div>
+  <div class="shell">
+    <header class="topbar">
+      <div class="brand">
+        <img src="trs-logo.gif" alt="TRS Logo">
+        <div><strong>臺北市稅捐稽徵處</strong><span>TAIPEI CITY REVENUE SERVICE</span></div>
+      </div>
+      <div class="utility">
+        <span class="portal-badge" id="portalBadge"></span><span class="portal-badge" id="syncBadge">同步中…</span>
+        <button class="admin-entry-btn" id="adminEntryBtn" type="button">⚙ 管理設定</button>
+        <button class="u-btn" id="newsBtn" type="button"></button>
+        <button class="u-btn" id="helpBtn" type="button"></button>
+        <button class="u-btn" id="contactBtn" type="button"></button>
+      </div>
+    </header>
+
+    <section class="hero">
+      <div class="hand-note left" id="leftNote"></div>
+      <div class="hand-note right" id="rightNote"></div>
+      <div class="mascot-peek" id="mascotWrap"><img id="mascotImage" src="tax-helper.png" alt="TAX 小幫手"></div>
+      <div class="title-wrap">
+        <h1 id="portalTitle"></h1>
+        <div class="yellow-line"></div>
+        <div class="hero-sub"><span id="portalTag1"></span><br><span id="portalTag2"></span></div>
+      </div>
+    </section>
+
+    <main class="cards" id="cardsContainer"></main>
+    <div class="same-tab-note" id="sameTabNote"></div>
+    <section class="announcement" id="announcementBox">
+      <div class="ann-title" id="announcementTitle"></div>
+      <div id="announcementRows"></div>
+    </section>
+    <div class="footer-note" id="footerNote"></div>
+  </div>
+</div>
+
+<div class="modal" id="dataModal">
+  <div class="modal-card">
+    <div class="modal-head"><div><small>DATA & GUIDE</small><h3 id="dataModalTitle"></h3></div><button class="close" data-close>×</button></div>
+    <div class="choices" id="dataChoices"></div>
+  </div>
+</div>
+
+<div class="modal" id="infoModal">
+  <div class="modal-card">
+    <div class="modal-head"><div><small>INFO</small><h3 id="infoTitle"></h3></div><button class="close" data-close>×</button></div>
+    <div id="infoBody" style="color:#687d9e;line-height:1.9;font-size:.9rem"></div>
+  </div>
+</div>
+
+<div class="admin-overlay" id="adminLoginOverlay">
+  <div class="admin-panel admin-login">
+    <div class="admin-top"><div><small>ADMIN</small><h2>管理設定</h2></div><button class="close" data-admin-close>×</button></div>
+    <div style="color:#647b9d;line-height:1.8;font-size:.86rem">請輸入管理密碼後進入設定頁面。</div>
+    <div class="admin-login-row"><input id="adminPassword" type="password" placeholder="請輸入密碼"><button id="adminLoginBtn" type="button">登入</button></div>
+    <div class="admin-error" id="adminLoginError"></div>
+    <div class="admin-hint">設定完成後按「儲存設定」即可套用，不需要直接修改 HTML。</div>
+  </div>
+</div>
+
+<div class="admin-overlay" id="adminPanelOverlay">
+  <div class="admin-panel">
+    <div class="admin-top"><div><small>PORTAL SETTINGS</small><h2>智慧工作入口｜完整管理</h2></div><button class="close" data-admin-close>×</button></div>
+    <div class="admin-grid">
+
+      <section class="admin-section full">
+        <h3>基本文字</h3>
+        <div class="admin-field"><label>上方小標</label><input id="setBadgeText"></div>
+        <div class="admin-field"><label>主標題</label><input id="setTitle"></div>
+        <div class="admin-field"><label>功能列文字</label><input id="setTag1"></div>
+        <div class="admin-field"><label>第二行標語</label><input id="setTag2"></div>
+        <div class="admin-field"><label>卡片下方提示</label><input id="setSameTabNote"></div>
+        <div class="admin-field"><label>頁尾文字</label><input id="setFooterNote"></div>
+      </section>
+
+      <section class="admin-section">
+        <h3>最新消息</h3>
+        <label class="admin-check"><input id="setNewsEnabled" type="checkbox"> 顯示</label>
+        <div class="admin-field"><label>按鈕名稱</label><input id="setNewsLabel"></div>
+        <div class="admin-field"><label>點擊方式</label><select id="setNewsMode"><option value="popup">顯示訊息視窗</option><option value="url">前往網址</option></select></div>
+        <div class="admin-field"><label>視窗標題</label><input id="setNewsTitle"></div>
+        <div class="admin-field"><label>視窗內容</label><textarea id="setNewsContent"></textarea></div>
+        <div class="admin-field"><label>網址</label><input id="setNewsUrl"></div>
+      </section>
+
+      <section class="admin-section">
+        <h3>使用說明</h3>
+        <label class="admin-check"><input id="setHelpEnabled" type="checkbox"> 顯示</label>
+        <div class="admin-field"><label>按鈕名稱</label><input id="setHelpLabel"></div>
+        <div class="admin-field"><label>視窗標題</label><input id="setHelpTitle"></div>
+        <div class="admin-field"><label>內容</label><textarea id="setHelpContent"></textarea></div>
+      </section>
+
+      <section class="admin-section">
+        <h3>聯絡窗口</h3>
+        <label class="admin-check"><input id="setContactEnabled" type="checkbox"> 顯示</label>
+        <div class="admin-field"><label>按鈕名稱</label><input id="setContactLabel"></div>
+        <div class="admin-field"><label>連結</label><input id="setContactUrl"></div>
+      </section>
+
+      <section class="admin-section">
+        <h3>公告區</h3>
+        <label class="admin-check"><input id="setAnnouncementEnabled" type="checkbox"> 顯示公告區</label>
+        <div class="admin-field"><label>公告區標題</label><input id="setAnnouncementTitle"></div>
+      </section>
+
+      <section class="admin-section full">
+        <h3>版面外觀</h3>
+        <label class="admin-check"><input id="setMascotEnabled" type="checkbox"> 顯示石虎</label>
+        <div class="admin-field">
+          <label>石虎圖片</label>
+          <div class="admin-file-row">
+            <img id="mascotPreview" class="admin-image-preview" src="tax-helper.png">
+            <label class="admin-file-btn">選擇圖片<input id="setMascotFile" type="file" accept="image/*" style="display:none"></label>
+            <button class="admin-file-btn" id="resetMascotBtn" type="button">恢復預設圖片</button>
+          </div>
+        </div>
+        <div class="admin-field"><label>石虎大小</label><div class="admin-range-row"><input id="setMascotSize" type="range" min="100" max="360" step="5"><span class="admin-range-value" id="mascotSizeValue"></span></div></div>
+        <div class="admin-pos-grid">
+          <div class="admin-pos-box"><strong>石虎位置</strong><div class="admin-pos-row"><label>左右 X<input id="setMascotX" type="number"></label><label>上下 Y<input id="setMascotY" type="number"></label></div></div>
+        </div>
+
+        <hr style="border:0;border-top:1px solid #edf2f7;margin:16px 0">
+        <label class="admin-check"><input id="setLeftNoteEnabled" type="checkbox"> 顯示左側文字</label>
+        <div class="admin-field"><label>左側文字</label><textarea id="setLeftNoteText"></textarea></div>
+        <div class="admin-field"><label>字體大小</label><div class="admin-range-row"><input id="setLeftNoteSize" type="range" min="12" max="38"><span class="admin-range-value" id="leftNoteSizeValue"></span></div></div>
+        <div class="admin-pos-grid"><div class="admin-pos-box"><strong>左側文字位置</strong><div class="admin-pos-row"><label>左右 X<input id="setLeftNoteX" type="number"></label><label>上下 Y<input id="setLeftNoteY" type="number"></label></div></div></div>
+
+        <hr style="border:0;border-top:1px solid #edf2f7;margin:16px 0">
+        <label class="admin-check"><input id="setRightNoteEnabled" type="checkbox"> 顯示右側文字</label>
+        <div class="admin-field"><label>右側文字</label><textarea id="setRightNoteText"></textarea></div>
+        <div class="admin-field"><label>字體大小</label><div class="admin-range-row"><input id="setRightNoteSize" type="range" min="12" max="38"><span class="admin-range-value" id="rightNoteSizeValue"></span></div></div>
+        <div class="admin-pos-grid"><div class="admin-pos-box"><strong>右側文字位置</strong><div class="admin-pos-row"><label>左右 X<input id="setRightNoteX" type="number"></label><label>上下 Y<input id="setRightNoteY" type="number"></label></div></div></div>
+      </section>
+
+      <section class="admin-section full">
+        <h3>首頁卡片管理</h3>
+        <div class="admin-note-help">可新增卡片。類型可選「一般連結」、「查資料」或「趣學習」。</div>
+        <div class="admin-list" id="adminCardsList"></div>
+        <button class="add-btn" id="addCardBtn" type="button">＋ 新增首頁卡片</button>
+      </section>
+
+      <section class="admin-section full">
+        <h3>查資料｜子項目管理</h3>
+        <div class="admin-field"><label>彈窗標題</label><input id="setDataModalTitle"></div>
+        <div class="admin-list" id="adminDataItemsList"></div>
+        <button class="add-btn" id="addDataItemBtn" type="button">＋ 新增查資料項目</button>
+      </section>
+
+      <section class="admin-section full">
+        <h3>趣學習｜內容管理</h3>
+        <div class="admin-note-help">可管理互動遊戲、同仁作品與影音學習；封面及內容直接貼網址，不需要修改程式。</div>
+        <div class="admin-list" id="adminLearningItemsList"></div>
+        <button class="add-btn" id="addLearningItemBtn" type="button">＋ 新增趣學習項目</button>
+      </section>
+
+      <section class="admin-section full">
+        <h3>最新公告管理</h3>
+        <div class="admin-list" id="adminAnnouncementsList"></div>
+        <button class="add-btn" id="addAnnouncementBtn" type="button">＋ 新增公告</button>
+      </section>
+
+      <section class="admin-section full">
+        <h3>子頁｜返回智慧工作入口按鈕</h3>
+        <label class="admin-check"><input id="setBackEnabled" type="checkbox"> 顯示返回按鈕</label>
+        <div class="admin-field"><label>按鈕文字</label><input id="setBackText"></div>
+        <div class="admin-field"><label>位置</label><select id="setBackPosition"><option value="top-left">左上</option><option value="top-right">右上</option><option value="bottom-left">左下</option><option value="bottom-right">右下</option></select></div>
+        <div class="admin-field"><label>大小</label><div class="admin-range-row"><input id="setBackScale" type="range" min="70" max="160" step="5"><span class="admin-range-value" id="backScaleValue"></span></div></div>
+        <div class="admin-pos-grid"><div class="admin-pos-box"><strong>位置微調</strong><div class="admin-pos-row"><label>左右 X<input id="setBackX" type="number"></label><label>上下 Y<input id="setBackY" type="number"></label></div></div></div>
+      </section>
+    </div>
+
+    <div class="admin-actions">
+      <button class="admin-reset" id="adminResetBtn" type="button">恢復預設</button>
+      <button class="admin-save" id="adminSaveBtn" type="button">儲存設定</button>
+    </div>
+  </div>
+</div>
+<div class="admin-toast" id="adminToast">設定已儲存</div>
+
+<script>
+const STORAGE_KEY='trsSmartPortalSettings_v12';
+const PORTAL_API_URL='https://tax-status-api.ddy88000000.workers.dev/api/portal-settings';
+const PORTAL_AUTH_URL='https://tax-status-api.ddy88000000.workers.dev/api/portal-auth';
+let adminSessionPassword='';
+
+const DEFAULTS={
+  badgeText:'單一入口整合版',
+  title:'智慧工作入口',
+  tag1:'查資料・找工具・填回報・趣學習',
+  tag2:'一站快速到位！',
+  sameTabNote:'各頁面皆可直接使用「返回智慧工作入口」按鈕返回首頁。',
+  footerNote:'用心服務　讓工作更輕鬆',
+
+  news:{enabled:true,label:'🔔 最新消息',mode:'popup',title:'最新消息',content:'此區可放置入口網站更新資訊、系統公告或重要提醒。',url:''},
+  help:{enabled:true,label:'📘 使用說明',title:'使用說明',content:'查資料：快速查詢業務資訊與操作指引。\\n找工具：整合常用網站與工作工具。\\n填回報：線上填報臨時業務與回報事項。\\n趣學習：透過互動方式學習業務知識。'},
+  contact:{enabled:true,label:'👤 聯絡窗口',url:'https://tpctax.gov.taipei/News.aspx?n=CC2C23F341C059D5&sms=2D3666ECD0032A15'},
+
+  mascot:{enabled:true,image:'tax-helper.png',size:205,x:0,y:0},
+  leftNote:{enabled:true,text:'一起\\n讓工作更簡單！',size:18,x:0,y:0},
+  rightNote:{enabled:true,text:'同心稅務\\n更好的服務\\n從這裡開始！',size:18,x:0,y:0},
+
+  cards:[
+    {id:'data',title:'查資料',desc:'快速查詢業務資訊\\n與操作指引',icon:'🔎',theme:'blue',type:'data',url:'',enabled:true},
+    {id:'tools',title:'找工具',desc:'整合常用網站\\n與工作工具',icon:'🧰',theme:'orange',type:'link',url:'tools.html',enabled:true},
+    {id:'report',title:'填回報',desc:'線上填報臨時業務\\n與回報事項',icon:'📝',theme:'green',type:'link',url:'business-report.html',enabled:true},
+    {id:'learning',title:'趣學習',desc:'用互動方式\\n輕鬆學習業務知識',icon:'🎵',theme:'purple',type:'learning',url:'',enabled:true},
+    {id:'error',title:'報異常',desc:'系統問題\\n即時回報與追蹤',icon:'⚠️',theme:'red',type:'link',url:'system-report/index.html',enabled:false}
+  ],
+
+  dataModalTitle:'查資料',
+  dataItems:[
+    {id:'tax-helper',icon:'⌕',title:'TAX 小幫手',desc:'查詢電話答詢題庫與業務資訊',url:'tax-helper/index.html',enabled:true},
+    {id:'video-guide',icon:'▣',title:'視訊服務雲操作',desc:'互動式視訊服務操作教學',url:'video-guide.html',enabled:true}
+  ],
+
+  learningItems:[
+    {id:'tax-melody',icon:'🎵',title:'Tax Melody｜節奏學稅',desc:'跟著節奏記住稅務重點。',url:'music/index.html',enabled:true},
+    {id:'invoice-game',icon:'🧾',title:'發票互動遊戲',desc:'透過互動方式認識發票知識。',url:'https://ct-2486.github.io/invoice-app-game',enabled:false}
+  ],
+
+  announcement:{enabled:true,title:'📢 最新公告'},
+  announcements:[
+    {id:'ann1',date:'115.09',text:'智慧工作入口整合完成',url:'',enabled:true},
+    {id:'ann2',date:'115.09',text:'視訊服務雲操作教學更新',url:'',enabled:true},
+    {id:'ann3',date:'115.09',text:'TAX 小幫手題庫持續更新',url:'',enabled:true}
+  ],
+
+  backButton:{enabled:true,text:'返回智慧工作入口',position:'bottom-right',scale:100,x:0,y:0}
+};
+
+const clone=o=>JSON.parse(JSON.stringify(o));
+const esc=s=>String(s??'').replace(/[&<>"']/g,ch=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[ch]));
+const lines=s=>String(s??'').split('\n').map(esc).join('<br>');
+const newid=p=>p+'-'+Date.now()+'-'+Math.random().toString(36).slice(2,7);
+
+const LEARNING_CATEGORIES=[
+  {value:'game',label:'互動遊戲',icon:'🎮'},
+  {value:'staff',label:'同仁作品',icon:'✨'},
+  {value:'video',label:'影音學習',icon:'🎬'}
+];
+
+const LEARNING_TYPES=[
+  {value:'link',label:'一般連結'},
+  {value:'game',label:'互動遊戲'},
+  {value:'image',label:'圖片／漫畫'},
+  {value:'video',label:'影片'},
+  {value:'pdf',label:'PDF'}
+];
+
+function normalizeLearningItem(x={}){
+  let category=x.category;
+  if(!category){
+    if(x.id==='tax-melody')category='game';
+    else if(String(x.mediaType||'').includes('video'))category='video';
+    else category='staff';
+  }
+
+  let contentType=x.contentType;
+  if(!contentType){
+    if(x.id==='tax-melody')contentType='game';
+    else if(String(x.mediaType||'').startsWith('video'))contentType='video';
+    else contentType='link';
+  }
+
+  return {
+    id:x.id||newid('learn'),
+    category:['game','staff','video'].includes(category)?category:'staff',
+    contentType:['link','game','image','video','pdf'].includes(contentType)?contentType:'link',
+    icon:x.icon||(category==='game'?'🎮':category==='video'?'🎬':'✨'),
+    title:x.title||'新學習內容',
+    desc:x.desc||'',
+    provider:x.provider||'',
+    coverUrl:x.coverUrl||'',
+    url:x.url||x.mediaUrl||'',
+    enabled:x.enabled!==false
+  };
+}
+
+function convertGoogleDriveUrl(url){
+  const s=String(url||'').trim();
+  if(!s)return '';
+
+  let m=s.match(/drive\.google\.com\/file\/d\/([^/]+)/i);
+  if(!m) m=s.match(/[?&]id=([^&]+)/i);
+
+  if(m){
+    return 'https://drive.google.com/thumbnail?id='+m[1]+'&sz=w1200';
+  }
+
+  return s;
+}
+
+function previewImageUrl(url){
+  return convertGoogleDriveUrl(url);
+}
+
+
+function mergeDefaults(saved){
+  const s=clone(DEFAULTS);
+  if(!saved||typeof saved!=='object')return s;
+  for(const k of ['badgeText','title','tag1','tag2','sameTabNote','footerNote','dataModalTitle']) if(saved[k]!==undefined)s[k]=saved[k];
+  for(const k of ['news','help','contact','mascot','leftNote','rightNote','announcement','backButton']) if(saved[k]&&typeof saved[k]==='object')s[k]={...s[k],...saved[k]};
+  for(const k of ['cards','dataItems','announcements']) if(Array.isArray(saved[k]))s[k]=saved[k];
+  if(Array.isArray(saved.learningItems)) s.learningItems=saved.learningItems.map(normalizeLearningItem);
+  else s.learningItems=(s.learningItems||[]).map(normalizeLearningItem);
+  return s;
+}
+function getSettings(){
+  try{return mergeDefaults(JSON.parse(localStorage.getItem(STORAGE_KEY)||'null'))}catch{return clone(DEFAULTS)}
+}
+function cacheSettings(s){
+  localStorage.setItem(STORAGE_KEY,JSON.stringify(s));
+}
+function setSyncState(state,text){
+  const el=document.getElementById('syncBadge');
+  if(!el)return;
+  el.dataset.state=state;
+  el.textContent=text;
+}
+async function loadRemoteSettings(){
+  setSyncState('local','同步中…');
+  try{
+    const res=await fetch(PORTAL_API_URL,{method:'GET',cache:'no-store'});
+    if(!res.ok) throw new Error('HTTP '+res.status);
+    const data=await res.json();
+    if(data?.success && data.settings){
+      const merged=mergeDefaults(data.settings);
+      cacheSettings(merged);
+      setSyncState('ok','☁ 共用設定');
+      return merged;
+    }
+    setSyncState('ok','☁ 共用設定');
+    return getSettings();
+  }catch(err){
+    console.warn('D1 設定讀取失敗，使用本機快取',err);
+    setSyncState('local','⚠ 本機備援');
+    return getSettings();
+  }
+}
+async function saveRemoteSettings(s){
+  setSyncState('local','儲存中…');
+  const res=await fetch(PORTAL_API_URL,{
+    method:'POST',
+    headers:{
+      'Content-Type':'application/json',
+      'X-Portal-Admin-Password':adminSessionPassword
+    },
+    body:JSON.stringify({settings:s})
+  });
+  let data=null;
+  try{data=await res.json()}catch{}
+  if(!res.ok || !data?.success){
+    throw new Error(data?.error||('HTTP '+res.status));
+  }
+  cacheSettings(s);
+  setSyncState('ok','☁ 已同步');
+  return true;
+}
+let pendingMascot='';
+
+function applySettings(){
+  const s=getSettings();
+  document.title=s.title||'智慧工作入口';
+  portalBadge.textContent=s.badgeText;
+  portalTitle.textContent=s.title;
+  portalTag1.textContent=s.tag1;
+  portalTag2.textContent=s.tag2;
+  sameTabNote.textContent=s.sameTabNote;
+  footerNote.textContent=s.footerNote;
+
+  newsBtn.style.display=s.news.enabled?'':'none'; newsBtn.textContent=s.news.label;
+  helpBtn.style.display=s.help.enabled?'':'none'; helpBtn.textContent=s.help.label;
+  contactBtn.style.display=s.contact.enabled?'':'none'; contactBtn.textContent=s.contact.label;
+
+  mascotWrap.style.display=s.mascot.enabled?'':'none';
+  mascotWrap.style.width=(Number(s.mascot.size)||205)+'px';
+  mascotWrap.style.transform=`translate(${Number(s.mascot.x)||0}px,${Number(s.mascot.y)||0}px)`;
+  mascotImage.src=s.mascot.image||'tax-helper.png';
+
+  leftNote.style.display=s.leftNote.enabled?'':'none'; leftNote.innerHTML=lines(s.leftNote.text); leftNote.style.fontSize=(Number(s.leftNote.size)||18)+'px'; leftNote.style.translate=`${Number(s.leftNote.x)||0}px ${Number(s.leftNote.y)||0}px`;
+  rightNote.style.display=s.rightNote.enabled?'':'none'; rightNote.innerHTML=lines(s.rightNote.text); rightNote.style.fontSize=(Number(s.rightNote.size)||18)+'px'; rightNote.style.translate=`${Number(s.rightNote.x)||0}px ${Number(s.rightNote.y)||0}px`;
+
+  renderCards(s);
+  dataModalTitle.textContent=s.dataModalTitle;
+  renderDataChoices(s);
+
+  announcementBox.style.display=s.announcement.enabled?'':'none';
+  announcementTitle.textContent=s.announcement.title;
+  renderAnnouncements(s);
+}
+
+function renderCards(s){
+  cardsContainer.innerHTML='';
+  s.cards.filter(c=>c.enabled!==false).forEach(c=>{
+    const el=document.createElement('article');
+    el.className='card '+(['blue','orange','red','green','purple','teal','pink'].includes(c.theme)?c.theme:'blue');
+    el.tabIndex=0;
+    el.innerHTML=`<div class="iconbox">${esc(c.icon||'🔗')}</div><h3>${esc(c.title)}</h3><p>${lines(c.desc)}</p><span class="go">›</span>`;
+    const go=()=>{
+      if(c.type==='data'){dataModal.classList.add('open');return}
+      if(c.type==='learning'){openLearning(s);return}
+      if(c.url)location.assign(c.url)
+    };
+    el.addEventListener('click',go);el.addEventListener('keydown',e=>{if(e.key==='Enter'||e.key===' '){e.preventDefault();go()}});
+    cardsContainer.appendChild(el);
+  });
+}
+function renderDataChoices(s){
+  dataChoices.innerHTML='';
+  s.dataItems.filter(i=>i.enabled!==false).forEach(i=>{
+    const b=document.createElement('button');b.className='choice';b.type='button';
+    b.innerHTML=`<span class="ci">${esc(i.icon||'⌕')}</span><span><strong>${esc(i.title)}</strong><small>${esc(i.desc)}</small></span><span class="arr">→</span>`;
+    b.onclick=()=>i.url&&location.assign(i.url);dataChoices.appendChild(b)
+  })
+}
+function openLearning(s){
+  location.assign('games/index.html')
+}
+function renderAnnouncements(s){
+  announcementRows.innerHTML='';
+  s.announcements.filter(a=>a.enabled!==false).forEach(a=>{
+    const row=document.createElement('div');row.className='ann-row'+(a.url?' link':'');
+    row.innerHTML=`<b>${esc(a.date)}</b><span>${esc(a.text)}</span><span>›</span>`;
+    if(a.url)row.onclick=()=>location.assign(a.url);
+    announcementRows.appendChild(row)
+  })
+}
+
+function showInfo(title,content){infoTitle.textContent=title;infoBody.innerHTML=lines(content);infoModal.classList.add('open')}
+newsBtn.onclick=()=>{const s=getSettings();if(s.news.mode==='url'&&s.news.url)location.assign(s.news.url);else showInfo(s.news.title,s.news.content)};
+helpBtn.onclick=()=>{const s=getSettings();showInfo(s.help.title,s.help.content)};
+contactBtn.onclick=()=>{const s=getSettings();if(s.contact.url)location.assign(s.contact.url)};
+document.querySelectorAll('[data-close]').forEach(b=>b.onclick=()=>b.closest('.modal').classList.remove('open'));
+document.querySelectorAll('.modal').forEach(m=>m.addEventListener('click',e=>{if(e.target===m)m.classList.remove('open')}));
+
+/* admin */
+const loginOverlay=document.getElementById('adminLoginOverlay'),panelOverlay=document.getElementById('adminPanelOverlay');
+adminEntryBtn.onclick=()=>{adminPassword.value='';adminLoginError.textContent='';loginOverlay.classList.add('open')};
+document.querySelectorAll('[data-admin-close]').forEach(b=>b.onclick=()=>{
+  const overlay=b.closest('.admin-overlay');
+  overlay.classList.remove('open');
+  if(overlay===panelOverlay) adminSessionPassword='';
+});
+async function verifyAdminPassword(password){
+  const res=await fetch(PORTAL_AUTH_URL,{
+    method:'POST',
+    headers:{
+      'Content-Type':'application/json',
+      'X-Portal-Admin-Password':password
+    },
+    body:'{}'
+  });
+  let data=null;
+  try{data=await res.json()}catch{}
+  if(!res.ok || !data?.success){
+    throw new Error(data?.error||'管理密碼驗證失敗');
+  }
+  return true;
+}
+
+adminLoginBtn.onclick=async()=>{
+  const password=adminPassword.value;
+  if(!password){
+    adminLoginError.textContent='請輸入管理密碼';
+    return;
+  }
+
+  adminLoginBtn.disabled=true;
+  adminLoginBtn.textContent='驗證中…';
+  adminLoginError.textContent='';
+
+  try{
+    await verifyAdminPassword(password);
+    adminSessionPassword=password;
+    adminPassword.value='';
+    loginOverlay.classList.remove('open');
+    fillAdmin();
+    panelOverlay.classList.add('open');
+  }catch(err){
+    adminSessionPassword='';
+    adminLoginError.textContent=err.message||'管理密碼錯誤';
+  }finally{
+    adminLoginBtn.disabled=false;
+    adminLoginBtn.textContent='登入';
+  }
+};
+
+adminPassword.addEventListener('keydown',e=>{
+  if(e.key==='Enter')adminLoginBtn.click();
+});
+
+let work=null;
+function bindRange(id,valueId,suffix=' px'){const r=document.getElementById(id),v=document.getElementById(valueId);const f=()=>v.textContent=r.value+suffix;r.oninput=f;f()}
+function fillAdmin(){
+  work=clone(getSettings());pendingMascot='';
+  setBadgeText.value=work.badgeText;setTitle.value=work.title;setTag1.value=work.tag1;setTag2.value=work.tag2;setSameTabNote.value=work.sameTabNote;setFooterNote.value=work.footerNote;
+
+  setNewsEnabled.checked=work.news.enabled;setNewsLabel.value=work.news.label;setNewsMode.value=work.news.mode;setNewsTitle.value=work.news.title;setNewsContent.value=work.news.content;setNewsUrl.value=work.news.url;
+  setHelpEnabled.checked=work.help.enabled;setHelpLabel.value=work.help.label;setHelpTitle.value=work.help.title;setHelpContent.value=work.help.content;
+  setContactEnabled.checked=work.contact.enabled;setContactLabel.value=work.contact.label;setContactUrl.value=work.contact.url;
+  setAnnouncementEnabled.checked=work.announcement.enabled;setAnnouncementTitle.value=work.announcement.title;
+
+  setMascotEnabled.checked=work.mascot.enabled;mascotPreview.src=work.mascot.image||'tax-helper.png';setMascotSize.value=work.mascot.size;setMascotX.value=work.mascot.x;setMascotY.value=work.mascot.y;
+  setLeftNoteEnabled.checked=work.leftNote.enabled;setLeftNoteText.value=work.leftNote.text;setLeftNoteSize.value=work.leftNote.size;setLeftNoteX.value=work.leftNote.x;setLeftNoteY.value=work.leftNote.y;
+  setRightNoteEnabled.checked=work.rightNote.enabled;setRightNoteText.value=work.rightNote.text;setRightNoteSize.value=work.rightNote.size;setRightNoteX.value=work.rightNote.x;setRightNoteY.value=work.rightNote.y;
+
+  setDataModalTitle.value=work.dataModalTitle;
+  setBackEnabled.checked=work.backButton.enabled;setBackText.value=work.backButton.text;setBackPosition.value=work.backButton.position;setBackScale.value=work.backButton.scale;setBackX.value=work.backButton.x;setBackY.value=work.backButton.y;
+
+  bindRange('setMascotSize','mascotSizeValue');bindRange('setLeftNoteSize','leftNoteSizeValue');bindRange('setRightNoteSize','rightNoteSizeValue');bindRange('setBackScale','backScaleValue','%');
+  renderAdminCards();renderSimpleList('data');renderSimpleList('learning');renderSimpleList('announcements')
+}
+setMascotFile.onchange=e=>{const f=e.target.files?.[0];if(!f)return;if(f.size>2500000){alert('建議圖片控制在 2.5MB 以下');return}const r=new FileReader();r.onload=()=>{pendingMascot=String(r.result);mascotPreview.src=pendingMascot};r.readAsDataURL(f)};
+resetMascotBtn.onclick=()=>{pendingMascot='tax-helper.png';mascotPreview.src='tax-helper.png';setMascotFile.value=''};
+
+function renderAdminCards(){
+  adminCardsList.innerHTML='';
+  work.cards.forEach((c,i)=>{
+    const el=document.createElement('div');el.className='admin-item';
+    el.innerHTML=`<div class="admin-item-head"><strong>${i+1}. ${esc(c.title||'未命名卡片')}</strong>${actionsHtml(i,'card',work.cards.length)}</div>
+      <div class="item-grid">
+        <label>圖示<input data-card-field="icon" data-i="${i}" value="${esc(c.icon)}"></label>
+        <label>名稱<input data-card-field="title" data-i="${i}" value="${esc(c.title)}"></label>
+        <label>顏色<select data-card-field="theme" data-i="${i}">${['blue','orange','red','green','purple','teal','pink'].map(x=>`<option value="${x}" ${c.theme===x?'selected':''}>${x}</option>`).join('')}</select></label>
+        <label>類型<select data-card-field="type" data-i="${i}"><option value="link" ${c.type==='link'?'selected':''}>一般連結</option><option value="data" ${c.type==='data'?'selected':''}>查資料</option><option value="learning" ${c.type==='learning'?'selected':''}>趣學習</option></select></label>
+        <label class="wide">說明<textarea data-card-field="desc" data-i="${i}">${esc(c.desc)}</textarea></label>
+        <label class="wide">連結（一般連結使用）<input data-card-field="url" data-i="${i}" value="${esc(c.url)}"></label>
+        <label class="enabled-line wide"><input type="checkbox" data-card-field="enabled" data-i="${i}" ${c.enabled!==false?'checked':''}> 顯示此卡片</label>
+      </div>`;
+    adminCardsList.appendChild(el)
+  });
+  adminCardsList.querySelectorAll('[data-card-field]').forEach(x=>wireField(x,work.cards,'card'));
+  wireActions(adminCardsList,work.cards,renderAdminCards,'card')
+}
+function actionsHtml(i,type,len){return `<div class="mini-actions"><button class="mini-btn" data-act="up" data-i="${i}" ${i===0?'disabled':''}>↑</button><button class="mini-btn" data-act="down" data-i="${i}" ${i===len-1?'disabled':''}>↓</button><button class="mini-btn danger" data-act="delete" data-i="${i}">刪除</button></div>`}
+function wireField(el,arr){
+  const f=el.dataset.cardField||el.dataset.field,i=Number(el.dataset.i);
+  const update=()=>arr[i][f]=el.type==='checkbox'?el.checked:el.value;
+  el.addEventListener('input',update);el.addEventListener('change',update)
+}
+function wireActions(root,arr,rerender){
+  root.querySelectorAll('[data-act]').forEach(b=>b.onclick=()=>{const i=Number(b.dataset.i),a=b.dataset.act;
+    if(a==='delete'){if(confirm('確定刪除這個項目嗎？')){arr.splice(i,1);rerender()}return}
+    if(a==='up'&&i>0)[arr[i-1],arr[i]]=[arr[i],arr[i-1]];
+    if(a==='down'&&i<arr.length-1)[arr[i+1],arr[i]]=[arr[i],arr[i+1]];
+    rerender()
+  })
+}
+addCardBtn.onclick=()=>{work.cards.push({id:newid('card'),title:'新功能',desc:'請輸入功能說明',icon:'🔗',theme:'blue',type:'link',url:'',enabled:true});renderAdminCards()};
+
+function renderSimpleList(type){
+  let arr,root,rerender;
+  if(type==='data'){arr=work.dataItems;root=adminDataItemsList;rerender=()=>renderSimpleList('data')}
+  if(type==='learning'){arr=work.learningItems;root=adminLearningItemsList;rerender=()=>renderSimpleList('learning')}
+  if(type==='announcements'){arr=work.announcements;root=adminAnnouncementsList;rerender=()=>renderSimpleList('announcements')}
+  root.innerHTML='';
+  arr.forEach((x,i)=>{
+    const el=document.createElement('div');el.className='admin-item';
+    if(type==='announcements'){
+      el.innerHTML=`<div class="admin-item-head"><strong>${i+1}. ${esc(x.text||'未命名公告')}</strong>${actionsHtml(i,type,arr.length)}</div>
+      <div class="item-grid two"><label>日期<input data-field="date" data-i="${i}" value="${esc(x.date)}"></label><label>內容<input data-field="text" data-i="${i}" value="${esc(x.text)}"></label><label class="wide">連結（可留空）<input data-field="url" data-i="${i}" value="${esc(x.url)}"></label><label class="enabled-line wide"><input type="checkbox" data-field="enabled" data-i="${i}" ${x.enabled!==false?'checked':''}> 顯示</label></div>`
+    }else if(type==='learning'){
+      x=arr[i]=normalizeLearningItem(x);
+      const catOptions=LEARNING_CATEGORIES.map(c=>`<option value="${c.value}" ${x.category===c.value?'selected':''}>${c.label}</option>`).join('');
+      const typeOptions=LEARNING_TYPES.map(t=>`<option value="${t.value}" ${x.contentType===t.value?'selected':''}>${t.label}</option>`).join('');
+      const preview=x.coverUrl?`<img class="learning-preview-img" src="${esc(previewImageUrl(x.coverUrl))}" alt="封面預覽" onerror="this.style.display='none'">`:'';
+      el.innerHTML=`<div class="admin-item-head"><strong>${i+1}. ${esc(x.title||'未命名項目')}</strong>${actionsHtml(i,type,arr.length)}</div>
+      <div class="item-grid">
+        <label>分類<select data-field="category" data-i="${i}">${catOptions}</select></label>
+        <label>內容類型<select data-field="contentType" data-i="${i}">${typeOptions}</select></label>
+        <label>圖示<input data-field="icon" data-i="${i}" value="${esc(x.icon)}"></label>
+        <label>名稱<input data-field="title" data-i="${i}" value="${esc(x.title)}"></label>
+
+        <label class="wide">說明<textarea data-field="desc" data-i="${i}">${esc(x.desc)}</textarea></label>
+
+        <label>提供單位
+          <input data-field="provider" data-i="${i}" value="${esc(x.provider||'')}" placeholder="例如：文山分處">
+        </label>
+
+        <label class="wide">封面圖片網址
+          <input data-field="coverUrl" data-i="${i}" value="${esc(x.coverUrl||'')}" placeholder="https://...">
+          <div class="learning-preview-wrap">${preview}<span class="learning-url-note">可貼 GitHub Pages 圖片網址；Google Drive 分享網址也會自動轉換預覽。</span></div>
+        </label>
+
+        <label class="wide">內容網址
+          <input data-field="url" data-i="${i}" value="${esc(x.url||'')}" placeholder="遊戲網址、圖片網址、影片網址或 PDF 網址">
+          <div class="learning-url-note">影片可貼 YouTube 或可直接播放的影片網址；圖片／PDF 可貼公開檔案網址。</div>
+        </label>
+
+        <label class="enabled-line wide"><input type="checkbox" data-field="enabled" data-i="${i}" ${x.enabled!==false?'checked':''}> 顯示</label>
+      </div>`
+    }else{
+      el.innerHTML=`<div class="admin-item-head"><strong>${i+1}. ${esc(x.title||'未命名項目')}</strong>${actionsHtml(i,type,arr.length)}</div>
+      <div class="item-grid"><label>圖示<input data-field="icon" data-i="${i}" value="${esc(x.icon)}"></label><label>名稱<input data-field="title" data-i="${i}" value="${esc(x.title)}"></label><label class="wide">說明<textarea data-field="desc" data-i="${i}">${esc(x.desc)}</textarea></label><label class="wide">連結<input data-field="url" data-i="${i}" value="${esc(x.url)}"></label><label class="enabled-line wide"><input type="checkbox" data-field="enabled" data-i="${i}" ${x.enabled!==false?'checked':''}> 顯示</label></div>`
+    }
+    root.appendChild(el)
+  });
+  root.querySelectorAll('[data-field]').forEach(el=>wireField(el,arr));
+  wireActions(root,arr,rerender)
+}
+addDataItemBtn.onclick=()=>{work.dataItems.push({id:newid('data'),icon:'🔗',title:'新查資料項目',desc:'',url:'',enabled:true});renderSimpleList('data')};
+addLearningItemBtn.onclick=()=>{work.learningItems.push(normalizeLearningItem({id:newid('learn'),category:'staff',contentType:'image',icon:'✨',title:'新學習內容',desc:'',provider:'',coverUrl:'',url:'',enabled:true}));renderSimpleList('learning')};
+addAnnouncementBtn.onclick=()=>{work.announcements.push({id:newid('ann'),date:'',text:'新公告',url:'',enabled:true});renderSimpleList('announcements')};
+
+function collectAdmin(){
+  work.badgeText=setBadgeText.value.trim();work.title=setTitle.value.trim()||'智慧工作入口';work.tag1=setTag1.value.trim();work.tag2=setTag2.value.trim();work.sameTabNote=setSameTabNote.value.trim();work.footerNote=setFooterNote.value.trim();
+  work.news={enabled:setNewsEnabled.checked,label:setNewsLabel.value.trim(),mode:setNewsMode.value,title:setNewsTitle.value.trim(),content:setNewsContent.value,url:setNewsUrl.value.trim()};
+  work.help={enabled:setHelpEnabled.checked,label:setHelpLabel.value.trim(),title:setHelpTitle.value.trim(),content:setHelpContent.value};
+  work.contact={enabled:setContactEnabled.checked,label:setContactLabel.value.trim(),url:setContactUrl.value.trim()};
+  work.announcement={enabled:setAnnouncementEnabled.checked,title:setAnnouncementTitle.value.trim()};
+  work.mascot={enabled:setMascotEnabled.checked,image:pendingMascot||work.mascot.image||'tax-helper.png',size:Number(setMascotSize.value)||205,x:Number(setMascotX.value)||0,y:Number(setMascotY.value)||0};
+  work.leftNote={enabled:setLeftNoteEnabled.checked,text:setLeftNoteText.value,size:Number(setLeftNoteSize.value)||18,x:Number(setLeftNoteX.value)||0,y:Number(setLeftNoteY.value)||0};
+  work.rightNote={enabled:setRightNoteEnabled.checked,text:setRightNoteText.value,size:Number(setRightNoteSize.value)||18,x:Number(setRightNoteX.value)||0,y:Number(setRightNoteY.value)||0};
+  work.dataModalTitle=setDataModalTitle.value.trim()||'查資料';
+  work.backButton={enabled:setBackEnabled.checked,text:setBackText.value.trim()||'返回智慧工作入口',position:setBackPosition.value,scale:Number(setBackScale.value)||100,x:Number(setBackX.value)||0,y:Number(setBackY.value)||0};
+}
+adminSaveBtn.onclick=async()=>{
+  collectAdmin();
+  adminSaveBtn.disabled=true;
+  adminSaveBtn.textContent='儲存中…';
+  try{
+    await saveRemoteSettings(work);
+    applySettings();
+    panelOverlay.classList.remove('open');
+    adminSessionPassword='';
+    adminToast.textContent='設定已同步至共用資料庫';
+    adminToast.classList.add('show');
+    setTimeout(()=>adminToast.classList.remove('show'),2200);
+  }catch(err){
+    console.error(err);
+    cacheSettings(work);
+    applySettings();
+    setSyncState('error','⚠ 同步失敗');
+    alert('共用資料庫同步失敗，已先保留在這台電腦。\\n\\n'+err.message);
+  }finally{
+    adminSaveBtn.disabled=false;
+    adminSaveBtn.textContent='儲存設定';
+  }
+};
+adminResetBtn.onclick=async()=>{
+  if(!confirm('確定恢復所有預設設定嗎？'))return;
+  work=clone(DEFAULTS);
+  cacheSettings(work);
+  fillAdmin();
+  applySettings();
+  try{
+    await saveRemoteSettings(work);
+    adminToast.textContent='已恢復預設並同步';
+    adminToast.classList.add('show');
+    setTimeout(()=>adminToast.classList.remove('show'),1800);
+  }catch(err){
+    setSyncState('error','⚠ 同步失敗');
+    alert('已在本機恢復預設，但共用資料庫同步失敗。');
+  }
+};
+
+(async function bootstrapPortal(){
+  applySettings(); // 先顯示本機快取，避免白畫面
+  const remote=await loadRemoteSettings();
+  cacheSettings(remote);
+  applySettings();
+})();
+</script>
+</body>
+</html>

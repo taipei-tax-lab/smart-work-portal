@@ -1,0 +1,218 @@
+<!DOCTYPE html>
+<html lang="zh-Hant">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="theme-color" content="#0f6cbd">
+  <title>TAX 小幫手</title>
+  <link rel="stylesheet" href="style.css">
+<style>
+.portal-back-btn{
+position:fixed!important;right:24px!important;bottom:24px!important;z-index:999999!important;
+padding:14px 20px!important;border-radius:18px!important;background:#1958a0!important;
+color:#fff!important;text-decoration:none!important;font:900 15px "Microsoft JhengHei",sans-serif!important;
+box-shadow:0 12px 30px rgba(20,70,130,.32)!important;border:2px solid #fff!important}
+</style>
+<style>
+.portal-back-btn{position:fixed!important;z-index:999999!important;display:inline-flex!important;align-items:center!important;justify-content:center!important;text-decoration:none!important;background:linear-gradient(135deg,#174f9d,#246fc9)!important;color:#fff!important;border:3px solid rgba(255,255,255,.92)!important;box-shadow:0 14px 34px rgba(15,58,121,.35)!important;font-family:"Microsoft JhengHei",sans-serif!important;font-weight:900!important}
+</style>
+</head>
+<body><a class="portal-back-btn" href="../index.html">⌂ 返回智慧工作入口</a>
+  <div class="app-shell">
+    <aside class="sidebar" aria-label="主要選單">
+      <div class="brand">
+        <div class="brand-mark">
+    <img src="logo.png.gif" alt="Tax AI Logo">
+</div>
+       <div><strong>TAX 小幫手</strong><span>Smart Tax Assistant</span></div>
+      </div>
+      <nav>
+        <button class="nav-item active" data-view="home">⌂<span>首頁</span></button>
+        <button class="nav-item" data-view="search">⌕<span>智慧搜尋</span></button>
+        <button class="nav-item" data-view="learning" style="display:none;">
+        ▤<span>學習中心</span>
+        </button>
+        <button type="button" class="tax-melody-entry" onclick="openTaxMelody()" style="display:none;">
+        🎵<span>節奏學稅</span>
+        </button>
+        <button class="nav-item" data-view="bank">▦<span>題庫瀏覽</span></button>
+        <button class="nav-item" data-view="favorites">♡<span>我的收藏</span></button>
+      </nav>
+      <div class="sidebar-foot"><span class="status-dot"></span>題庫 V115.6.11<br><small>臺北市稅捐稽徵處同仁使用</small></div>
+    </aside>
+
+    <main>
+      <header class="topbar">
+        <button id="menuBtn" class="icon-btn mobile-only" aria-label="開啟選單">☰</button>
+        <div><h1 id="pageTitle">首頁</h1><p id="pageSubtitle">快速找到正確、完整的電話答詢內容</p></div>
+        <div class="top-actions"><input id="excelFileInput" type="file" accept=".xlsx,.xls" hidden><button id="importExcelBtn" class="import-btn" type="button">📂 匯入 Excel 題庫</button><span class="database-pill"><b id="bankCount">109</b> 題正式題庫</span><button class="avatar" title="內部使用者">稅</button></div>
+      </header>
+
+      <section id="homeView" class="view active">
+        <div class="hero">
+          <div class="eyebrow">KEYWORD SEARCH</div>
+          <h2>您好，今天想查詢<br><span>哪一項稅務問題？</span></h2>
+          <p>輸入民眾的口語問題，系統會從電話測試題庫中整理答詢重點與標準回答。</p>
+          <form class="hero-search search-form">
+            <span>⌕</span><input class="search-input" placeholder="請輸入關鍵字，例如：稅籍異動即時通" autocomplete="off"><button>智慧搜尋</button>
+          </form>
+          <div id="popularSearches" class="chips"></div>
+        </div>
+
+        <div class="section-heading"><div><span>依業務分類查詢</span><h3>快速進入常用稅目</h3></div><button class="text-btn" data-go="bank">查看全部題庫 →</button></div>
+        <div id="categoryCards" class="category-grid"></div>
+
+        <div class="future-panel">
+          <div><span class="eyebrow">Smart Tax Assistant</span><h3>TAX 小幫手</h3><p>透過關鍵字及分類化快速查找</p></div>
+          <div class="future-grid">
+            <div><b>🎮 題庫關鍵字查找</b><small>查詢更有效率</small></div>
+            <div><b>✨ 重點整理</b><small>自動重點整理，快速掌握解題關鍵</small></div>
+            <div><b>★ 收藏同步</b><small>建立個人常用清單</small></div>
+            <div><b>相關題目延伸</b><small>延伸相關題目，擴展學習與理解。</small></div>
+          </div>
+        </div>
+      </section>
+      <section id="learningView" class="view">
+        <div class="section-heading compact learning-heading">
+          <div>
+            <span>TAX  LEARNING</span>
+            <h2>學習中心</h2>
+            <p>用摘要、重點整理與 AI 圖解，掌握重要稅務新知。</p>
+          </div>
+        </div>
+
+        <div id="featuredLearning" class="featured-learning">
+          <p>學習內容載入中...</p>
+        </div>
+
+        <div class="learning-grid">
+          <div class="learning-panel learning-panel-full">
+            <div class="learning-panel-title">
+              <div>
+                <span>LEARNING TOPICS</span>
+                <h3>最新學習主題</h3>
+              </div>
+              <small>本圖片以AI方式呈現</small>
+            </div>
+
+            <div id="learningNews">
+              <p>學習主題載入中...</p>
+            </div>
+          </div>
+        </div>
+      </section>
+      <section id="searchView" class="view">
+        <div class="search-page-head">
+          <div><span class="eyebrow">SMART SEARCH</span><h2>智慧搜尋</h2><p>支援口語、同義詞、關鍵字與相關問題排序。</p></div>
+          <form class="page-search search-form"><span>⌕</span><input class="search-input" placeholder="輸入民眾問題或關鍵字"><button>搜尋</button></form>
+        </div>
+        <div id="searchMeta" class="result-meta"></div>
+        <div id="searchResults" class="result-list"></div>
+      </section>
+
+      <section id="bankView" class="view">
+        <div class="section-heading compact"><div><span>QUESTION BANK</span><h2>電話測試題庫</h2></div><div class="bank-tools"><input id="bankFilter" placeholder="篩選題目…"><select id="categorySelect"></select></div></div>
+        <div id="bankList" class="bank-list"></div>
+      </section>
+
+      <section id="favoritesView" class="view">
+        <div class="section-heading compact"><div><span>MY LIBRARY</span><h2>我的收藏</h2><p>收藏資料儲存在本機瀏覽器。</p></div></div>
+        <div id="favoriteList" class="result-list"></div>
+      </section>
+    </main>
+  </div>
+
+  <div id="detailDrawer" class="drawer" aria-hidden="true">
+    <div class="drawer-backdrop" data-close></div>
+    <article class="drawer-panel">
+      <button class="drawer-close" data-close aria-label="關閉">×</button>
+      <div id="drawerContent"></div>
+    </article>
+  </div>
+  <div id="toast" class="toast" role="status"></div>
+  <script src="https://cdn.jsdelivr.net/npm/xlsx@0.18.5/dist/xlsx.full.min.js"></script>
+  <script src="searchDictionary.js?v=20260817v4"></script>
+  <script src="questionBank.js?v=20260817v4"></script>
+  <script src="search.js?v=20260817v4"></script>
+  <script src="learningBank.js?v=20260728"></script>
+  <script src="app.js?v=20260817"></script>
+
+<!-- TAX MELODY 遊戲頁面 -->
+<div id="taxMelodyPage" class="tax-melody-page">
+  <button class="tax-melody-back" onclick="closeTaxMelody()">
+    ← 回到 TAX AI
+  </button>
+
+  <iframe
+    id="taxMelodyFrame"
+    src="https://113604.github.io/tax-melody/"
+    title="TAX MELODY 地方稅節奏遊戲"
+    allow="autoplay"
+  ></iframe>
+</div>
+
+<script>
+  function openTaxMelody() {
+    const page = document.getElementById("taxMelodyPage");
+    page.classList.add("show");
+    document.body.style.overflow = "hidden";
+  }
+
+  function closeTaxMelody() {
+    const page = document.getElementById("taxMelodyPage");
+    page.classList.remove("show");
+    document.body.style.overflow = "";
+  }
+</script>
+
+
+
+
+
+<script>
+(async function(){
+ const KEY='trsSmartPortalSettings_v12';
+ const API='https://tax-status-api.ddy88000000.workers.dev/api/portal-settings';
+ const def={enabled:true,text:'返回智慧工作入口',position:'bottom-right',scale:100,x:0,y:0};
+ let b=def;
+ try{
+   const r=await fetch(API,{cache:'no-store'});
+   const d=await r.json();
+   if(d?.success&&d.settings){
+     localStorage.setItem(KEY,JSON.stringify(d.settings));
+     b={...def,...(d.settings.backButton||{})};
+   }
+ }catch(e){
+   try{
+     const s=JSON.parse(localStorage.getItem(KEY)||'null');
+     if(s?.backButton)b={...def,...s.backButton};
+   }catch{}
+ }
+ const el=document.querySelector('.portal-back-btn');
+ if(!el)return;
+ el.style.display=b.enabled?'inline-flex':'none';
+ el.textContent='⌂ '+b.text;
+ const sc=Math.max(.7,Math.min(1.6,(Number(b.scale)||100)/100));
+ el.style.setProperty('font-size',(15*sc)+'px','important');
+ el.style.setProperty('padding',(14*sc)+'px '+(20*sc)+'px','important');
+ el.style.setProperty('border-radius',(18*sc)+'px','important');
+ ['left','right','top','bottom'].forEach(k=>el.style.setProperty(k,'auto','important'));
+ const x=Number(b.x)||0,y=Number(b.y)||0,p=b.position||'bottom-right';
+ if(p==='top-left'){
+   el.style.setProperty('left',(24+x)+'px','important');
+   el.style.setProperty('top',(24+y)+'px','important');
+ }else if(p==='top-right'){
+   el.style.setProperty('right',(24-x)+'px','important');
+   el.style.setProperty('top',(24+y)+'px','important');
+ }else if(p==='bottom-left'){
+   el.style.setProperty('left',(24+x)+'px','important');
+   el.style.setProperty('bottom',(24-y)+'px','important');
+ }else{
+   el.style.setProperty('right',(24-x)+'px','important');
+   el.style.setProperty('bottom',(24-y)+'px','important');
+ }
+})();
+</script>
+
+</body>
+</html>

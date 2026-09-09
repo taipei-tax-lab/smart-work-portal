@@ -1,0 +1,82 @@
+.game-screen{background:radial-gradient(circle at 50% 12%,#354ca5,#0e1848 54%,#08102e);color:white}.game-hud{height:82px;border-radius:20px;display:flex;align-items:center;gap:20px;padding:10px 18px;background:rgba(8,18,61,.72);color:white}.hud-block small,.life small{display:block;color:#b9c9ff}.hud-block strong,.life strong{font-size:1.45rem}.song-progress{flex:1;text-align:center}.song-progress>div{height:8px;background:#ffffff25;border-radius:99px;overflow:hidden;margin:5px 0}.song-progress i{display:block;height:100%;width:0;background:linear-gradient(90deg,#59e8ff,#ff72d6)}.pause-btn{width:48px;height:48px;border:2px solid #fff;border-radius:50%;background:#ffffff16;color:#fff;font-weight:900}.game-stage{position:relative;min-height:calc(100vh - 102px);overflow:hidden;padding:10px 12px 18px}.game-stage:before{content:"";position:absolute;inset:0;background:radial-gradient(circle at 50% 90%,#ff7bc055,transparent 28%),linear-gradient(75deg,transparent 44%,#7beeff22 45%,transparent 47%),linear-gradient(105deg,transparent 44%,#ff87df22 45%,transparent 47%);animation:stageLight 3s ease-in-out infinite alternate}@keyframes stageLight{to{filter:hue-rotate(35deg);transform:scaleX(1.08)}}.lyrics-panel{position:relative;z-index:3;max-width:720px;margin:0 auto 8px;padding:8px 20px;border-radius:18px;text-align:center;background:rgba(12,22,73,.64);min-height:94px}.lyrics-panel p{margin:2px;color:#bac5ef;font-size:.82rem}.lyrics-panel strong{display:block;font-size:clamp(1.05rem,2.5vw,1.55rem);margin:5px;color:#fff;text-shadow:0 0 16px #8cecff;animation:lyricPulse .7s ease}@keyframes lyricPulse{50%{transform:scale(1.04)}}.lane-area{position:relative;z-index:2;width:min(640px,92vw);height:min(60vh,610px);margin:auto;display:grid;grid-template-columns:repeat(4,1fr);overflow:hidden;clip-path:none;
+background:linear-gradient(180deg,#ffffff0d,#ffffff18);border-bottom:2px solid #fff5}.lane{position:relative;border-right:1px solid #fff2}.lane.active{background:linear-gradient(180deg,transparent,#ffffff2b)}.hit-line{position:absolute;bottom:48px;left:0;right:0;height:5px;background:linear-gradient(90deg,#62efff,#fff,#ffc153,#ff7ed8);box-shadow:0 0 25px #fff}.note{position:absolute;left:14%;width:72%;height:24px;border-radius:8px;background:linear-gradient(135deg,#4cdcff,#fff);box-shadow:0 0 18px #56ddff;will-change:transform}.note.lane1{background:linear-gradient(135deg,#74f0b1,#fff);box-shadow:0 0 18px #6cf2b0}.note.lane2{background:linear-gradient(135deg,#ffc154,#fff);box-shadow:0 0 18px #ffc154}.note.lane3{background:linear-gradient(135deg,#f77ad8,#fff);box-shadow:0 0 18px #f77ad8}.note.hit{animation:noteHit .18s ease-out forwards}.note.hold{height:60px;border-radius:999px}.note.flick:after{content:none;display:none}@keyframes noteHit{to{opacity:0;filter:brightness(2);transform:scale(1.9)}}.key-row{position:relative;z-index:3;width:min(700px,96vw);margin:-32px auto 0;display:grid;grid-template-columns:repeat(4,1fr);gap:8px}.key-btn{border:2px solid #fff8;border-radius:16px;padding:12px 3px;color:#fff;background:#0f1f5dcc;box-shadow:0 0 20px #4acaff33;display:flex;align-items:center;justify-content:center}.key-btn b{font-size:1.35rem;line-height:1}.key-btn span{display:none}.key-btn.pressed{transform:translateY(3px);background:#ffffff39;box-shadow:0 0 30px #fff}.judge{position:absolute;z-index:10;left:50%;top:52%;transform:translate(-50%,-50%);font-size:clamp(2.4rem,8vw,5rem);font-weight:1000;opacity:0;text-shadow:0 0 25px currentColor}.judge.show{animation:judgePop .55s ease-out}.countdown{position:absolute;z-index:20;left:50%;top:50%;transform:translate(-50%,-50%);font-size:8rem;font-weight:1000;text-shadow:0 0 40px #ff7bd4}@keyframes judgePop{0%{opacity:0;transform:translate(-50%,-30%) scale(.5)}35%{opacity:1;transform:translate(-50%,-50%) scale(1.18)}100%{opacity:0;transform:translate(-50%,-75%) scale(1)}}
+
+
+/* =========================================================
+   遊戲說明按鈕與新手教學視窗
+   ========================================================= */
+.game-help-btn{
+  min-width:132px;
+  height:48px;
+  flex:0 0 auto;
+  padding:0 16px;
+  display:inline-flex;
+  align-items:center;
+  justify-content:center;
+  gap:7px;
+  border:2px solid rgba(255,255,255,.85);
+  border-radius:999px;
+  color:#fff;
+  background:linear-gradient(135deg,rgba(100,210,255,.42),rgba(179,108,238,.55));
+  box-shadow:0 0 22px rgba(102,210,255,.32);
+  font-size:.92rem;
+  font-weight:1000;
+  white-space:nowrap;
+  cursor:pointer;
+  transition:transform .18s ease,filter .18s ease;
+}
+.game-help-btn:hover{transform:translateY(-2px) scale(1.04);filter:brightness(1.12)}
+.game-guide-modal{z-index:1000;background:rgba(8,13,48,.72);backdrop-filter:blur(12px);-webkit-backdrop-filter:blur(12px)}
+.game-guide-card{
+  position:relative;
+  width:min(720px,94vw);
+  max-height:92dvh;
+  overflow-y:auto;
+  padding:28px;
+  gap:18px;
+  text-align:left;
+  border-radius:30px;
+  color:#26335e;
+  background:radial-gradient(circle at 90% 0,rgba(186,162,255,.34),transparent 34%),linear-gradient(145deg,rgba(255,255,255,.97),rgba(239,245,255,.94));
+  box-shadow:0 28px 80px rgba(4,8,38,.45);
+  animation:gameGuideIn .28s ease both;
+}
+@keyframes gameGuideIn{from{opacity:0;transform:translateY(18px) scale(.96)}to{opacity:1;transform:none}}
+.game-guide-heading{display:flex;align-items:center;gap:16px;padding-right:38px}
+.game-guide-heading small{color:#7a6ad0;font-size:.7rem;font-weight:1000;letter-spacing:.18em}
+.game-guide-heading h2{margin:3px 0 5px;color:#303967;font-size:clamp(1.65rem,4vw,2.35rem)}
+.game-guide-heading p{margin:0;color:#747e9d;font-weight:700}
+.game-guide-music{width:66px;height:66px;display:grid;place-items:center;flex:0 0 66px;border-radius:22px;color:#fff;background:linear-gradient(135deg,#67c9f2,#7964e4 58%,#eb80c6);box-shadow:0 13px 28px rgba(102,102,211,.28);font-size:2rem}
+.game-guide-close{top:15px;right:18px;color:#59628c;background:rgba(255,255,255,.7);border-radius:50%}
+.game-guide-steps{display:grid;gap:11px}
+.game-guide-steps article{display:grid;grid-template-columns:36px 132px minmax(0,1fr);align-items:center;gap:14px;min-height:92px;padding:13px 16px;border:1px solid rgba(125,139,199,.14);border-radius:21px;background:rgba(255,255,255,.72);box-shadow:0 9px 22px rgba(70,88,150,.08)}
+.guide-number{width:32px;height:32px;display:grid;place-items:center;border-radius:50%;color:#fff;background:#6961b3;font-weight:1000}
+.game-guide-steps strong{display:block;color:#354064;font-size:1.02rem}
+.game-guide-steps p{margin:5px 0 0;color:#78819b;font-size:.88rem;line-height:1.55}
+.guide-demo{height:58px;display:flex;align-items:center;justify-content:center}
+.guide-note-demo{position:relative;width:110px;margin:auto;border-radius:13px;background:linear-gradient(180deg,#18285f,#0b153e);overflow:hidden}
+.guide-note-demo:after{content:"";position:absolute;left:8px;right:8px;bottom:9px;height:4px;border-radius:99px;background:linear-gradient(90deg,#62efff,#fff,#ffc153,#ff7ed8)}
+.guide-note-demo i{position:absolute;top:8px;width:54px;height:13px;border-radius:6px;background:linear-gradient(135deg,#5ee6ff,#fff);box-shadow:0 0 13px #5ee6ff;animation:guideNoteDrop 1.4s ease-in-out infinite}
+@keyframes guideNoteDrop{0%{transform:translateY(0)}70%,100%{transform:translateY(30px)}}
+.guide-key-demo{gap:5px}
+.guide-key-demo kbd{width:27px;height:36px;display:grid;place-items:center;border:0;border-bottom:4px solid #433c7a;border-radius:7px;color:#fff;background:#6d64ad;font:800 13px inherit}
+.guide-combo-demo{display:block;height:auto;color:#7b6bd1;text-align:center;font-size:.68rem;font-weight:1000;letter-spacing:.1em}
+.guide-combo-demo b{display:block;color:#ef75b6;font-size:2rem;line-height:1}
+.game-guide-tip{padding:12px 15px;border-radius:15px;color:#5c6382;background:rgba(111,204,245,.14);font-size:.9rem;font-weight:750;text-align:center}
+.game-guide-start{width:100%;min-height:56px;font-size:1.02rem}
+@media(max-width:700px){
+  .game-help-btn{min-width:104px;height:38px;padding:0 10px;flex:0 0 auto;font-size:.72rem;gap:4px}
+  .game-guide-card{padding:22px 15px 17px;border-radius:24px}
+  .game-guide-heading{gap:11px}
+  .game-guide-music{width:52px;height:52px;flex-basis:52px;border-radius:17px;font-size:1.55rem}
+  .game-guide-heading h2{font-size:1.45rem}
+  .game-guide-heading p{font-size:.78rem}
+  .game-guide-steps article{grid-template-columns:28px 92px minmax(0,1fr);gap:8px;min-height:82px;padding:10px 8px}
+  .guide-number{width:27px;height:27px;font-size:.78rem}
+  .game-guide-steps strong{font-size:.86rem}
+  .game-guide-steps p{font-size:.7rem}
+  .guide-note-demo{width:82px}
+  .guide-key-demo{gap:2px}
+  .guide-key-demo kbd{width:20px;height:30px;font-size:.62rem}
+  .game-guide-tip{font-size:.75rem}
+}

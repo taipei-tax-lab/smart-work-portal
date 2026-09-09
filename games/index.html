@@ -1,0 +1,339 @@
+<!doctype html>
+<html lang="zh-Hant">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>趣學習｜智慧工作入口</title>
+<style>
+*{box-sizing:border-box}
+body{margin:0;min-height:100vh;font-family:"Microsoft JhengHei","PingFang TC","Noto Sans TC",sans-serif;color:#365477;background:linear-gradient(180deg,#f8fcff,#edf7ff)}
+.shell{width:min(1180px,94vw);margin:auto;padding:26px 0 60px}
+.back{display:inline-flex;padding:10px 15px;border:1px solid #dce8f5;border-radius:14px;background:#fff;color:#245b98;text-decoration:none;font-weight:900;box-shadow:0 7px 20px rgba(46,78,128,.06)}
+.hero{text-align:center;padding:44px 0 26px}
+.hero small{color:#7891b2;font-weight:900;letter-spacing:.18em}
+.hero h1{font-size:clamp(3rem,6vw,5rem);margin:8px 0;color:#164e91}
+.hero p{color:#758aa6;font-weight:700}
+.tabs{display:flex;justify-content:center;gap:10px;flex-wrap:wrap;margin:4px 0 28px}
+.tab{border:1px solid #d5e3f2;background:#fff;color:#42668f;border-radius:999px;padding:10px 16px;font-weight:900;cursor:pointer}
+.tab.active{background:#245f9f;color:#fff;border-color:#245f9f}
+.grid{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:18px}
+.item{background:#fff;border:1px solid #dce7f3;border-radius:24px;overflow:hidden;box-shadow:0 16px 38px rgba(54,83,129,.09);cursor:pointer;transition:.2s}
+.item:hover{transform:translateY(-4px);box-shadow:0 22px 48px rgba(54,83,129,.14)}
+.cover{height:190px;background:linear-gradient(135deg,#edf6ff,#f8fbff);display:grid;place-items:center;overflow:hidden}
+.cover img{width:100%;height:100%;object-fit:cover}
+.cover .emoji{font-size:3.5rem}
+.body{padding:18px}
+.badge{display:inline-flex;padding:6px 9px;border-radius:999px;background:#eef5fd;color:#38699e;font-size:.68rem;font-weight:900}
+.body h2{margin:11px 0 7px;color:#275985;font-size:1.1rem}
+.body p{margin:0;color:#778aa3;line-height:1.65;font-size:.8rem}
+.provider{margin-top:12px;color:#8a9bb0;font-size:.72rem;font-weight:800}
+.empty{grid-column:1/-1;text-align:center;padding:60px 20px;border:1px dashed #cadbed;border-radius:22px;background:#fff;color:#7990aa}
+.viewer{position:fixed;inset:0;z-index:9999;display:none;align-items:center;justify-content:center;padding:20px;background:rgba(18,35,57,.72);backdrop-filter:blur(7px)}
+.viewer.open{display:flex}
+.viewer-card{width:min(1000px,96vw);max-height:92vh;overflow:auto;background:#fff;border-radius:24px;padding:20px;box-shadow:0 30px 90px rgba(0,0,0,.32)}
+.viewer-head{display:flex;justify-content:space-between;gap:12px;align-items:flex-start;margin-bottom:14px}
+.viewer-head h3{margin:0;color:#275985}
+.close{border:0;width:38px;height:38px;border-radius:50%;background:#edf4fb;color:#5d7899;font-size:1.2rem;cursor:pointer}
+.viewer-toolbar{display:flex;justify-content:center;gap:8px;flex-wrap:wrap;margin:0 0 12px}
+.viewer-toolbar button,.viewer-toolbar a{border:1px solid #d7e3f0;background:#fff;color:#356391;border-radius:10px;padding:8px 12px;font-weight:900;text-decoration:none;cursor:pointer}
+.viewer-toolbar button:hover,.viewer-toolbar a:hover{background:#f1f7fd}
+.viewer-media{overflow:auto;text-align:center;max-height:74vh;padding:4px}
+.viewer-media img{display:block;width:auto;height:auto;max-width:100%;max-height:70vh;margin:auto;border-radius:14px;transform-origin:top center;transition:transform .15s ease}
+.viewer-media video{display:block;width:min(100%,1000px);max-height:72vh;margin:auto;border-radius:14px;background:#000}
+.viewer-media iframe{width:100%;height:72vh;border:0;border-radius:14px}
+
+@media(max-width:900px){.grid{grid-template-columns:repeat(2,minmax(0,1fr))}}
+@media(max-width:620px){.grid{grid-template-columns:1fr}.cover{height:210px}}
+</style>
+</head>
+<body>
+<div class="shell">
+  <a class="back" href="../index.html">← 返回智慧工作入口</a>
+  <section class="hero">
+    <small>LEARNING HUB</small>
+    <h1>趣學習</h1>
+    <p>遊戲、同仁作品與影音內容，一起輕鬆學。</p>
+  </section>
+  <div class="tabs" id="tabs"></div>
+  <main class="grid" id="grid"></main>
+</div>
+
+<div class="viewer" id="viewer">
+  <div class="viewer-card">
+    <div class="viewer-head"><h3 id="viewerTitle"></h3><button class="close" id="viewerClose">×</button></div>
+    <div class="viewer-toolbar" id="viewerToolbar" style="display:none">
+      <button type="button" id="zoomOutBtn">－ 縮小</button>
+      <button type="button" id="fitViewBtn">適合視窗</button>
+      <button type="button" id="zoomResetBtn">100%</button>
+      <button type="button" id="zoomInBtn">＋ 放大</button>
+      <a id="openOriginalBtn" href="#" target="_blank" rel="noopener">開啟原始檔</a>
+    </div>
+    <div class="viewer-media" id="viewerMedia"></div>
+  </div>
+</div>
+
+<script>
+const API='https://tax-status-api.ddy88000000.workers.dev/api/portal-settings';
+const KEY='trsSmartPortalSettings_v12';
+const cats=[
+  {value:'all',label:'全部',icon:'✨'},
+  {value:'game',label:'互動遊戲',icon:'🎮'},
+  {value:'staff',label:'同仁作品',icon:'📚'},
+  {value:'video',label:'影音學習',icon:'🎬'}
+];
+let settings={learningItems:[]}, current='all';
+
+const esc=x=>String(x??'').replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
+
+function driveFileId(url){
+  const s=String(url||'').trim();
+  let m=s.match(/drive\.google\.com\/file\/d\/([^/?]+)/i);
+  if(!m)m=s.match(/[?&]id=([^&]+)/i);
+  return m?m[1]:'';
+}
+
+function convertDrive(url){
+  const s=String(url||'').trim();
+  const id=driveFileId(s);
+  if(id){
+    return 'https://drive.google.com/thumbnail?id='+id+'&sz=w3000';
+  }
+  return s;
+}
+
+function drivePreviewUrl(url){
+  const id=driveFileId(url);
+  return id ? 'https://drive.google.com/file/d/'+id+'/preview' : '';
+}
+
+function normalize(x={}){
+  let category=x.category;
+  if(!category) category=x.id==='tax-melody'?'game':'staff';
+  let contentType=x.contentType;
+  if(!contentType) contentType=x.id==='tax-melody'?'game':'link';
+  return {
+    ...x,
+    category:['game','staff','video'].includes(category)?category:'staff',
+    contentType:['link','game','image','video','pdf'].includes(contentType)?contentType:'link',
+    enabled:x.enabled!==false
+  };
+}
+
+function catLabel(v){return cats.find(c=>c.value===v)?.label||'學習內容'}
+
+function youtubeEmbed(url){
+  const s=String(url||'');
+  let m=s.match(/youtu\.be\/([^?&/]+)/i);
+  if(!m)m=s.match(/[?&]v=([^?&/]+)/i);
+  if(!m)m=s.match(/youtube\.com\/embed\/([^?&/]+)/i);
+  return m?'https://www.youtube.com/embed/'+m[1]:'';
+}
+
+function resolveContentUrl(url){
+  const s=String(url||'').trim();
+  if(!s)return '';
+  if(/^https?:\/\//i.test(s))return s;
+  if(s.startsWith('../'))return s;
+  if(s.startsWith('./'))return '../'+s.slice(2);
+  if(s.startsWith('/'))return s;
+  return '../'+s;
+}
+
+async function load(){
+  try{
+    const r=await fetch(API,{cache:'no-store'});
+    const d=await r.json();
+    if(d?.success&&d.settings){
+      settings=d.settings;
+      localStorage.setItem(KEY,JSON.stringify(settings));
+    }
+  }catch(e){
+    try{settings=JSON.parse(localStorage.getItem(KEY)||'null')||settings}catch{}
+  }
+  settings.learningItems=(settings.learningItems||[]).map(normalize);
+  renderTabs();render();
+}
+
+function renderTabs(){
+  tabs.innerHTML='';
+  cats.forEach(c=>{
+    const b=document.createElement('button');
+    b.className='tab'+(current===c.value?' active':'');
+    b.textContent=c.icon+' '+c.label;
+    b.onclick=()=>{current=c.value;renderTabs();render()};
+    tabs.appendChild(b);
+  });
+}
+
+function render(){
+  grid.innerHTML='';
+  const items=(settings.learningItems||[]).filter(x=>x.enabled!==false&&(current==='all'||x.category===current));
+  if(!items.length){
+    grid.innerHTML='<div class="empty">這個分類目前還沒有內容。</div>';
+    return;
+  }
+
+  items.forEach(x=>{
+    const el=document.createElement('article');
+    el.className='item';
+    const cover=x.coverUrl
+      ? `<img src="${esc(convertDrive(x.coverUrl))}" alt="" onerror="this.style.display='none';this.nextElementSibling.style.display='block'"><div class="emoji" style="display:none">${esc(x.icon||'✨')}</div>`
+      : `<div class="emoji">${esc(x.icon||'✨')}</div>`;
+    el.innerHTML=`<div class="cover">${cover}</div>
+      <div class="body">
+        <span class="badge">${esc(catLabel(x.category))}</span>
+        <h2>${esc(x.title||'未命名內容')}</h2>
+        <p>${esc(x.desc||'')}</p>
+        ${x.provider?`<div class="provider">提供：${esc(x.provider)}</div>`:''}
+      </div>`;
+    el.onclick=()=>openItem(x);
+    grid.appendChild(el);
+  });
+}
+
+
+let currentZoom=1;
+let currentImageEl=null;
+let fitScale=1;
+
+function showViewerToolbar(show, originalUrl=''){
+  viewerToolbar.style.display=show?'flex':'none';
+  openOriginalBtn.href=originalUrl||'#';
+}
+
+function applyZoom(){
+  if(!currentImageEl)return;
+  const scale=currentZoom;
+  currentImageEl.style.transform='scale('+scale+')';
+  zoomResetBtn.textContent=Math.round(scale*100)+'%';
+}
+
+function fitImageToViewer(){
+  if(!currentImageEl)return;
+
+  // reset any old transform first
+  currentImageEl.style.transform='scale(1)';
+  currentImageEl.style.width='auto';
+  currentImageEl.style.height='auto';
+  currentImageEl.style.maxWidth='100%';
+  currentImageEl.style.maxHeight='70vh';
+
+  requestAnimationFrame(()=>{
+    const naturalW=currentImageEl.naturalWidth||1;
+    const naturalH=currentImageEl.naturalHeight||1;
+    const box=viewerMedia.getBoundingClientRect();
+    const maxW=Math.max(200,box.width-12);
+    const maxH=Math.max(200,window.innerHeight*0.68);
+
+    fitScale=Math.min(1,maxW/naturalW,maxH/naturalH);
+    currentZoom=fitScale;
+
+    currentImageEl.style.maxWidth='none';
+    currentImageEl.style.maxHeight='none';
+    currentImageEl.style.width=naturalW+'px';
+    currentImageEl.style.height='auto';
+
+    applyZoom();
+    viewerMedia.scrollTop=0;
+    viewerMedia.scrollLeft=0;
+  });
+}
+
+zoomInBtn.onclick=()=>{
+  currentZoom=Math.min(4,currentZoom+0.25);
+  applyZoom();
+};
+
+zoomOutBtn.onclick=()=>{
+  currentZoom=Math.max(0.25,currentZoom-0.25);
+  applyZoom();
+};
+
+zoomResetBtn.onclick=()=>{
+  currentZoom=1;
+  applyZoom();
+};
+
+fitViewBtn.onclick=()=>{
+  fitImageToViewer();
+};
+
+function openItem(x){
+  const url=resolveContentUrl(x.url);
+  if(!url)return;
+
+  if(x.contentType==='game'||x.contentType==='link'){
+    location.assign(url);
+    return;
+  }
+
+  viewerTitle.textContent=x.title||'學習內容';
+  viewerMedia.innerHTML='';
+  currentImageEl=null;
+  currentZoom=1;
+  showViewerToolbar(false);
+
+  if(x.contentType==='image'){
+    const img=document.createElement('img');
+    img.src=convertDrive(url);
+    img.alt=x.title||'';
+    img.onload=()=>{
+      currentImageEl=img;
+      fitImageToViewer();
+    };
+    viewerMedia.appendChild(img);
+    showViewerToolbar(true,url);
+    viewer.classList.add('open');
+    return;
+  }
+
+  if(x.contentType==='video'){
+    const yt=youtubeEmbed(url);
+    const drivePreview=drivePreviewUrl(url);
+
+    if(yt){
+      const fr=document.createElement('iframe');
+      fr.src=yt;
+      fr.allow='accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture';
+      fr.allowFullscreen=true;
+      viewerMedia.appendChild(fr);
+    }else if(drivePreview){
+      const fr=document.createElement('iframe');
+      fr.src=drivePreview;
+      fr.allow='autoplay';
+      fr.allowFullscreen=true;
+      viewerMedia.appendChild(fr);
+    }else{
+      const v=document.createElement('video');
+      v.src=url;
+      v.controls=true;
+      v.playsInline=true;
+      v.preload='metadata';
+      viewerMedia.appendChild(v);
+    }
+
+    showViewerToolbar(false);
+    viewer.classList.add('open');
+    return;
+  }
+
+  if(x.contentType==='pdf'){
+    const drivePreview=drivePreviewUrl(url);
+    const fr=document.createElement('iframe');
+    fr.src=drivePreview||url;
+    viewerMedia.appendChild(fr);
+    viewer.classList.add('open');
+    return;
+  }
+
+  location.assign(url);
+}
+
+viewerClose.onclick=()=>viewer.classList.remove('open');
+viewer.onclick=e=>{if(e.target===viewer)viewer.classList.remove('open')};
+window.addEventListener('resize',()=>{if(viewer.classList.contains('open')&&currentImageEl)fitImageToViewer()});
+
+load();
+</script>
+</body>
+</html>

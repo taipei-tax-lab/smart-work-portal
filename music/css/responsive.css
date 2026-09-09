@@ -1,0 +1,1139 @@
+
+/* =========================================================
+   Tax Melody v2｜手機、平板完整修正版
+   2026-08-03
+   ========================================================= */
+
+html,
+body {
+  width: 100%;
+  max-width: 100%;
+  min-width: 0;
+}
+
+img,
+svg,
+video,
+canvas {
+  max-width: 100%;
+}
+
+.screen,
+.app-shell {
+  width: 100%;
+  max-width: 100%;
+  min-width: 0;
+}
+
+/* =========================================================
+   平板以下
+   ========================================================= */
+@media (max-width: 980px) {
+  html,
+  body {
+    height: auto;
+    min-height: 100%;
+    overflow-x: hidden;
+    overflow-y: auto;
+  }
+
+  .app-shell {
+    height: auto;
+    min-height: 100dvh;
+  }
+
+  .screen {
+    min-height: 100dvh;
+  }
+
+  .section-header {
+    width: 100%;
+    min-width: 0;
+    padding: 10px 12px;
+  }
+
+  .section-header > div {
+    min-width: 0;
+  }
+
+  .section-header h2 {
+    min-width: 0;
+    font-size: clamp(1rem, 3.8vw, 1.35rem);
+  }
+
+  .section-header h2 small {
+    display: block;
+    margin-top: 2px;
+  }
+
+  /* ---------- 首頁 ---------- */
+  #homeScreen.home-screen {
+    width: 100%;
+    min-height: 100dvh;
+    overflow-x: hidden;
+    overflow-y: auto;
+  }
+
+  .home-stage {
+    width: 100%;
+    min-width: 0 !important;
+    min-height: 100dvh;
+    aspect-ratio: auto;
+    overflow: hidden;
+  }
+
+  .home-bg {
+    object-fit: cover;
+    object-position: center center;
+  }
+
+  .home-agency {
+    left: 14px;
+    top: 12px;
+  }
+
+  .home-agency b {
+    font-size: 12px;
+  }
+
+  .home-agency span {
+    font-size: 7px;
+  }
+
+  .home-top-nav {
+    left: 12px;
+    right: 12px;
+    top: 54px;
+    justify-content: center;
+    gap: 8px;
+  }
+
+  .home-top-nav button {
+    width: 58px;
+    height: 58px;
+    flex: 0 0 58px;
+  }
+
+  .home-top-nav span {
+    font-size: 20px;
+  }
+
+  .home-top-nav small {
+    font-size: 9px;
+  }
+
+  .mascot-bubble {
+    left: 50%;
+    top: 34%;
+    min-width: 205px;
+    padding: 12px 18px;
+    font-size: 13px;
+  }
+
+  .start-song-btn {
+    width: min(300px, 72vw);
+    min-width: 0;
+    bottom: 22%;
+    padding: 13px 20px;
+    font-size: 18px;
+  }
+
+  .home-shortcuts {
+    left: 14px;
+    right: 14px;
+    bottom: 20px;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: 9px;
+  }
+
+  .home-shortcuts button,
+  .home-shortcuts .home-link-button {
+    width: 100%;
+    min-width: 0;
+    height: 52px;
+    padding: 0 10px;
+    gap: 7px;
+    font-size: 14px;
+  }
+
+  .home-shortcuts .icon {
+    font-size: 18px;
+  }
+
+  .home-shortcuts .qa,
+  .home-link-button .qa {
+    min-width: 38px;
+    padding: 4px 7px;
+    font-size: 11px;
+  }
+
+  /* ---------- 選歌頁 ---------- */
+  .song-select-screen {
+    min-height: 100dvh;
+    overflow-y: auto;
+  }
+
+  .song-select-stage {
+    width: 100%;
+    height: auto !important;
+    min-height: 0 !important;
+    display: grid;
+    grid-template-columns: 1fr !important;
+    gap: 14px;
+  }
+
+  .song-feature {
+    min-width: 0;
+    padding: 24px 20px;
+    grid-template-columns: minmax(190px, .8fr) minmax(0, 1.2fr);
+    gap: 20px;
+    border-radius: 26px;
+  }
+
+  .feature-cover-wrap {
+    width: min(33vw, 300px);
+    min-width: 190px;
+  }
+
+  .feature-copy h3 {
+    font-size: clamp(1.7rem, 4.5vw, 2.5rem);
+  }
+
+  .song-browser {
+    min-height: 560px;
+  }
+
+  .compact-song-list {
+    max-height: 370px;
+  }
+
+  /* ---------- 遊戲頁 ---------- */
+  .game-screen {
+    min-height: 100dvh;
+    overflow: hidden;
+  }
+
+  .game-hud {
+    height: 72px;
+    gap: 8px;
+    padding: 7px 9px;
+  }
+
+  .hud-block strong,
+  .life strong {
+    font-size: 1rem;
+  }
+
+  .song-progress span {
+    font-size: .78rem;
+  }
+
+  .game-stage {
+    min-height: calc(100dvh - 84px);
+    padding-inline: 4px;
+  }
+
+  .lane-area {
+    width: min(640px, 96vw);
+    height: min(58dvh, 540px);
+  }
+
+  .key-row {
+    width: min(700px, 98vw);
+  }
+
+  /* ---------- 結算頁 ---------- */
+  .result-screen {
+    min-height: 100dvh;
+    overflow-y: auto;
+  }
+
+  .result-panel {
+    width: 100%;
+    height: auto;
+    min-height: calc(100dvh - 12px);
+    padding: 20px;
+  }
+
+  .result-body {
+    grid-template-columns: minmax(300px, .95fr) minmax(360px, 1.05fr);
+    gap: 18px;
+  }
+
+  .result-actions {
+    gap: 10px;
+  }
+
+  /* ---------- 知識補給站 ---------- */
+  .knowledge-topic-grid {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+
+  /* ---------- 學習重點 ---------- */
+  .learning-card {
+    grid-template-columns: minmax(0, 1fr) minmax(300px, 380px);
+    grid-template-areas:
+      "copy teacher"
+      "points teacher"
+      "button button";
+    width: 100%;
+    gap: 16px 20px;
+  }
+
+  .learning-points {
+    width: 100%;
+  }
+
+  .tiger-teacher {
+    width: 100%;
+  }
+
+  .tiger-teacher img {
+    width: 430px;
+    max-width: 130%;
+  }
+
+  /* ---------- 學習紀錄 ---------- */
+  .records-summary {
+    grid-template-columns: 1fr;
+  }
+
+  .record-card {
+    grid-template-columns: 170px minmax(0, 1fr);
+  }
+
+  .record-actions {
+    grid-column: 1 / -1;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+}
+
+/* =========================================================
+   手機直向
+   ========================================================= */
+@media (max-width: 700px) {
+  html,
+  body {
+    overflow-x: hidden !important;
+  }
+
+  .screen {
+    padding: 8px;
+  }
+
+  .round {
+    width: 40px;
+    height: 40px;
+    flex: 0 0 40px;
+  }
+
+  /* ---------- 首頁：改成手機直向專屬排版 ---------- */
+  #homeScreen.home-screen {
+    min-height: 100dvh;
+    background:
+      linear-gradient(rgba(226,245,255,.08), rgba(243,233,255,.18)),
+      #dff4ff;
+  }
+
+  .home-stage {
+    min-height: 100dvh;
+    padding: 0;
+  }
+
+  .home-bg {
+    object-fit: cover;
+    object-position: 50% center;
+    filter: saturate(.94);
+  }
+
+  .home-stage::after {
+    content: "";
+    position: absolute;
+    inset: 0;
+    z-index: 1;
+    pointer-events: none;
+    background:
+      linear-gradient(to bottom,
+        rgba(223,244,255,.2) 0,
+        rgba(223,244,255,0) 30%,
+        rgba(25,41,96,.04) 58%,
+        rgba(225,239,255,.55) 79%,
+        rgba(239,232,255,.96) 100%);
+  }
+
+  .home-agency,
+  .home-top-nav,
+  .mascot-bubble,
+  .start-song-btn,
+  .home-shortcuts {
+    z-index: 5;
+  }
+
+  .home-agency {
+    left: 12px;
+    top: max(10px, env(safe-area-inset-top));
+  }
+
+  .home-top-nav {
+    top: max(50px, calc(env(safe-area-inset-top) + 42px));
+    left: 8px;
+    right: 8px;
+    gap: 6px;
+  }
+
+  .home-top-nav button {
+    width: 53px;
+    height: 53px;
+    flex-basis: 53px;
+  }
+
+  .mascot-bubble {
+    top: 36%;
+    width: auto;
+    min-width: 190px;
+    padding: 10px 15px;
+  }
+
+  .start-song-btn {
+    bottom: 24%;
+    width: min(285px, 76vw);
+    padding: 12px 16px;
+  }
+
+  .home-shortcuts {
+    left: 10px;
+    right: 10px;
+    bottom: max(12px, env(safe-area-inset-bottom));
+    gap: 8px;
+  }
+
+  .home-shortcuts button,
+  .home-shortcuts .home-link-button {
+    height: 48px;
+    padding: 0 8px;
+    border-radius: 18px;
+    font-size: 12.5px;
+  }
+
+  /* ---------- 進入遊戲視窗 ---------- */
+  .enter-card {
+    width: min(340px, 90vw);
+    padding: 28px 20px;
+  }
+
+  /* ---------- 選歌頁 ---------- */
+  .song-select-screen {
+    padding: 7px;
+  }
+
+  .song-select-header {
+    margin-bottom: 8px;
+  }
+
+  .song-select-heading p {
+    display: none;
+  }
+
+  .song-select-stage {
+    display: block;
+  }
+
+  .song-feature {
+    padding: 20px 16px;
+    display: grid;
+    grid-template-columns: 1fr;
+    gap: 13px;
+    text-align: center;
+  }
+
+  .feature-cover-wrap {
+    width: min(68vw, 290px);
+    min-width: 0;
+  }
+
+  .feature-copy {
+    min-width: 0;
+  }
+
+  .feature-eyebrow {
+    margin-top: 0;
+  }
+
+  .feature-copy h3 {
+    font-size: clamp(1.65rem, 8vw, 2.35rem);
+  }
+
+  .feature-subtitle {
+    font-size: .95rem;
+  }
+
+  .feature-tags {
+    justify-content: center;
+    flex-wrap: wrap;
+  }
+
+  .feature-score {
+    margin-inline: auto;
+  }
+
+  .feature-actions {
+    justify-content: center;
+  }
+
+  .song-browser {
+    margin-top: 12px;
+    min-height: 0;
+    overflow: visible;
+    border-radius: 24px;
+  }
+
+  .difficulty-area {
+    padding: 16px 14px 10px;
+  }
+
+  .difficulty-tabs {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+
+  .browser-list-heading {
+    padding: 10px 14px;
+  }
+
+  .compact-song-list {
+    max-height: none;
+    overflow: visible;
+    padding: 4px 10px 10px;
+  }
+
+  .compact-song-item {
+    min-height: 78px;
+    padding: 9px;
+    grid-template-columns: 34px 58px minmax(0, 1fr) 34px;
+    gap: 8px;
+  }
+
+  .compact-song-cover {
+    width: 58px;
+    height: 58px;
+  }
+
+  .compact-song-copy b {
+    font-size: .9rem;
+  }
+
+  .compact-song-copy small,
+  .compact-song-copy em {
+    font-size: .68rem;
+  }
+
+  .mission-card {
+    margin: 8px 10px 12px;
+  }
+
+  /* ---------- 遊戲頁 ---------- */
+  .game-screen {
+    padding: 4px;
+  }
+
+  .game-hud {
+    height: 62px;
+    gap: 5px;
+    padding: 6px;
+    border-radius: 15px;
+  }
+
+  .hud-block {
+    min-width: 58px;
+  }
+
+  .hud-block small,
+  .life small {
+    font-size: .55rem;
+  }
+
+  .hud-block strong,
+  .life strong {
+    font-size: .82rem;
+  }
+
+  .life {
+    display: none;
+  }
+
+  .pause-btn {
+    width: 38px;
+    height: 38px;
+    flex: 0 0 38px;
+  }
+
+  .song-progress {
+    min-width: 0;
+  }
+
+  .song-progress span {
+    max-width: 34vw;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+  }
+
+  .game-stage {
+    min-height: calc(100dvh - 70px);
+    padding: 5px 2px 8px;
+  }
+
+  .lyrics-panel {
+    width: min(96vw, 640px);
+    min-height: 72px;
+    padding: 8px 10px;
+  }
+
+  .lyrics-panel strong {
+    font-size: clamp(.95rem, 4vw, 1.2rem);
+  }
+
+  .lane-area {
+    width: 96vw;
+    height: min(57dvh, 500px);
+  }
+
+  .key-row {
+    width: 98vw;
+    margin-top: -23px;
+    gap: 5px;
+  }
+
+  .key-btn {
+    min-width: 0;
+    padding: 8px 2px;
+  }
+
+  /* ---------- 結算頁 ---------- */
+  .result-screen {
+    padding: 5px;
+  }
+
+  .result-panel {
+    min-height: 100dvh;
+    padding: 16px 12px;
+    border-radius: 22px;
+  }
+
+  .result-panel > h2 {
+    font-size: clamp(1.65rem, 8vw, 2.5rem);
+  }
+
+  .result-body {
+    display: grid;
+    grid-template-columns: 1fr;
+    gap: 12px;
+    margin: 8px 0 14px;
+  }
+
+  .result-left,
+  .result-hero {
+    min-width: 0;
+  }
+
+  .result-summary {
+    padding: 15px;
+  }
+
+  .result-grid {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+
+  .result-hero {
+    min-height: 330px;
+  }
+
+  .result-tiger {
+    max-height: 330px;
+  }
+
+  .result-actions {
+    grid-template-columns: 1fr;
+    gap: 8px;
+  }
+
+  .result-actions .btn {
+    min-height: 50px;
+  }
+
+  /* ---------- 知識補給站 ---------- */
+  .knowledge-screen {
+    padding: 8px;
+  }
+
+  .knowledge-intro {
+    min-height: 0;
+    padding: 24px 18px;
+    display: block;
+    text-align: center;
+  }
+
+  .knowledge-intro h1 {
+    font-size: clamp(1.65rem, 8vw, 2.2rem);
+  }
+
+  .knowledge-note {
+    width: min(210px, 72vw);
+    margin: 20px auto 0;
+  }
+
+  .knowledge-topic-grid {
+    grid-template-columns: 1fr;
+    gap: 14px;
+  }
+
+  .knowledge-topic-copy > p,
+  .knowledge-topic-tags {
+    min-height: 0;
+  }
+
+  /* ---------- 學習重點 ---------- */
+  .learning-screen {
+    padding: 8px;
+  }
+
+  .learning-card {
+    width: 100%;
+    padding: 22px 15px 18px;
+    grid-template-columns: 1fr;
+    grid-template-areas:
+      "copy"
+      "teacher"
+      "points"
+      "button";
+    gap: 16px;
+  }
+
+  .learn-copy {
+    text-align: center;
+  }
+
+  .today {
+    margin-inline: auto;
+  }
+
+  .learn-copy h2 {
+    font-size: clamp(1.9rem, 9vw, 2.65rem);
+  }
+
+  .learn-copy > p {
+    font-size: .95rem;
+    line-height: 1.75;
+  }
+
+  .tiger-teacher {
+    width: min(270px, 80vw);
+    min-height: 210px;
+    margin: 0 auto;
+  }
+
+  .tiger-teacher img {
+    width: 320px;
+    max-width: 125%;
+    transform: translate(0, 15px);
+  }
+
+  .learning-points {
+    width: 100%;
+    margin: 0;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: 10px;
+  }
+
+  .learning-point {
+    min-height: 136px;
+    padding: 14px 8px;
+  }
+
+  .learning-actions {
+    width: 100%;
+    grid-template-columns: 1fr;
+  }
+
+  .back-songs-btn,
+  .tax-ai-btn {
+    width: 100%;
+  }
+
+  /* ---------- 學習紀錄 ---------- */
+  .records-screen {
+    padding: 8px;
+  }
+
+  .records-summary {
+    padding: 22px 16px;
+    grid-template-columns: 1fr;
+  }
+
+  .records-summary-copy {
+    text-align: center;
+  }
+
+  .records-summary-copy h1 {
+    font-size: clamp(1.65rem, 8vw, 2.25rem);
+  }
+
+  .records-stats {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+
+  .records-stats article {
+    min-height: 96px;
+    padding: 14px;
+  }
+
+  .record-card {
+    grid-template-columns: 1fr;
+    padding: 13px;
+    gap: 14px;
+  }
+
+  .record-cover {
+    aspect-ratio: 16 / 9;
+  }
+
+  .record-performance {
+    grid-template-columns: 1fr;
+  }
+
+  .record-actions {
+    grid-column: auto;
+    grid-template-columns: 1fr;
+  }
+
+  /* ---------- 設定視窗 ---------- */
+  .modal {
+    padding: 12px;
+  }
+
+  .modal-card {
+    width: min(420px, 96vw);
+    max-height: 90dvh;
+    overflow-y: auto;
+    padding: 22px 16px;
+  }
+
+  .settings-card label {
+    grid-template-columns: 100px minmax(0, 1fr);
+    gap: 8px;
+  }
+}
+
+/* =========================================================
+   小型手機
+   ========================================================= */
+@media (max-width: 430px) {
+  .home-top-nav button {
+    width: 49px;
+    height: 49px;
+    flex-basis: 49px;
+  }
+
+  .home-top-nav span {
+    font-size: 17px;
+  }
+
+  .home-top-nav small {
+    font-size: 8px;
+  }
+
+  .mascot-bubble {
+    display: none;
+  }
+
+  .start-song-btn {
+    bottom: 25%;
+    width: 78vw;
+    font-size: 16px;
+  }
+
+  .home-shortcuts button,
+  .home-shortcuts .home-link-button {
+    font-size: 11.5px;
+  }
+
+  .learning-points {
+    grid-template-columns: 1fr;
+  }
+
+  .learning-point {
+    min-height: 112px;
+  }
+
+  .records-stats {
+    grid-template-columns: 1fr 1fr;
+  }
+
+  .record-meta {
+    display: grid;
+  }
+}
+
+/* =========================================================
+   手機橫向遊戲優化
+   ========================================================= */
+@media (max-height: 520px) and (orientation: landscape) {
+  .home-stage {
+    min-height: 720px;
+  }
+
+  .game-hud {
+    height: 54px;
+  }
+
+  .game-stage {
+    min-height: calc(100dvh - 58px);
+  }
+
+  .lyrics-panel {
+    min-height: 54px;
+  }
+
+  .lyrics-panel p {
+    display: none;
+  }
+
+  .lane-area {
+    height: calc(100dvh - 150px);
+  }
+
+  .key-row {
+    margin-top: -22px;
+  }
+
+  .result-panel {
+    height: auto;
+  }
+}
+
+/* 安全區域 */
+@supports (padding: max(0px)) {
+  .home-shortcuts {
+    padding-bottom: max(0px, env(safe-area-inset-bottom));
+  }
+
+  .game-screen,
+  .result-screen,
+  .learning-screen,
+  .knowledge-screen,
+  .records-screen {
+    padding-bottom: max(6px, env(safe-area-inset-bottom));
+  }
+}
+
+
+/* =========================================================
+   手機橫向首頁專用版
+   解決手機橫放時看起來仍像桌機版、下方按鈕被截掉
+   ========================================================= */
+@media (orientation: landscape) and (max-height: 720px) and (pointer: coarse) {
+  html,
+  body {
+    width: 100%;
+    height: 100%;
+    overflow: hidden !important;
+  }
+
+  #homeScreen.home-screen {
+    width: 100%;
+    height: 100dvh;
+    min-height: 100dvh;
+    overflow: hidden !important;
+  }
+
+  .home-stage {
+    width: 100%;
+    height: 100dvh;
+    min-height: 100dvh !important;
+    aspect-ratio: auto !important;
+    overflow: hidden;
+  }
+
+  .home-bg {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    object-position: center 44%;
+  }
+
+  .home-agency {
+    left: 16px;
+    top: 12px;
+  }
+
+  .home-agency b {
+    font-size: 12px;
+  }
+
+  .home-agency span {
+    font-size: 7px;
+  }
+
+  .home-top-nav {
+    left: auto;
+    right: 14px;
+    top: 10px;
+    justify-content: flex-end;
+    gap: 7px;
+  }
+
+  .home-top-nav button {
+    width: 54px;
+    height: 54px;
+    flex: 0 0 54px;
+  }
+
+  .home-top-nav span {
+    font-size: 19px;
+  }
+
+  .home-top-nav small {
+    font-size: 8px;
+    margin-top: 2px;
+  }
+
+  .mascot-bubble {
+    display: none !important;
+  }
+
+  .start-song-btn {
+    left: 50%;
+    bottom: 92px;
+    width: min(270px, 34vw);
+    min-width: 220px;
+    padding: 10px 18px;
+    font-size: 16px;
+  }
+
+  .home-shortcuts {
+    left: 4%;
+    right: 4%;
+    bottom: 12px;
+    padding: 0;
+    grid-template-columns: repeat(4, minmax(0, 1fr));
+    gap: 10px;
+  }
+
+  .home-shortcuts button,
+  .home-shortcuts .home-link-button {
+    width: 100%;
+    height: 52px;
+    min-width: 0;
+    padding: 0 10px;
+    border-radius: 999px;
+    gap: 7px;
+    font-size: clamp(11px, 1.7vw, 15px);
+  }
+
+  .home-shortcuts .icon {
+    font-size: 17px;
+  }
+
+  .home-shortcuts .qa,
+  .home-link-button .qa {
+    min-width: 38px;
+    padding: 4px 7px;
+    font-size: 10px;
+  }
+
+  /* 手機橫向的選歌與其他頁面仍允許上下捲動 */
+  #songsScreen,
+  #knowledgeScreen,
+  #learningScreen,
+  #recordsScreen,
+  #resultScreen {
+    height: 100dvh;
+    min-height: 100dvh;
+    overflow-y: auto;
+    overflow-x: hidden;
+  }
+}
+
+/* 某些手機瀏覽器在橫向仍回報 hover:none，而不一定正確回報 coarse */
+@media (orientation: landscape) and (max-height: 720px) and (hover: none) {
+  .home-stage {
+    height: 100dvh;
+    min-height: 100dvh !important;
+  }
+
+  .home-top-nav {
+    left: auto;
+    right: 14px;
+    top: 10px;
+  }
+
+  .mascot-bubble {
+    display: none !important;
+  }
+
+  .start-song-btn {
+    bottom: 92px;
+  }
+
+  .home-shortcuts {
+    left: 4%;
+    right: 4%;
+    bottom: 12px;
+    grid-template-columns: repeat(4, minmax(0, 1fr));
+    gap: 10px;
+  }
+
+  .home-shortcuts button,
+  .home-shortcuts .home-link-button {
+    height: 52px;
+    font-size: clamp(11px, 1.7vw, 15px);
+  }
+}
+
+
+/* =========================================================
+   手機橫向：完整顯示主視覺，不再放大裁切
+   ========================================================= */
+@media (orientation: landscape) and (max-height: 760px) {
+  .home-stage {
+    height: 100dvh !important;
+    min-height: 100dvh !important;
+  }
+
+  .home-bg {
+    object-fit: contain !important;
+    object-position: center center !important;
+    background: #dff4ff;
+  }
+
+  .start-song-btn {
+    bottom: 72px !important;
+  }
+
+  .home-shortcuts {
+    bottom: 10px !important;
+  }
+}
+
+
+/* =========================================================
+   手機首頁：開始新歌與功能鍵再往上移
+   ========================================================= */
+@media (max-width: 768px) and (orientation: portrait) {
+  .start-song-btn {
+    bottom: 28% !important;
+  }
+
+  .home-shortcuts {
+    bottom: 8.5% !important;
+  }
+}
+
+@media (max-width: 430px) and (orientation: portrait) {
+  .start-song-btn {
+    bottom: 27% !important;
+  }
+
+  .home-shortcuts {
+    bottom: 7% !important;
+  }
+}
