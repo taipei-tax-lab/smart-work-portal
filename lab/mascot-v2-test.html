@@ -1,0 +1,263 @@
+<!doctype html>
+<html lang="zh-Hant">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>TAX 小幫手｜動畫 V2 實驗室</title>
+<style>
+:root{
+  --blue:#174f91;
+  --blue2:#2d6fb7;
+  --ink:#28496f;
+  --soft:#7186a2;
+  --line:#dce8f5;
+  --card:#ffffff;
+}
+*{box-sizing:border-box}
+html,body{margin:0;font-family:"Microsoft JhengHei","PingFang TC","Noto Sans TC",sans-serif;color:var(--ink)}
+body{
+  min-height:100vh;
+  background:
+    radial-gradient(circle at 82% 15%,rgba(128,195,255,.24),transparent 28%),
+    linear-gradient(180deg,#eff8ff 0%,#fbfdff 55%,#edf7ff 100%);
+}
+.shell{width:min(1180px,calc(100vw - 32px));margin:auto;padding:28px 0 48px}
+.head{display:flex;justify-content:space-between;gap:20px;align-items:flex-start;flex-wrap:wrap}
+.kicker{font-size:.72rem;font-weight:900;letter-spacing:.12em;color:#6d88a9}
+h1{margin:6px 0 8px;color:var(--blue);font-size:clamp(2rem,4vw,3.5rem)}
+.lead{max-width:760px;color:var(--soft);line-height:1.8;font-weight:700}
+.badge{padding:7px 11px;border:1px solid #cfe2f8;background:#edf6ff;color:#32669f;border-radius:999px;font-size:.74rem;font-weight:900}
+.grid{display:grid;grid-template-columns:minmax(0,1.5fr) minmax(320px,.8fr);gap:18px;margin-top:22px}
+.card{background:rgba(255,255,255,.92);border:1px solid var(--line);border-radius:26px;box-shadow:0 18px 45px rgba(45,82,128,.09)}
+.stage-card{padding:18px}
+.compare{display:grid;grid-template-columns:1fr 1fr;gap:14px}
+.panel-title{font-size:.74rem;font-weight:900;color:#6e89aa;letter-spacing:.08em;margin-bottom:8px}
+.stage{
+  min-height:470px;border-radius:22px;overflow:hidden;position:relative;
+  display:flex;align-items:flex-end;justify-content:center;padding:18px;
+  background:
+    radial-gradient(circle at 50% 40%,rgba(255,255,255,.95),rgba(239,248,255,.9) 52%,rgba(227,241,253,.95));
+  border:1px solid #e2edf7;
+}
+.stage:after{
+  content:"";position:absolute;bottom:28px;width:55%;height:22px;border-radius:50%;
+  background:rgba(30,75,126,.10);filter:blur(10px)
+}
+.mascot{width:min(360px,86%);position:relative;z-index:2;filter:drop-shadow(0 18px 24px rgba(39,72,115,.18))}
+.mascot img{display:block;width:100%}
+.frame-stack{position:relative;width:min(360px,86%);aspect-ratio:1/1.08;z-index:2}
+.frame-stack img{
+  position:absolute;inset:0;width:100%;height:100%;object-fit:contain;opacity:0;
+  filter:drop-shadow(0 18px 24px rgba(39,72,115,.18));
+}
+.frame-stack img.active{opacity:1}
+.frame-stack.fallback{display:grid;place-items:center}
+.frame-stack.fallback img{position:static;width:100%;height:auto;opacity:1;animation:fallbackIdle 3s ease-in-out infinite}
+@keyframes fallbackIdle{
+  0%,100%{transform:translateY(0)}
+  50%{transform:translateY(-4px)}
+}
+.controls{padding:20px}
+.controls h2{margin:0 0 8px;color:#235b99}
+.note{font-size:.82rem;line-height:1.8;color:var(--soft)}
+.btns{display:grid;grid-template-columns:1fr 1fr;gap:9px;margin-top:16px}
+button{
+  border:1px solid #d7e5f4;background:#fff;color:#315f93;padding:12px 13px;border-radius:13px;
+  font-weight:900;cursor:pointer
+}
+button:hover{background:#f5faff}
+button.primary{background:var(--blue2);border-color:var(--blue2);color:#fff}
+.control{margin-top:16px}
+.control label{display:flex;justify-content:space-between;gap:10px;font-size:.75rem;font-weight:900;color:#5d7798;margin-bottom:6px}
+input[type="range"]{width:100%}
+.timeline{margin-top:14px;display:grid;grid-template-columns:repeat(8,1fr);gap:6px}
+.frame-dot{
+  height:36px;border-radius:10px;border:1px solid #dbe8f5;background:#f7fbff;color:#6480a0;
+  display:grid;place-items:center;font-size:.72rem;font-weight:900;cursor:pointer
+}
+.frame-dot.on{background:#2f70b6;color:#fff;border-color:#2f70b6}
+.status{margin-top:14px;padding:11px 12px;border-radius:12px;background:#eef6ff;color:#5c7b9f;font-size:.75rem;line-height:1.65}
+.story{margin-top:18px;padding:18px}
+.story h3{margin:0 0 12px;color:#2f5d91}
+.pose-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:9px}
+.pose{padding:11px;border:1px solid #e0ebf5;border-radius:14px;background:#fbfdff}
+.pose b{display:block;color:#3d6493;font-size:.76rem}
+.pose span{display:block;color:#8192a8;font-size:.68rem;line-height:1.5;margin-top:4px}
+@media(max-width:900px){.grid{grid-template-columns:1fr}.compare{grid-template-columns:1fr}.pose-grid{grid-template-columns:1fr 1fr}}
+@media(max-width:560px){.shell{width:calc(100vw - 18px)}.btns{grid-template-columns:1fr}.pose-grid{grid-template-columns:1fr}.stage{min-height:390px}}
+@media(prefers-reduced-motion:reduce){*{animation:none!important}}
+</style>
+</head>
+<body>
+<div class="shell">
+  <div class="head">
+    <div>
+      <div class="kicker">EXPERIMENT / MASCOT ANIMATION V2</div>
+      <h1>TAX 小幫手動畫實驗室</h1>
+      <div class="lead">V2 不再把整張 PNG 旋轉或甩動。這個頁面改成「關鍵姿勢播放器」：真正動畫素材完成後，會依序播放 8 個姿勢，直接和原始靜態角色並排比較。</div>
+    </div>
+    <div class="badge">不影響正式 main</div>
+  </div>
+
+  <div class="grid">
+    <section class="card stage-card">
+      <div class="compare">
+        <div>
+          <div class="panel-title">ORIGINAL｜原始角色</div>
+          <div class="stage">
+            <div class="mascot"><img src="../tax-helper.png" alt="原始 TAX 小幫手"></div>
+          </div>
+        </div>
+
+        <div>
+          <div class="panel-title">V2｜關鍵姿勢動畫</div>
+          <div class="stage">
+            <div class="frame-stack" id="frameStack" aria-label="TAX 小幫手 V2 動畫"></div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <aside class="card controls">
+      <h2>播放控制</h2>
+      <div class="note">V2 的重點是「手掌角度、手臂彎曲、身體重心、披風跟隨」都真的改變，而不是把整個角色當成一張紙旋轉。</div>
+
+      <div class="btns">
+        <button class="primary" id="playBtn">▶ 播放一次</button>
+        <button id="loopBtn">↻ 循環播放</button>
+        <button id="pauseBtn">Ⅱ 暫停</button>
+        <button id="resetBtn">↺ 回第一格</button>
+      </div>
+
+      <div class="control">
+        <label><span>每格停留</span><span id="delayLabel">140 ms</span></label>
+        <input id="delay" type="range" min="70" max="260" value="140" step="10">
+      </div>
+
+      <div class="timeline" id="timeline"></div>
+
+      <div class="status" id="status">目前尚未加入 V2 姿勢圖，因此會以原始角色作為備援顯示。下一階段將加入 pose-01 ～ pose-08。</div>
+    </aside>
+  </div>
+
+  <section class="card story">
+    <h3>第一版動作腳本</h3>
+    <div class="pose-grid">
+      <div class="pose"><b>01｜待機</b><span>原始站姿，建立基準。</span></div>
+      <div class="pose"><b>02｜蓄力</b><span>身體微蹲，準備打招呼。</span></div>
+      <div class="pose"><b>03｜抬手</b><span>肩膀帶動，手掌向外。</span></div>
+      <div class="pose"><b>04｜向左揮</b><span>第一個大幅度揮手。</span></div>
+      <div class="pose"><b>05｜向右揮</b><span>身體重心同步移動。</span></div>
+      <div class="pose"><b>06｜再揮一次</b><span>披風延遲跟隨，避免紙片感。</span></div>
+      <div class="pose"><b>07｜小跳</b><span>開心反應，動作達到高點。</span></div>
+      <div class="pose"><b>08｜回正</b><span>自然落地，回到待機。</span></div>
+    </div>
+  </section>
+</div>
+
+<script>
+const frameStack=document.getElementById('frameStack');
+const timeline=document.getElementById('timeline');
+const statusEl=document.getElementById('status');
+const delayInput=document.getElementById('delay');
+const delayLabel=document.getElementById('delayLabel');
+
+const frames=Array.from({length:8},(_,i)=>`../assets/mascot-v2/pose-${String(i+1).padStart(2,'0')}.png`);
+let loaded=[];
+let current=0;
+let timer=null;
+let looping=false;
+
+function buildTimeline(){
+  timeline.innerHTML='';
+  for(let i=0;i<8;i++){
+    const b=document.createElement('button');
+    b.className='frame-dot'+(i===current?' on':'');
+    b.textContent=String(i+1).padStart(2,'0');
+    b.onclick=()=>showFrame(i);
+    timeline.appendChild(b);
+  }
+}
+
+function markTimeline(){
+  [...timeline.children].forEach((el,i)=>el.classList.toggle('on',i===current));
+}
+
+function showFrame(i){
+  current=i;
+  if(loaded.length){
+    loaded.forEach((img,idx)=>img.classList.toggle('active',idx===current));
+  }
+  markTimeline();
+}
+
+function stop(){
+  if(timer)clearTimeout(timer);
+  timer=null;
+}
+
+function tick(){
+  stop();
+  if(!loaded.length)return;
+  current=(current+1)%loaded.length;
+  showFrame(current);
+  if(!looping && current===0){
+    statusEl.textContent='播放完成。';
+    return;
+  }
+  timer=setTimeout(tick,Number(delayInput.value));
+}
+
+function playOnce(){
+  looping=false;
+  if(!loaded.length)return;
+  current=0;showFrame(0);
+  statusEl.textContent='播放一次中…';
+  timer=setTimeout(tick,Number(delayInput.value));
+}
+
+function playLoop(){
+  looping=true;
+  if(!loaded.length)return;
+  statusEl.textContent='循環播放中…';
+  timer=setTimeout(tick,Number(delayInput.value));
+}
+
+async function preload(){
+  const results=await Promise.all(frames.map(src=>new Promise(resolve=>{
+    const img=new Image();
+    img.onload=()=>resolve({ok:true,img,src});
+    img.onerror=()=>resolve({ok:false,img:null,src});
+    img.src=src;
+  })));
+
+  loaded=results.filter(x=>x.ok).map(x=>x.img);
+
+  if(loaded.length===8){
+    frameStack.classList.remove('fallback');
+    loaded.forEach((img,i)=>{
+      img.alt='TAX 小幫手姿勢 '+(i+1);
+      if(i===0)img.classList.add('active');
+      frameStack.appendChild(img);
+    });
+    statusEl.textContent='已載入 8 張 V2 姿勢圖，可以開始播放。';
+  }else{
+    frameStack.classList.add('fallback');
+    const fallback=new Image();
+    fallback.src='../tax-helper.png';
+    fallback.alt='V2 姿勢圖尚未完成，暫以原圖顯示';
+    frameStack.appendChild(fallback);
+    loaded=[];
+  }
+  buildTimeline();
+}
+
+document.getElementById('playBtn').onclick=playOnce;
+document.getElementById('loopBtn').onclick=playLoop;
+document.getElementById('pauseBtn').onclick=()=>{stop();statusEl.textContent='已暫停。'};
+document.getElementById('resetBtn').onclick=()=>{stop();looping=false;showFrame(0);statusEl.textContent='已回到第一格。'};
+delayInput.oninput=()=>{delayLabel.textContent=delayInput.value+' ms'};
+preload();
+</script>
+</body>
+</html>
