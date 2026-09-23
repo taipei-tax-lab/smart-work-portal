@@ -141,7 +141,7 @@ button,input,textarea,select{font-family:inherit}
     <section class="hero">
       <div class="hand-note left" id="leftNote"></div>
       <div class="hand-note right" id="rightNote"></div>
-      <div class="mascot-peek" id="mascotWrap"><img id="mascotImage" src="tax-helper.png" alt="TAX 小幫手"></div>
+      <div class="mascot-peek" id="mascotWrap"><img id="mascotImage" src="tax-helper-wave.webp" alt="TAX 小幫手"></div>
       <div class="title-wrap">
         <h1 id="portalTitle"></h1>
         <div class="yellow-line"></div>
@@ -305,6 +305,7 @@ button,input,textarea,select{font-family:inherit}
 
 <script>
 const STORAGE_KEY='trsSmartPortalSettings_v12';
+const DEFAULT_MASCOT_IMAGE='tax-helper-wave.webp';
 const PORTAL_API_URL='https://tax-status-api.ddy88000000.workers.dev/api/portal-settings';
 const PORTAL_AUTH_URL='https://tax-status-api.ddy88000000.workers.dev/api/portal-auth';
 let adminSessionPassword='';
@@ -321,7 +322,7 @@ const DEFAULTS={
   help:{enabled:true,label:'📘 使用說明',title:'使用說明',content:'查資料：快速查詢業務資訊與操作指引。\\n找工具：整合常用網站與工作工具。\\n填回報：線上填報臨時業務與回報事項。\\n趣學習：透過互動方式學習業務知識。'},
   contact:{enabled:true,label:'👤 聯絡窗口',url:'https://tpctax.gov.taipei/News.aspx?n=CC2C23F341C059D5&sms=2D3666ECD0032A15'},
 
-  mascot:{enabled:true,image:'tax-helper.png',size:205,x:0,y:0},
+  mascot:{enabled:true,image:DEFAULT_MASCOT_IMAGE,size:205,x:0,y:0},
   leftNote:{enabled:true,text:'一起\\n讓工作更簡單！',size:18,x:0,y:0},
   rightNote:{enabled:true,text:'同心稅務\\n更好的服務\\n從這裡開始！',size:18,x:0,y:0},
 
@@ -501,7 +502,7 @@ function applySettings(){
   mascotWrap.style.display=s.mascot.enabled?'':'none';
   mascotWrap.style.width=(Number(s.mascot.size)||205)+'px';
   mascotWrap.style.transform=`translate(${Number(s.mascot.x)||0}px,${Number(s.mascot.y)||0}px)`;
-  mascotImage.src=s.mascot.image||'tax-helper.png';
+  mascotImage.src=(s.mascot.image&&s.mascot.image!=='tax-helper.png')?s.mascot.image:DEFAULT_MASCOT_IMAGE;
 
   leftNote.style.display=s.leftNote.enabled?'':'none'; leftNote.innerHTML=lines(s.leftNote.text); leftNote.style.fontSize=(Number(s.leftNote.size)||18)+'px'; leftNote.style.translate=`${Number(s.leftNote.x)||0}px ${Number(s.leftNote.y)||0}px`;
   rightNote.style.display=s.rightNote.enabled?'':'none'; rightNote.innerHTML=lines(s.rightNote.text); rightNote.style.fontSize=(Number(s.rightNote.size)||18)+'px'; rightNote.style.translate=`${Number(s.rightNote.x)||0}px ${Number(s.rightNote.y)||0}px`;
@@ -626,7 +627,7 @@ function fillAdmin(){
   setContactEnabled.checked=work.contact.enabled;setContactLabel.value=work.contact.label;setContactUrl.value=work.contact.url;
   setAnnouncementEnabled.checked=work.announcement.enabled;setAnnouncementTitle.value=work.announcement.title;
 
-  setMascotEnabled.checked=work.mascot.enabled;mascotPreview.src=work.mascot.image||'tax-helper.png';setMascotSize.value=work.mascot.size;setMascotX.value=work.mascot.x;setMascotY.value=work.mascot.y;
+  setMascotEnabled.checked=work.mascot.enabled;mascotPreview.src=(work.mascot.image&&work.mascot.image!=='tax-helper.png')?work.mascot.image:DEFAULT_MASCOT_IMAGE;setMascotSize.value=work.mascot.size;setMascotX.value=work.mascot.x;setMascotY.value=work.mascot.y;
   setLeftNoteEnabled.checked=work.leftNote.enabled;setLeftNoteText.value=work.leftNote.text;setLeftNoteSize.value=work.leftNote.size;setLeftNoteX.value=work.leftNote.x;setLeftNoteY.value=work.leftNote.y;
   setRightNoteEnabled.checked=work.rightNote.enabled;setRightNoteText.value=work.rightNote.text;setRightNoteSize.value=work.rightNote.size;setRightNoteX.value=work.rightNote.x;setRightNoteY.value=work.rightNote.y;
 
@@ -637,7 +638,7 @@ function fillAdmin(){
   renderAdminCards();renderSimpleList('data');renderSimpleList('learning');renderSimpleList('announcements')
 }
 setMascotFile.onchange=e=>{const f=e.target.files?.[0];if(!f)return;if(f.size>2500000){alert('建議圖片控制在 2.5MB 以下');return}const r=new FileReader();r.onload=()=>{pendingMascot=String(r.result);mascotPreview.src=pendingMascot};r.readAsDataURL(f)};
-resetMascotBtn.onclick=()=>{pendingMascot='tax-helper.png';mascotPreview.src='tax-helper.png';setMascotFile.value=''};
+resetMascotBtn.onclick=()=>{pendingMascot=DEFAULT_MASCOT_IMAGE;mascotPreview.src=DEFAULT_MASCOT_IMAGE;setMascotFile.value=''};
 
 function renderAdminCards(){
   adminCardsList.innerHTML='';
@@ -734,7 +735,7 @@ function collectAdmin(){
   work.help={enabled:setHelpEnabled.checked,label:setHelpLabel.value.trim(),title:setHelpTitle.value.trim(),content:setHelpContent.value};
   work.contact={enabled:setContactEnabled.checked,label:setContactLabel.value.trim(),url:setContactUrl.value.trim()};
   work.announcement={enabled:setAnnouncementEnabled.checked,title:setAnnouncementTitle.value.trim()};
-  work.mascot={enabled:setMascotEnabled.checked,image:pendingMascot||work.mascot.image||'tax-helper.png',size:Number(setMascotSize.value)||205,x:Number(setMascotX.value)||0,y:Number(setMascotY.value)||0};
+  work.mascot={enabled:setMascotEnabled.checked,image:pendingMascot||((work.mascot.image&&work.mascot.image!=='tax-helper.png')?work.mascot.image:DEFAULT_MASCOT_IMAGE),size:Number(setMascotSize.value)||205,x:Number(setMascotX.value)||0,y:Number(setMascotY.value)||0};
   work.leftNote={enabled:setLeftNoteEnabled.checked,text:setLeftNoteText.value,size:Number(setLeftNoteSize.value)||18,x:Number(setLeftNoteX.value)||0,y:Number(setLeftNoteY.value)||0};
   work.rightNote={enabled:setRightNoteEnabled.checked,text:setRightNoteText.value,size:Number(setRightNoteSize.value)||18,x:Number(setRightNoteX.value)||0,y:Number(setRightNoteY.value)||0};
   work.dataModalTitle=setDataModalTitle.value.trim()||'查資料';
